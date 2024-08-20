@@ -83,5 +83,5 @@ Thumbs.db
 *.mov
 *.wmv
 
-/local-development/connector-secrets.txt
-/local-development/*.jar
+/local-test/connector-secrets.txt
+/local-test/*.jar
