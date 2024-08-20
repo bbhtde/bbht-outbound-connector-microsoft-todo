@@ -22,10 +22,12 @@
     <hamcrest.version>2.2</hamcrest.version>
     <bean-matchers.version>0.14</bean-matchers.version>
     <jacoco.version>0.8.12</jacoco.version>
-    <surefire.version>3.3.0</surefire.version>
-    <shade.version>3.6.0</shade.version>
-    <sonar.language>java</sonar.language>
-    <sonar.cpd.exclusions>**/Update*Options.java</sonar.cpd.exclusions>
+
+    <plugin.jar.version>3.4.2</plugin.jar.version>
+    <plugin.compiler.version>3.13.0</plugin.compiler.version>
+    <plugin.surefire.version>3.4.0</plugin.surefire.version>
+    <plugin.shade.version>3.6.0</plugin.shade.version>
+    <plugin.resources.version>3.3.1</plugin.resources.version>
   </properties>
 
   <!-- Dependencies shared between modules-->
@@ -238,13 +240,42 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.3.0</version>
+          <version>${plugin.jar.version}</version>
         </plugin>
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.13.0</version>
+          <version>${plugin.compiler.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${plugin.resources.version}</version>
+          <executions>
+            <execution>
+              <id>Copy JAR for local test on build</id>
+              <phase>package</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>${project.basedir}/local-test</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>${project.basedir}/target</directory>
+                    <include>${project.artifactId}-${project.version}-with-dependencies.jar</include>
+                  </resource>
+                  <resource>
+                    <directory>${project.basedir}/src/etc</directory>
+                    <include>*.env</include>
+                    <filtering>true</filtering>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
 
         <!-- see https://github.com/camunda/connectors/tree/main/element-template-generator/maven-plugin -->
@@ -266,7 +297,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>${surefire.version}</version>
+          <version>${plugin.surefire.version}</version>
         </plugin>
         <plugin>
           <groupId>org.jacoco</groupId>
@@ -316,7 +347,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>${shade.version}</version>
+        <version>${plugin.shade.version}</version>
         <configuration>
           <shadedArtifactAttached>true</shadedArtifactAttached>
           <shadedClassifierName>with-dependencies</shadedClassifierName>
@@ -365,6 +396,11 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

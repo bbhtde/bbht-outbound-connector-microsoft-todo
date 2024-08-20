@@ -1,8 +1,10 @@
-# <img src="src/main/resources/icon.svg" height="24" width="24" style="width: 24px !important; height: 24px !important;"> Outbound Connector for To Do
+# <img src="./logo.svg" height="24" width="24" style="width: 24px !important; height: 24px !important;"> Outbound Connector for To Do
 
 This is a custom Camunda 8 outbound connector to read, create, update and delete Task Lists, Tasks and Check List Items in Microsoft 365 To Do. 
 
 It currently supports all operations described below in the section [Operations](#operations). Current restrictions and caveats are described in the section [Restrictions](#restrictions).
+
+![Sample Process for the Outbound Connector for To Do](./app-profile-logo.png)
 
 ## Building the Connector
 
