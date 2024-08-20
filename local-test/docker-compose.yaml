@@ -111,7 +111,7 @@ services:
       start_period: 30s
     env_file: ./connector-secrets.txt
     volumes:
-      - ./bbht-outbound-connector-microsoft-todo-1.0-SNAPSHOT-with-dependencies.jar:/opt/app/connector.jar
+      - ./${CONNECTOR_JAR_FILE}:/opt/app/connector.jar
     networks:
       - camunda-platform
     depends_on:

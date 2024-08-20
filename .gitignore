@@ -85,3 +85,4 @@ Thumbs.db
 
 /local-test/connector-secrets.txt
 /local-test/*.jar
+/local-test/*.env
