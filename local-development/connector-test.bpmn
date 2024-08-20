@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_08kudlg" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.26.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.5.0">
+  <bpmn:collaboration id="Collaboration_0h8oxf5">
+    <bpmn:participant id="Participant_16vafl4" name="Test Connector for MS To Do" processRef="test-bbht-connector-ms-to-do" />
+  </bpmn:collaboration>
+  <bpmn:process id="test-bbht-connector-ms-to-do" name="Test BBHT Connector for MS To Do" isExecutable="true">
+    <bpmn:sequenceFlow id="Flow_035ctgc" sourceRef="StartEvent_1" targetRef="Activity_1qhgt84" />
+    <bpmn:sequenceFlow id="Flow_1l5zbf5" sourceRef="Activity_1qhgt84" targetRef="Gateway_00lpo98" />
+    <bpmn:sequenceFlow id="Flow_1srazqp" name="Yes" sourceRef="Gateway_00lpo98" targetRef="Gateway_0mru0za">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=tasklistid != null</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0wpr7p0" name="No" sourceRef="Gateway_00lpo98" targetRef="Activity_1dxus24">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=tasklistid = null</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_13kskyy" sourceRef="Event_07rz3sc" targetRef="Gateway_0xx7qcj" />
+    <bpmn:sequenceFlow id="Flow_0ogg3n0" sourceRef="Activity_1dxus24" targetRef="Gateway_0mru0za" />
+    <bpmn:sequenceFlow id="Flow_19ty3f3" sourceRef="Gateway_0mru0za" targetRef="Activity_1g5yb8d" />
+    <bpmn:sequenceFlow id="Flow_1lwg6ir" sourceRef="Activity_1g5yb8d" targetRef="Gateway_0bqmlnu" />
+    <bpmn:sequenceFlow id="Flow_0gu38vt" name="Yes" sourceRef="Gateway_0bqmlnu" targetRef="Activity_04stj3b">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=taskid != null</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1vv4lk4" sourceRef="Gateway_0s6zlyk" targetRef="Activity_1iv6qav" />
+    <bpmn:sequenceFlow id="Flow_0m9fj0e" name="No" sourceRef="Gateway_0bqmlnu" targetRef="Activity_0m8luar">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=taskid = null</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0wkxl9i" sourceRef="Activity_0m8luar" targetRef="Gateway_0s6zlyk" />
+    <bpmn:sequenceFlow id="Flow_0wg4oe1" sourceRef="Activity_1iv6qav" targetRef="Activity_03pzmm8" />
+    <bpmn:sequenceFlow id="Flow_12vd2jg" sourceRef="Activity_03pzmm8" targetRef="Event_0315q66" />
+    <bpmn:sequenceFlow id="Flow_1t8igl6" sourceRef="Event_1plfb8g" targetRef="Gateway_17q9a0n" />
+    <bpmn:sequenceFlow id="Flow_1rdjxz3" sourceRef="Gateway_17q9a0n" targetRef="Event_10vna0p" />
+    <bpmn:sequenceFlow id="Flow_0pjgnez" sourceRef="Gateway_0zbaf84" targetRef="Gateway_17q9a0n" />
+    <bpmn:sequenceFlow id="Flow_11jb287" sourceRef="Event_1b8926k" targetRef="Gateway_0zbaf84" />
+    <bpmn:sequenceFlow id="Flow_1aaia31" sourceRef="Gateway_0xx7qcj" targetRef="Gateway_0a1slxb" />
+    <bpmn:sequenceFlow id="Flow_0ct12zx" sourceRef="Event_0zm98u3" targetRef="Gateway_0xx7qcj" />
+    <bpmn:sequenceFlow id="Flow_0cm6s6s" sourceRef="Gateway_0a1slxb" targetRef="Gateway_04e8adp" />
+    <bpmn:sequenceFlow id="Flow_0bqvqh2" sourceRef="Event_1qn7ulw" targetRef="Gateway_0a1slxb" />
+    <bpmn:sequenceFlow id="Flow_10xz9vu" sourceRef="Gateway_04e8adp" targetRef="Gateway_0zbaf84" />
+    <bpmn:sequenceFlow id="Flow_1c3x6aq" sourceRef="Event_0io654i" targetRef="Gateway_04e8adp" />
+    <bpmn:sequenceFlow id="Flow_1jqxx0d" sourceRef="Activity_04stj3b" targetRef="Gateway_0s6zlyk" />
+    <bpmn:serviceTask id="Activity_04stj3b" name="Update task &#34;Connector Task&#34;" zeebe:modelerTemplate="bbht.connector.MsToDo.v1" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPg0KPHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIg0KICB4bWw6c3BhY2U9InByZXNlcnZlIg0KICBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjI7Ij4NCiAgICA8cGF0aA0KICAgICAgZD0iTTI0LDBMMjQsMjRMMCwyNEwwLDBMMjQsMFpNMiw4TDYsOEw2LDRMMiw0TDIsOFpNMiwyMEw2LDIwTDYsMTZMMiwxNkwyLDIwWk0yLDE0TDYsMTRMNiwxMEwyLDEwTDIsMTRaTTgsMTRMMjIsMTRMMjIsMTBMOCwxMEw4LDE0Wk04LDIwTDIyLDIwTDIyLDE2TDgsMTZMOCwyMFpNOCw4TDIyLDhMMjIsNEw4LDRMOCw4WiINCiAgICAgIHN0eWxlPSJmaWxsOnJnYig1OSwxMzEsMTg5KTsiLz4NCjwvc3ZnPg0K">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="bbht.connector:mstodo:1" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input source="{{secrets.TENANT_ID}}" target="authentication.tenantId" />
+          <zeebe:input source="{{secrets.CLIENT_ID}}" target="authentication.clientId" />
+          <zeebe:input source="{{secrets.CLIENT_SECRET}}" target="authentication.clientSecret" />
+          <zeebe:input source="UPDATE_TASK" target="operation.operation" />
+          <zeebe:input source="=userid" target="operation.userIdOrPrincipalName" />
+          <zeebe:input source="=tasklistid" target="operation.taskListId" />
+          <zeebe:input source="=taskid" target="operation.taskId" />
+          <zeebe:input source="This is a task automatically created AND UPDATED by the BBHT Connector for Microsoft To Do" target="updateTaskOptions.body" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="retryBackoff" value="PT0S" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0gu38vt</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jqxx0d</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:startEvent id="StartEvent_1" name="Process started">
+      <bpmn:extensionElements />
+      <bpmn:outgoing>Flow_035ctgc</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_1qhgt84" name="Load ID of task list &#34;Connector Tasks&#34;" zeebe:modelerTemplate="bbht.connector.MsToDo.v1" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+Cjxzdmcgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDI0IDI0IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICB4bWw6c3BhY2U9InByZXNlcnZlIgogIHN0eWxlPSJmaWxsLXJ1bGU6ZXZlbm9kZDtjbGlwLXJ1bGU6ZXZlbm9kZDtzdHJva2UtbGluZWpvaW46cm91bmQ7c3Ryb2tlLW1pdGVybGltaXQ6MjsiPgogICAgPHBhdGgKICAgICAgZD0iTTI0LDBMMjQsMjRMMCwyNEwwLDBMMjQsMFpNMiw4TDYsOEw2LDRMMiw0TDIsOFpNMiwyMEw2LDIwTDYsMTZMMiwxNkwyLDIwWk0yLDE0TDYsMTRMNiwxMEwyLDEwTDIsMTRaTTgsMTRMMjIsMTRMMjIsMTBMOCwxMEw4LDE0Wk04LDIwTDIyLDIwTDIyLDE2TDgsMTZMOCwyMFpNOCw4TDIyLDhMMjIsNEw4LDRMOCw4WiIKICAgICAgc3R5bGU9ImZpbGw6cmdiKDU5LDEzMSwxODkpOyIvPgo8L3N2Zz4K">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="bbht.connector:mstodo:1" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input source="{{secrets.TENANT_ID}}" target="authentication.tenantId" />
+          <zeebe:input source="{{secrets.CLIENT_ID}}" target="authentication.clientId" />
+          <zeebe:input source="{{secrets.CLIENT_SECRET}}" target="authentication.clientSecret" />
+          <zeebe:input source="LIST_TASK_LISTS" target="operation.operation" />
+          <zeebe:input source="=userid" target="operation.userIdOrPrincipalName" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultVariable" value="debug_tasklist" />
+          <zeebe:header key="resultExpression" value="={tasklistid: if empty = true then null else result[item.displayName = &#34;Connector Tasks&#34;][1].id}" />
+          <zeebe:header key="errorExpression" value="=if error != null then&#10;  bpmnError(if error.errorCode != null then error.errorCode else &#34;&#34;, error.errorMessage)&#10;else &#10;  null" />
+          <zeebe:header key="retryBackoff" value="PT0S" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_035ctgc</bpmn:incoming>
+      <bpmn:outgoing>Flow_1l5zbf5</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_00lpo98" name="Does task list id exist?">
+      <bpmn:incoming>Flow_1l5zbf5</bpmn:incoming>
+      <bpmn:outgoing>Flow_1srazqp</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0wpr7p0</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_0mru0za">
+      <bpmn:incoming>Flow_0ogg3n0</bpmn:incoming>
+      <bpmn:incoming>Flow_1srazqp</bpmn:incoming>
+      <bpmn:outgoing>Flow_19ty3f3</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Activity_1dxus24" name="Create task list &#34;Connector Tasks&#34;" zeebe:modelerTemplate="bbht.connector.MsToDo.v1" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPg0KPHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIg0KICB4bWw6c3BhY2U9InByZXNlcnZlIg0KICBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjI7Ij4NCiAgICA8cGF0aA0KICAgICAgZD0iTTI0LDBMMjQsMjRMMCwyNEwwLDBMMjQsMFpNMiw4TDYsOEw2LDRMMiw0TDIsOFpNMiwyMEw2LDIwTDYsMTZMMiwxNkwyLDIwWk0yLDE0TDYsMTRMNiwxMEwyLDEwTDIsMTRaTTgsMTRMMjIsMTRMMjIsMTBMOCwxMEw4LDE0Wk04LDIwTDIyLDIwTDIyLDE2TDgsMTZMOCwyMFpNOCw4TDIyLDhMMjIsNEw4LDRMOCw4WiINCiAgICAgIHN0eWxlPSJmaWxsOnJnYig1OSwxMzEsMTg5KTsiLz4NCjwvc3ZnPg0K">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="bbht.connector:mstodo:1" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input source="{{secrets.TENANT_ID}}" target="authentication.tenantId" />
+          <zeebe:input source="{{secrets.CLIENT_ID}}" target="authentication.clientId" />
+          <zeebe:input source="{{secrets.CLIENT_SECRET}}" target="authentication.clientSecret" />
+          <zeebe:input source="CREATE_TASK_LIST" target="operation.operation" />
+          <zeebe:input source="=userid&#10;" target="operation.userIdOrPrincipalName" />
+          <zeebe:input source="Connector Tasks" target="taskListOptions.displayName" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultExpression" value="={ tasklistcreated: (not (empty) or error != null),&#10; tasklistid: if (empty or error != null) then null else result.id&#10;}" />
+          <zeebe:header key="errorExpression" value="=if error != null then&#10;  bpmnError(if error.errorCode != null then error.errorCode else &#34;&#34;, error.errorMessage)&#10;else &#10;  null" />
+          <zeebe:header key="retryBackoff" value="PT0S" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0wpr7p0</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ogg3n0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_0xx7qcj">
+      <bpmn:incoming>Flow_13kskyy</bpmn:incoming>
+      <bpmn:incoming>Flow_0ct12zx</bpmn:incoming>
+      <bpmn:outgoing>Flow_1aaia31</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Activity_1g5yb8d" name="Load ID of task &#34;Connector Task&#34;" zeebe:modelerTemplate="bbht.connector.MsToDo.v1" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPg0KPHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIg0KICB4bWw6c3BhY2U9InByZXNlcnZlIg0KICBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjI7Ij4NCiAgICA8cGF0aA0KICAgICAgZD0iTTI0LDBMMjQsMjRMMCwyNEwwLDBMMjQsMFpNMiw4TDYsOEw2LDRMMiw0TDIsOFpNMiwyMEw2LDIwTDYsMTZMMiwxNkwyLDIwWk0yLDE0TDYsMTRMNiwxMEwyLDEwTDIsMTRaTTgsMTRMMjIsMTRMMjIsMTBMOCwxMEw4LDE0Wk04LDIwTDIyLDIwTDIyLDE2TDgsMTZMOCwyMFpNOCw4TDIyLDhMMjIsNEw4LDRMOCw4WiINCiAgICAgIHN0eWxlPSJmaWxsOnJnYig1OSwxMzEsMTg5KTsiLz4NCjwvc3ZnPg0K">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="bbht.connector:mstodo:1" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input source="{{secrets.TENANT_ID}}" target="authentication.tenantId" />
+          <zeebe:input source="{{secrets.CLIENT_ID}}" target="authentication.clientId" />
+          <zeebe:input source="{{secrets.CLIENT_SECRET}}" target="authentication.clientSecret" />
+          <zeebe:input source="LIST_TASKS" target="operation.operation" />
+          <zeebe:input source="=userid" target="operation.userIdOrPrincipalName" />
+          <zeebe:input source="=tasklistid" target="operation.taskListId" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultVariable" value="debug_task" />
+          <zeebe:header key="resultExpression" value="={taskid: if empty = true then null &#10;  else result[item.title = &#34;Connector Task&#34;][1].id}" />
+          <zeebe:header key="errorExpression" value="=if error != null then&#10;  bpmnError(if error.errorCode != null then error.errorCode else &#34;&#34;, error.errorMessage)&#10;else &#10;  null" />
+          <zeebe:header key="retryBackoff" value="PT0S" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_19ty3f3</bpmn:incoming>
+      <bpmn:outgoing>Flow_1lwg6ir</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_0a1slxb">
+      <bpmn:incoming>Flow_1aaia31</bpmn:incoming>
+      <bpmn:incoming>Flow_0bqvqh2</bpmn:incoming>
+      <bpmn:outgoing>Flow_0cm6s6s</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_0bqmlnu" name="Does task id exist?">
+      <bpmn:incoming>Flow_1lwg6ir</bpmn:incoming>
+      <bpmn:outgoing>Flow_0gu38vt</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0m9fj0e</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_0s6zlyk">
+      <bpmn:incoming>Flow_0wkxl9i</bpmn:incoming>
+      <bpmn:incoming>Flow_1jqxx0d</bpmn:incoming>
+      <bpmn:outgoing>Flow_1vv4lk4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Activity_0m8luar" name="Create task &#34;Connector Task&#34;" zeebe:modelerTemplate="bbht.connector.MsToDo.v1" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPg0KPHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIg0KICB4bWw6c3BhY2U9InByZXNlcnZlIg0KICBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjI7Ij4NCiAgICA8cGF0aA0KICAgICAgZD0iTTI0LDBMMjQsMjRMMCwyNEwwLDBMMjQsMFpNMiw4TDYsOEw2LDRMMiw0TDIsOFpNMiwyMEw2LDIwTDYsMTZMMiwxNkwyLDIwWk0yLDE0TDYsMTRMNiwxMEwyLDEwTDIsMTRaTTgsMTRMMjIsMTRMMjIsMTBMOCwxMEw4LDE0Wk04LDIwTDIyLDIwTDIyLDE2TDgsMTZMOCwyMFpNOCw4TDIyLDhMMjIsNEw4LDRMOCw4WiINCiAgICAgIHN0eWxlPSJmaWxsOnJnYig1OSwxMzEsMTg5KTsiLz4NCjwvc3ZnPg0K">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="bbht.connector:mstodo:1" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input source="{{secrets.TENANT_ID}}" target="authentication.tenantId" />
+          <zeebe:input source="{{secrets.CLIENT_ID}}" target="authentication.clientId" />
+          <zeebe:input source="{{secrets.CLIENT_SECRET}}" target="authentication.clientSecret" />
+          <zeebe:input source="CREATE_TASK" target="operation.operation" />
+          <zeebe:input source="=userid" target="operation.userIdOrPrincipalName" />
+          <zeebe:input source="=tasklistid" target="operation.taskListId" />
+          <zeebe:input source="Connector Task" target="taskOptions.title" />
+          <zeebe:input source="This is a task automatically created by the BBHT Connector for Microsoft To Do" target="taskOptions.body" />
+          <zeebe:input source="process,connector,test" target="taskOptions.categories" />
+          <zeebe:input source="HIGH" target="taskOptions.importance" />
+          <zeebe:input source="NOT_STARTED" target="taskOptions.status" />
+          <zeebe:input source="2099-12-31T23:59:59.999999" target="taskOptions.dueDateTime" />
+          <zeebe:input source="UTC" target="taskOptions.dueDateTimeTimeZone" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultExpression" value="={ taskcreated: (not (empty) or error != null),&#10; taskid: if (empty or error != null) then null else result.id&#10;}" />
+          <zeebe:header key="errorExpression" value="=if error != null then&#10;  bpmnError(if error.errorCode != null then error.errorCode else &#34;&#34;, error.errorMessage)&#10;else &#10;  null" />
+          <zeebe:header key="retryBackoff" value="PT0S" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0m9fj0e</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wkxl9i</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_04e8adp">
+      <bpmn:incoming>Flow_0cm6s6s</bpmn:incoming>
+      <bpmn:incoming>Flow_1c3x6aq</bpmn:incoming>
+      <bpmn:outgoing>Flow_10xz9vu</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Activity_1iv6qav" name="Count check list items of task" zeebe:modelerTemplate="bbht.connector.MsToDo.v1" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPg0KPHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIg0KICB4bWw6c3BhY2U9InByZXNlcnZlIg0KICBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjI7Ij4NCiAgICA8cGF0aA0KICAgICAgZD0iTTI0LDBMMjQsMjRMMCwyNEwwLDBMMjQsMFpNMiw4TDYsOEw2LDRMMiw0TDIsOFpNMiwyMEw2LDIwTDYsMTZMMiwxNkwyLDIwWk0yLDE0TDYsMTRMNiwxMEwyLDEwTDIsMTRaTTgsMTRMMjIsMTRMMjIsMTBMOCwxMEw4LDE0Wk04LDIwTDIyLDIwTDIyLDE2TDgsMTZMOCwyMFpNOCw4TDIyLDhMMjIsNEw4LDRMOCw4WiINCiAgICAgIHN0eWxlPSJmaWxsOnJnYig1OSwxMzEsMTg5KTsiLz4NCjwvc3ZnPg0K">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="bbht.connector:mstodo:1" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input source="{{secrets.TENANT_ID}}" target="authentication.tenantId" />
+          <zeebe:input source="{{secrets.CLIENT_ID}}" target="authentication.clientId" />
+          <zeebe:input source="{{secrets.CLIENT_SECRET}}" target="authentication.clientSecret" />
+          <zeebe:input source="LIST_CHECK_LIST_ITEMS" target="operation.operation" />
+          <zeebe:input source="=userid" target="operation.userIdOrPrincipalName" />
+          <zeebe:input source="=tasklistid" target="operation.taskListId" />
+          <zeebe:input source="=taskid" target="operation.taskId" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultVariable" value="debug_checklistitems" />
+          <zeebe:header key="resultExpression" value="={ numberchecklistitems: if (empty or error.message) then 0&#10;else count(result)}" />
+          <zeebe:header key="errorExpression" value="=if error != null then&#10;  bpmnError(if error.errorCode != null then error.errorCode else &#34;&#34;, error.errorMessage)&#10;else &#10;  null" />
+          <zeebe:header key="retryBackoff" value="PT0S" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1vv4lk4</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wg4oe1</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_0zbaf84">
+      <bpmn:incoming>Flow_11jb287</bpmn:incoming>
+      <bpmn:incoming>Flow_10xz9vu</bpmn:incoming>
+      <bpmn:outgoing>Flow_0pjgnez</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Activity_03pzmm8" name="Create new check list item" zeebe:modelerTemplate="bbht.connector.MsToDo.v1" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPg0KPHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIg0KICB4bWw6c3BhY2U9InByZXNlcnZlIg0KICBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjI7Ij4NCiAgICA8cGF0aA0KICAgICAgZD0iTTI0LDBMMjQsMjRMMCwyNEwwLDBMMjQsMFpNMiw4TDYsOEw2LDRMMiw0TDIsOFpNMiwyMEw2LDIwTDYsMTZMMiwxNkwyLDIwWk0yLDE0TDYsMTRMNiwxMEwyLDEwTDIsMTRaTTgsMTRMMjIsMTRMMjIsMTBMOCwxMEw4LDE0Wk04LDIwTDIyLDIwTDIyLDE2TDgsMTZMOCwyMFpNOCw4TDIyLDhMMjIsNEw4LDRMOCw4WiINCiAgICAgIHN0eWxlPSJmaWxsOnJnYig1OSwxMzEsMTg5KTsiLz4NCjwvc3ZnPg0K">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="bbht.connector:mstodo:1" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input source="{{secrets.TENANT_ID}}" target="authentication.tenantId" />
+          <zeebe:input source="{{secrets.CLIENT_ID}}" target="authentication.clientId" />
+          <zeebe:input source="{{secrets.CLIENT_SECRET}}" target="authentication.clientSecret" />
+          <zeebe:input source="CREATE_CHECK_LIST_ITEM" target="operation.operation" />
+          <zeebe:input source="=userid" target="operation.userIdOrPrincipalName" />
+          <zeebe:input source="=tasklistid" target="operation.taskListId" />
+          <zeebe:input source="=taskid" target="operation.taskId" />
+          <zeebe:input source="=&#34;Unteraufgabe Nr. &#34; + string(numberchecklistitems + 1)" target="checkListItemOptions.displayName" />
+          <zeebe:input source="=modulo(numberchecklistitems, 2) = 0" target="checkListItemOptions.checked" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="errorExpression" value="=if error != null then&#10;  bpmnError(if error.errorCode != null then error.errorCode else &#34;&#34;, error.errorMessage)&#10;else &#10;  null" />
+          <zeebe:header key="retryBackoff" value="PT0S" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0wg4oe1</bpmn:incoming>
+      <bpmn:outgoing>Flow_12vd2jg</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_17q9a0n">
+      <bpmn:incoming>Flow_1t8igl6</bpmn:incoming>
+      <bpmn:incoming>Flow_0pjgnez</bpmn:incoming>
+      <bpmn:outgoing>Flow_1rdjxz3</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="Event_0315q66" name="Process finished successfully">
+      <bpmn:incoming>Flow_12vd2jg</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="Event_10vna0p" name="Process terminated with errors">
+      <bpmn:incoming>Flow_1rdjxz3</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_02dmi72" />
+    </bpmn:endEvent>
+    <bpmn:boundaryEvent id="Event_07rz3sc" name="Fehler" attachedToRef="Activity_1qhgt84">
+      <bpmn:outgoing>Flow_13kskyy</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_13m48zx" />
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Event_0zm98u3" attachedToRef="Activity_1dxus24">
+      <bpmn:outgoing>Flow_0ct12zx</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0tmcvm2" />
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Event_1qn7ulw" attachedToRef="Activity_1g5yb8d">
+      <bpmn:outgoing>Flow_0bqvqh2</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_046gae6" />
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Event_0io654i" attachedToRef="Activity_0m8luar">
+      <bpmn:outgoing>Flow_1c3x6aq</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1jva2eg" />
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Event_1b8926k" attachedToRef="Activity_1iv6qav">
+      <bpmn:outgoing>Flow_11jb287</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0rnyvcx" />
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Event_1plfb8g" attachedToRef="Activity_03pzmm8">
+      <bpmn:outgoing>Flow_1t8igl6</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1ubwejz" />
+    </bpmn:boundaryEvent>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0h8oxf5">
+      <bpmndi:BPMNShape id="Participant_16vafl4_di" bpmnElement="Participant_16vafl4" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="1690" height="368" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0uakqsx_di" bpmnElement="Activity_04stj3b">
+        <dc:Bounds x="1150" y="100" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="229" y="229" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="209" y="272" width="77" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_11uxwn4_di" bpmnElement="Activity_1qhgt84">
+        <dc:Bounds x="339" y="207" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_00lpo98_di" bpmnElement="Gateway_00lpo98" isMarkerVisible="true">
+        <dc:Bounds x="525" y="222" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="512" y="279" width="78" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0mru0za_di" bpmnElement="Gateway_0mru0za" isMarkerVisible="true">
+        <dc:Bounds x="785" y="222" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1iwmrb5_di" bpmnElement="Activity_1dxus24">
+        <dc:Bounds x="630" y="207" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0xx7qcj_di" bpmnElement="Gateway_0xx7qcj" isMarkerVisible="true">
+        <dc:Bounds x="675" y="335" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0x099tk_di" bpmnElement="Activity_1g5yb8d">
+        <dc:Bounds x="890" y="207" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0a1slxb_di" bpmnElement="Gateway_0a1slxb" isMarkerVisible="true">
+        <dc:Bounds x="935" y="335" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0bqmlnu_di" bpmnElement="Gateway_0bqmlnu" isMarkerVisible="true">
+        <dc:Bounds x="1045" y="222" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1039" y="282" width="61" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0s6zlyk_di" bpmnElement="Gateway_0s6zlyk" isMarkerVisible="true">
+        <dc:Bounds x="1305" y="222" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0x4txf2_di" bpmnElement="Activity_0m8luar">
+        <dc:Bounds x="1150" y="207" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_04e8adp_di" bpmnElement="Gateway_04e8adp" isMarkerVisible="true">
+        <dc:Bounds x="1195" y="335" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_12p8zv3_di" bpmnElement="Activity_1iv6qav">
+        <dc:Bounds x="1410" y="207" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0zbaf84_di" bpmnElement="Gateway_0zbaf84" isMarkerVisible="true">
+        <dc:Bounds x="1455" y="335" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0qc0l5i_di" bpmnElement="Activity_03pzmm8">
+        <dc:Bounds x="1580" y="207" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_17q9a0n_di" bpmnElement="Gateway_17q9a0n" isMarkerVisible="true">
+        <dc:Bounds x="1625" y="335" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0315q66_di" bpmnElement="Event_0315q66">
+        <dc:Bounds x="1752" y="229" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1730" y="272" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_040nsed_di" bpmnElement="Event_10vna0p">
+        <dc:Bounds x="1752" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1734" y="385" width="74" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1t3jik7_di" bpmnElement="Event_1plfb8g">
+        <dc:Bounds x="1632" y="269" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1onlnff_di" bpmnElement="Event_1b8926k">
+        <dc:Bounds x="1462" y="269" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_14397u2_di" bpmnElement="Event_0io654i">
+        <dc:Bounds x="1202" y="269" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0fm48q7_di" bpmnElement="Event_1qn7ulw">
+        <dc:Bounds x="942" y="269" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0t3zb7d_di" bpmnElement="Event_0zm98u3">
+        <dc:Bounds x="682" y="269" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_052ldap_di" bpmnElement="Event_07rz3sc">
+        <dc:Bounds x="392" y="269" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="413" y="312" width="33" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_035ctgc_di" bpmnElement="Flow_035ctgc">
+        <di:waypoint x="265" y="247" />
+        <di:waypoint x="339" y="247" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1l5zbf5_di" bpmnElement="Flow_1l5zbf5">
+        <di:waypoint x="439" y="247" />
+        <di:waypoint x="525" y="247" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1srazqp_di" bpmnElement="Flow_1srazqp">
+        <di:waypoint x="550" y="222" />
+        <di:waypoint x="550" y="140" />
+        <di:waypoint x="810" y="140" />
+        <di:waypoint x="810" y="222" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="672" y="142" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wpr7p0_di" bpmnElement="Flow_0wpr7p0">
+        <di:waypoint x="575" y="247" />
+        <di:waypoint x="630" y="247" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="595" y="229" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13kskyy_di" bpmnElement="Flow_13kskyy">
+        <di:waypoint x="410" y="305" />
+        <di:waypoint x="410" y="360" />
+        <di:waypoint x="675" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ogg3n0_di" bpmnElement="Flow_0ogg3n0">
+        <di:waypoint x="730" y="247" />
+        <di:waypoint x="785" y="247" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19ty3f3_di" bpmnElement="Flow_19ty3f3">
+        <di:waypoint x="835" y="247" />
+        <di:waypoint x="890" y="247" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lwg6ir_di" bpmnElement="Flow_1lwg6ir">
+        <di:waypoint x="990" y="247" />
+        <di:waypoint x="1045" y="247" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0gu38vt_di" bpmnElement="Flow_0gu38vt">
+        <di:waypoint x="1070" y="222" />
+        <di:waypoint x="1070" y="140" />
+        <di:waypoint x="1150" y="140" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1112" y="122" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vv4lk4_di" bpmnElement="Flow_1vv4lk4">
+        <di:waypoint x="1355" y="247" />
+        <di:waypoint x="1410" y="247" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0m9fj0e_di" bpmnElement="Flow_0m9fj0e">
+        <di:waypoint x="1095" y="247" />
+        <di:waypoint x="1150" y="247" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1113" y="256" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wkxl9i_di" bpmnElement="Flow_0wkxl9i">
+        <di:waypoint x="1250" y="247" />
+        <di:waypoint x="1305" y="247" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wg4oe1_di" bpmnElement="Flow_0wg4oe1">
+        <di:waypoint x="1510" y="247" />
+        <di:waypoint x="1580" y="247" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12vd2jg_di" bpmnElement="Flow_12vd2jg">
+        <di:waypoint x="1680" y="247" />
+        <di:waypoint x="1752" y="247" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1t8igl6_di" bpmnElement="Flow_1t8igl6">
+        <di:waypoint x="1650" y="305" />
+        <di:waypoint x="1650" y="335" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rdjxz3_di" bpmnElement="Flow_1rdjxz3">
+        <di:waypoint x="1675" y="360" />
+        <di:waypoint x="1752" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pjgnez_di" bpmnElement="Flow_0pjgnez">
+        <di:waypoint x="1505" y="360" />
+        <di:waypoint x="1625" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11jb287_di" bpmnElement="Flow_11jb287">
+        <di:waypoint x="1480" y="305" />
+        <di:waypoint x="1480" y="335" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1aaia31_di" bpmnElement="Flow_1aaia31">
+        <di:waypoint x="725" y="360" />
+        <di:waypoint x="935" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ct12zx_di" bpmnElement="Flow_0ct12zx">
+        <di:waypoint x="700" y="305" />
+        <di:waypoint x="700" y="335" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0cm6s6s_di" bpmnElement="Flow_0cm6s6s">
+        <di:waypoint x="985" y="360" />
+        <di:waypoint x="1195" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0bqvqh2_di" bpmnElement="Flow_0bqvqh2">
+        <di:waypoint x="960" y="305" />
+        <di:waypoint x="960" y="335" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10xz9vu_di" bpmnElement="Flow_10xz9vu">
+        <di:waypoint x="1245" y="360" />
+        <di:waypoint x="1455" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1c3x6aq_di" bpmnElement="Flow_1c3x6aq">
+        <di:waypoint x="1220" y="305" />
+        <di:waypoint x="1220" y="335" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jqxx0d_di" bpmnElement="Flow_1jqxx0d">
+        <di:waypoint x="1250" y="140" />
+        <di:waypoint x="1330" y="140" />
+        <di:waypoint x="1330" y="222" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

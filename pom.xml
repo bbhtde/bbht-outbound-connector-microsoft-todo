@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>de.bbht.development</groupId>
+  <artifactId>bbht-outbound-connector-microsoft-todo</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.release>21</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <msgraph.version>6.13.0</msgraph.version>
+    <azure-identity.version>1.13.0</azure-identity.version>
+    <connectors.version>8.5.5</connectors.version>
+    <jackson.version>2.17.2</jackson.version>
+    <assertj.version>3.25.3</assertj.version>
+    <junit.jupiter.version>5.10.2</junit.jupiter.version>
+    <mockito.version>5.12.0</mockito.version>
+    <hamcrest.version>2.2</hamcrest.version>
+    <bean-matchers.version>0.14</bean-matchers.version>
+    <jacoco.version>0.8.12</jacoco.version>
+    <surefire.version>3.3.0</surefire.version>
+    <shade.version>3.6.0</shade.version>
+    <sonar.language>java</sonar.language>
+    <sonar.cpd.exclusions>**/Update*Options.java</sonar.cpd.exclusions>
+  </properties>
+
+  <!-- Dependencies shared between modules-->
+  <dependencyManagement>
+    <dependencies>
+      <!-- MS Graph SDK -->
+      <dependency>
+        <!-- Include the sdk as a dependency -->
+        <groupId>com.microsoft.graph</groupId>
+        <artifactId>microsoft-graph</artifactId>
+        <version>${msgraph.version}</version>
+      </dependency>
+
+      <dependency>
+        <!-- This dependency is only needed if you are using a TokenCredential object for authentication -->
+        <groupId>com.azure</groupId>
+        <artifactId>azure-identity</artifactId>
+        <version>${azure-identity.version}</version>
+      </dependency>
+
+      <!-- Camunda Connector SDK Dependencies -->
+      <dependency>
+        <groupId>io.camunda.connector</groupId>
+        <artifactId>connector-core</artifactId>
+        <version>${connectors.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.camunda.connector</groupId>
+        <artifactId>connector-validation</artifactId>
+        <version>${connectors.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.camunda.connector</groupId>
+        <artifactId>element-template-generator-core</artifactId>
+        <version>${connectors.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jsr310</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.camunda.connector</groupId>
+        <artifactId>connector-test</artifactId>
+        <version>${connectors.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${junit.jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${assertj.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-junit-jupiter</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest</artifactId>
+        <version>${hamcrest.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.code.bean-matchers</groupId>
+        <artifactId>bean-matchers</artifactId>
+        <version>${bean-matchers.version}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.microsoft.graph</groupId>
+      <artifactId>microsoft-graph</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.azure</groupId>
+      <artifactId>azure-identity</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.camunda.connector</groupId>
+      <artifactId>connector-core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.camunda.connector</groupId>
+      <artifactId>connector-validation</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.camunda.connector</groupId>
+      <artifactId>element-template-generator-core</artifactId>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.camunda.connector</groupId>
+      <artifactId>connector-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.code.bean-matchers</groupId>
+      <artifactId>bean-matchers</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.3.0</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.13.0</version>
+        </plugin>
+
+        <!-- see https://github.com/camunda/connectors/tree/main/element-template-generator/maven-plugin -->
+        <!-- see https://github.com/camunda/connectors/tree/main/element-template-generator/core -->
+        <plugin>
+          <groupId>io.camunda.connector</groupId>
+          <artifactId>element-template-generator-maven-plugin</artifactId>
+          <version>${connectors.version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>generate-templates</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <!-- plugins for test coverage -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${surefire.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${jacoco.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <formats>
+                <format>XML</format>
+              </formats>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Aufruf des https://github.com/camunda/connectors/tree/main/element-template-generator/maven-plugin -->
+      <plugin>
+        <groupId>io.camunda.connector</groupId>
+        <artifactId>element-template-generator-maven-plugin</artifactId>
+        <configuration>
+          <connectors>
+            <connector>
+              <connectorClass>de.bbht.development.connector.todo.ToDoConnectorFunction</connectorClass>
+            </connector>
+          </connectors>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>${shade.version}</version>
+        <configuration>
+          <shadedArtifactAttached>true</shadedArtifactAttached>
+          <shadedClassifierName>with-dependencies</shadedClassifierName>
+          <!-- no need for this since we are not consuming this artifact downstream -->
+          <createDependencyReducedPom>false</createDependencyReducedPom>
+          <filters>
+            <filter>
+              <artifact>*:*</artifact>
+              <excludes>
+                <exclude>module-info.class</exclude>
+                <exclude>META-INF/MANIFEST.MF</exclude>
+                <exclude>META-INF/*.SF</exclude>
+                <exclude>META-INF/*.DSA</exclude>
+                <exclude>META-INF/*.RSA</exclude>
+              </excludes>
+            </filter>
+          </filters>
+          <transformers>
+            <!-- This is needed if you have dependencies that use Service Loader. Most Google Cloud client libraries does. -->
+            <transformer
+              implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+            <!-- This is needed to not repeat licenses in the META-INF directory -->
+            <transformer
+              implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer"/>
+            <!-- This is needed to merge existing NOTICE files and keep them downstream -->
+            <transformer
+              implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
+              <addHeader>false</addHeader>
+            </transformer>
+            <transformer
+              implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"/>
+          </transformers>
+          <!-- Adjust to use relocations inside your JAR -->
+          <relocations>
+            <relocation>
+              <pattern>com.fasterxml.jackson</pattern>
+              <shadedPattern>de.bbht.connector.com.fasterxml.jackson</shadedPattern>
+            </relocation>
+          </relocations>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
