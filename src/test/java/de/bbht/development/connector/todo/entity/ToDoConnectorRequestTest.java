@@ -139,7 +139,7 @@ class ToDoConnectorRequestTest {
     var operation = new Operation(ToDoOperation.LIST_TASK_LISTS, "test@bbht.de", null, null, null);
     var taskOptions = new TaskOptions("Titel", "Body", "Category 1, Category 2", ImportanceDto.HIGH,
         TaskStatusDto.IN_PROGRESS, createDateTime(2023), "UTC", createDateTime(2024), "UTC",
-        createDateTime(2025), "UTC");
+        createDateTime(2025), "UTC", createDateTime(2024), "UTC", Boolean.TRUE);
     var input = new ToDoConnectorRequest(authentication, operation, null, null, taskOptions, null, null, null);
 
     var context = OutboundConnectorContextBuilder.create()
@@ -165,7 +165,9 @@ class ToDoConnectorRequestTest {
         .returns(createDateTime(2024), TaskOptions::dueDateTime)
         .returns("UTC", TaskOptions::dueDateTimeTimeZone)
         .returns(createDateTime(2025), TaskOptions::completedDateTime)
-        .returns("UTC", TaskOptions::completedDateTimeTimeZone);
+        .returns("UTC", TaskOptions::completedDateTimeTimeZone)
+        .returns(createDateTime(2024), TaskOptions::reminderDateTime)
+        .returns("UTC", TaskOptions::reminderDateTimeTimeZone);
   }
 
   private String createDateTime(int year) {

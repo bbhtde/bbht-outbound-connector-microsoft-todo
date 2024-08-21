@@ -282,6 +282,7 @@ class ToDoConnectorFunctionTest {
     task2.setCategories(List.of("Category 1", "Category 3"));
     task2.setStartDateTime(createDateTime(2023));
     task2.setDueDateTime(createDateTime(2024));
+    task2.setReminderDateTime(createDateTime(2024));
 
     var task3 = new TaskDto();
     task3.setId("3");
@@ -293,6 +294,7 @@ class ToDoConnectorFunctionTest {
     task3.setStartDateTime(createDateTime(2023));
     task3.setDueDateTime(createDateTime(2024));
     task3.setCompletedDateTime(createDateTime(2025));
+    task3.setReminderDateTime(createDateTime(2024));
 
     return List.of(task1, task2, task3);
   }
@@ -315,6 +317,7 @@ class ToDoConnectorFunctionTest {
     task.setStartDateTime(createDateTime(2023));
     task.setDueDateTime(createDateTime(2024));
     task.setCompletedDateTime(createDateTime(2025));
+    task.setReminderDateTime(createDateTime(2024));
     return task;
   }
 
@@ -382,7 +385,7 @@ class ToDoConnectorFunctionTest {
   void shouldCreateNewTask() throws Exception {
     // Given
     var taskOptions = new TaskOptions("Title", "Item Body", "Category 1, Category 2", ImportanceDto.HIGH,
-        TaskStatusDto.COMPLETED, "2023-08-13T14:38:43.104312", "UTC", null, null, null, null);
+        TaskStatusDto.COMPLETED, "2023-08-13T14:38:43.104312", "UTC", null, null, null, null, "2024-08-13T14:38:43.104312", "UTC", Boolean.TRUE);
     var context = createDefaultOutboundConnectorContext(
         new Operation(ToDoOperation.CREATE_TASK, testUserId, "1", null, null), null, null, taskOptions, null, null, null);
 
@@ -397,6 +400,11 @@ class ToDoConnectorFunctionTest {
     startDateTime.setDateTime("2023-08-13T14:38:43.104312");
     startDateTime.setTimeZone("UTC");
     createTask.setStartDateTime(startDateTime);
+    var reminderDateTime = new DateTimeTimeZoneDto();
+    reminderDateTime.setDateTime("2024-08-13T14:38:43.104312");
+    reminderDateTime.setTimeZone("UTC");
+    createTask.setReminderDateTime(reminderDateTime);
+    createTask.setReminderOn(Boolean.TRUE);
     final var task = createTask();
     given(msGraphService.createTask(testUserId, "1", createTask)).willReturn(Optional.of(task));
 
@@ -414,15 +422,20 @@ class ToDoConnectorFunctionTest {
         .returns("Item Body", TaskDto::getBody)
         .returns(ImportanceDto.HIGH, TaskDto::getImportance)
         .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus)
-        .extracting(TaskDto::getStartDateTime)
-        .returns("2023-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
-        .returns("UTC", DateTimeTimeZoneDto::getTimeZone);
+        .satisfies(taskDto1 -> assertThat(taskDto1.getStartDateTime())
+          .returns("2023-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
+          .returns("UTC", DateTimeTimeZoneDto::getTimeZone)
+        )
+        .satisfies(taskDto2 -> assertThat(taskDto2.getReminderDateTime())
+          .returns("2024-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
+          .returns("UTC", DateTimeTimeZoneDto::getTimeZone)
+        );
   }
 
   @Test
   void shouldUpdateTask() throws Exception {
     // Given
-    var updateTaskOptions = new UpdateTaskOptions("New Title", null, "", null, null, null, null, null, null, null, null);
+    var updateTaskOptions = new UpdateTaskOptions("New Title", null, "", null, null, null, null, null, null, null, null, null, null, null);
     var context = createDefaultOutboundConnectorContext(
         new Operation(ToDoOperation.UPDATE_TASK, testUserId, "1", "1", null), null, null, null, updateTaskOptions, null, null);
 
