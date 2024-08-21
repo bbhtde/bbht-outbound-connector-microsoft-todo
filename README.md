@@ -4,7 +4,7 @@ This is a custom Camunda 8 outbound connector to read, create, update and delete
 
 It currently supports all operations described below in the section [Operations](#operations). Current restrictions and caveats are described in the section [Restrictions](#restrictions).
 
-![Sample Process for the Outbound Connector for To Do](./app-profile-logo.png)
+![Sample Process for the Outbound Connector for To Do](./connector-screenshot.png)
 
 ## Building the Connector
 
