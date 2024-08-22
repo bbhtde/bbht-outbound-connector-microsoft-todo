@@ -750,7 +750,7 @@ The following restrictions currently apply:
 
 * Task Lists, Tasks and Check List Items cannot be loaded recursively (e.g. loading all check list items in all tasks of a given task list). 
 * Also, currently no additional relationships (such as `extensions`, `attachments` and `linkedResources`) are supported.
-* For Tasks, the properties `isReminderOn`, `reminderDateTime` and `recurrence` are not yet supported (c.f. [https://learn.microsoft.com/en-us/graph/api/resources/todotask](https://learn.microsoft.com/en-us/graph/api/resources/todotask?view=graph-rest-1.0))
+* For Tasks, the `recurrence` property is not yet supported (c.f. [https://learn.microsoft.com/en-us/graph/api/resources/todotask](https://learn.microsoft.com/en-us/graph/api/resources/todotask?view=graph-rest-1.0))
 
 ## Disclaimer
 

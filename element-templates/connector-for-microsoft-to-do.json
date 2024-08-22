@@ -2646,6 +2646,761 @@
       "value" : "Yukon Standard Time"
     } ]
   }, {
+    "id" : "taskOptions.reminderDateTime",
+    "label" : "Reminder Date & Time",
+    "description" : "Date and Time the User will be reminded of their Task",
+    "optional" : true,
+    "constraints" : {
+      "notEmpty" : false,
+      "pattern" : {
+        "value" : "^([1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9][0-9][0-9][0-9])?$",
+        "message" : "Please use the format 'YYYY-MM-DDThh:mm:ss.SSSSSS'"
+      }
+    },
+    "feel" : "optional",
+    "group" : "task",
+    "binding" : {
+      "name" : "taskOptions.reminderDateTime",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "operation.operation",
+      "oneOf" : [ "CREATE_TASK" ],
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "taskOptions.reminderDateTimeTimeZone",
+    "label" : "Reminder Date & Time Timezone",
+    "description" : "Timezone for the Date & Time the User will be reminded of their Task",
+    "optional" : true,
+    "group" : "task",
+    "binding" : {
+      "name" : "taskOptions.reminderDateTimeTimeZone",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "operation.operation",
+      "oneOf" : [ "CREATE_TASK" ],
+      "type" : "simple"
+    },
+    "type" : "Dropdown",
+    "choices" : [ {
+      "name" : "Afghanistan Standard Time",
+      "value" : "Afghanistan Standard Time"
+    }, {
+      "name" : "Africa/Cairo",
+      "value" : "Africa/Cairo"
+    }, {
+      "name" : "Africa/Casablanca",
+      "value" : "Africa/Casablanca"
+    }, {
+      "name" : "Africa/Johannesburg",
+      "value" : "Africa/Johannesburg"
+    }, {
+      "name" : "Africa/Lagos",
+      "value" : "Africa/Lagos"
+    }, {
+      "name" : "Africa/Nairobi",
+      "value" : "Africa/Nairobi"
+    }, {
+      "name" : "Africa/Windhoek",
+      "value" : "Africa/Windhoek"
+    }, {
+      "name" : "Alaskan Standard Time",
+      "value" : "Alaskan Standard Time"
+    }, {
+      "name" : "Aleutian Standard Time",
+      "value" : "Aleutian Standard Time"
+    }, {
+      "name" : "Altai Standard Time",
+      "value" : "Altai Standard Time"
+    }, {
+      "name" : "America/Anchorage",
+      "value" : "America/Anchorage"
+    }, {
+      "name" : "America/Argentina/Buenos_Aires",
+      "value" : "America/Argentina/Buenos_Aires"
+    }, {
+      "name" : "America/Asuncion",
+      "value" : "America/Asuncion"
+    }, {
+      "name" : "America/Bahia",
+      "value" : "America/Bahia"
+    }, {
+      "name" : "America/Bogota",
+      "value" : "America/Bogota"
+    }, {
+      "name" : "America/Caracas",
+      "value" : "America/Caracas"
+    }, {
+      "name" : "America/Cayenne",
+      "value" : "America/Cayenne"
+    }, {
+      "name" : "America/Chicago",
+      "value" : "America/Chicago"
+    }, {
+      "name" : "America/Chihuahua",
+      "value" : "America/Chihuahua"
+    }, {
+      "name" : "America/Cuiaba",
+      "value" : "America/Cuiaba"
+    }, {
+      "name" : "America/Denver",
+      "value" : "America/Denver"
+    }, {
+      "name" : "America/Godthab",
+      "value" : "America/Godthab"
+    }, {
+      "name" : "America/Guatemala",
+      "value" : "America/Guatemala"
+    }, {
+      "name" : "America/Halifax",
+      "value" : "America/Halifax"
+    }, {
+      "name" : "America/Indiana/Indianapolis",
+      "value" : "America/Indiana/Indianapolis"
+    }, {
+      "name" : "America/La_Paz",
+      "value" : "America/La_Paz"
+    }, {
+      "name" : "America/Los_Angeles",
+      "value" : "America/Los_Angeles"
+    }, {
+      "name" : "America/Mexico_City",
+      "value" : "America/Mexico_City"
+    }, {
+      "name" : "America/Montevideo",
+      "value" : "America/Montevideo"
+    }, {
+      "name" : "America/New_York",
+      "value" : "America/New_York"
+    }, {
+      "name" : "America/Phoenix",
+      "value" : "America/Phoenix"
+    }, {
+      "name" : "America/Regina",
+      "value" : "America/Regina"
+    }, {
+      "name" : "America/Santa_Isabel",
+      "value" : "America/Santa_Isabel"
+    }, {
+      "name" : "America/Santiago",
+      "value" : "America/Santiago"
+    }, {
+      "name" : "America/Sao_Paulo",
+      "value" : "America/Sao_Paulo"
+    }, {
+      "name" : "America/St_Johns",
+      "value" : "America/St_Johns"
+    }, {
+      "name" : "Arab Standard Time",
+      "value" : "Arab Standard Time"
+    }, {
+      "name" : "Arabian Standard Time",
+      "value" : "Arabian Standard Time"
+    }, {
+      "name" : "Arabic Standard Time",
+      "value" : "Arabic Standard Time"
+    }, {
+      "name" : "Argentina Standard Time",
+      "value" : "Argentina Standard Time"
+    }, {
+      "name" : "Asia/Amman",
+      "value" : "Asia/Amman"
+    }, {
+      "name" : "Asia/Astana (Almaty)",
+      "value" : "Asia/Astana (Almaty)"
+    }, {
+      "name" : "Asia/Baghdad",
+      "value" : "Asia/Baghdad"
+    }, {
+      "name" : "Asia/Baku",
+      "value" : "Asia/Baku"
+    }, {
+      "name" : "Asia/Bangkok",
+      "value" : "Asia/Bangkok"
+    }, {
+      "name" : "Asia/Beirut",
+      "value" : "Asia/Beirut"
+    }, {
+      "name" : "Asia/Colombo",
+      "value" : "Asia/Colombo"
+    }, {
+      "name" : "Asia/Damascus",
+      "value" : "Asia/Damascus"
+    }, {
+      "name" : "Asia/Dhaka",
+      "value" : "Asia/Dhaka"
+    }, {
+      "name" : "Asia/Dubai",
+      "value" : "Asia/Dubai"
+    }, {
+      "name" : "Asia/Irkutsk",
+      "value" : "Asia/Irkutsk"
+    }, {
+      "name" : "Asia/Jerusalem",
+      "value" : "Asia/Jerusalem"
+    }, {
+      "name" : "Asia/Kabul",
+      "value" : "Asia/Kabul"
+    }, {
+      "name" : "Asia/Karachi",
+      "value" : "Asia/Karachi"
+    }, {
+      "name" : "Asia/Kathmandu",
+      "value" : "Asia/Kathmandu"
+    }, {
+      "name" : "Asia/Kolkata",
+      "value" : "Asia/Kolkata"
+    }, {
+      "name" : "Asia/Krasnoyarsk",
+      "value" : "Asia/Krasnoyarsk"
+    }, {
+      "name" : "Asia/Magadan",
+      "value" : "Asia/Magadan"
+    }, {
+      "name" : "Asia/Novosibirsk",
+      "value" : "Asia/Novosibirsk"
+    }, {
+      "name" : "Asia/Riyadh",
+      "value" : "Asia/Riyadh"
+    }, {
+      "name" : "Asia/Seoul",
+      "value" : "Asia/Seoul"
+    }, {
+      "name" : "Asia/Shanghai",
+      "value" : "Asia/Shanghai"
+    }, {
+      "name" : "Asia/Singapore",
+      "value" : "Asia/Singapore"
+    }, {
+      "name" : "Asia/Taipei",
+      "value" : "Asia/Taipei"
+    }, {
+      "name" : "Asia/Tbilisi",
+      "value" : "Asia/Tbilisi"
+    }, {
+      "name" : "Asia/Tehran",
+      "value" : "Asia/Tehran"
+    }, {
+      "name" : "Asia/Tokyo",
+      "value" : "Asia/Tokyo"
+    }, {
+      "name" : "Asia/Toshkent (Tashkent)",
+      "value" : "Asia/Toshkent (Tashkent)"
+    }, {
+      "name" : "Asia/Ulaanbaatar",
+      "value" : "Asia/Ulaanbaatar"
+    }, {
+      "name" : "Asia/Vladivostok",
+      "value" : "Asia/Vladivostok"
+    }, {
+      "name" : "Asia/Yakutsk",
+      "value" : "Asia/Yakutsk"
+    }, {
+      "name" : "Asia/Yangon (Rangoon)",
+      "value" : "Asia/Yangon (Rangoon)"
+    }, {
+      "name" : "Asia/Yekaterinburg",
+      "value" : "Asia/Yekaterinburg"
+    }, {
+      "name" : "Asia/Yerevan",
+      "value" : "Asia/Yerevan"
+    }, {
+      "name" : "Astrakhan Standard Time",
+      "value" : "Astrakhan Standard Time"
+    }, {
+      "name" : "Atlantic Standard Time",
+      "value" : "Atlantic Standard Time"
+    }, {
+      "name" : "Atlantic/Azores",
+      "value" : "Atlantic/Azores"
+    }, {
+      "name" : "Atlantic/Cape_Verde",
+      "value" : "Atlantic/Cape_Verde"
+    }, {
+      "name" : "Atlantic/Reykjavik",
+      "value" : "Atlantic/Reykjavik"
+    }, {
+      "name" : "AUS Central Standard Time",
+      "value" : "AUS Central Standard Time"
+    }, {
+      "name" : "Aus Central W. Standard Time",
+      "value" : "Aus Central W. Standard Time"
+    }, {
+      "name" : "AUS Eastern Standard Time",
+      "value" : "AUS Eastern Standard Time"
+    }, {
+      "name" : "Australia/Adelaide",
+      "value" : "Australia/Adelaide"
+    }, {
+      "name" : "Australia/Brisbane",
+      "value" : "Australia/Brisbane"
+    }, {
+      "name" : "Australia/Darwin",
+      "value" : "Australia/Darwin"
+    }, {
+      "name" : "Australia/Hobart",
+      "value" : "Australia/Hobart"
+    }, {
+      "name" : "Australia/Perth",
+      "value" : "Australia/Perth"
+    }, {
+      "name" : "Australia/Sydney",
+      "value" : "Australia/Sydney"
+    }, {
+      "name" : "Azerbaijan Standard Time",
+      "value" : "Azerbaijan Standard Time"
+    }, {
+      "name" : "Azores Standard Time",
+      "value" : "Azores Standard Time"
+    }, {
+      "name" : "Bahia Standard Time",
+      "value" : "Bahia Standard Time"
+    }, {
+      "name" : "Bangladesh Standard Time",
+      "value" : "Bangladesh Standard Time"
+    }, {
+      "name" : "Belarus Standard Time",
+      "value" : "Belarus Standard Time"
+    }, {
+      "name" : "Bougainville Standard Time",
+      "value" : "Bougainville Standard Time"
+    }, {
+      "name" : "Canada Central Standard Time",
+      "value" : "Canada Central Standard Time"
+    }, {
+      "name" : "Cape Verde Standard Time",
+      "value" : "Cape Verde Standard Time"
+    }, {
+      "name" : "Caucasus Standard Time",
+      "value" : "Caucasus Standard Time"
+    }, {
+      "name" : "Cen. Australia Standard Time",
+      "value" : "Cen. Australia Standard Time"
+    }, {
+      "name" : "Central America Standard Time",
+      "value" : "Central America Standard Time"
+    }, {
+      "name" : "Central Asia Standard Time",
+      "value" : "Central Asia Standard Time"
+    }, {
+      "name" : "Central Brazilian Standard Time",
+      "value" : "Central Brazilian Standard Time"
+    }, {
+      "name" : "Central Europe Standard Time",
+      "value" : "Central Europe Standard Time"
+    }, {
+      "name" : "Central European Standard Time",
+      "value" : "Central European Standard Time"
+    }, {
+      "name" : "Central Pacific Standard Time",
+      "value" : "Central Pacific Standard Time"
+    }, {
+      "name" : "Central Standard Time",
+      "value" : "Central Standard Time"
+    }, {
+      "name" : "Central Standard Time (Mexico)",
+      "value" : "Central Standard Time (Mexico)"
+    }, {
+      "name" : "Chatham Islands Standard Time",
+      "value" : "Chatham Islands Standard Time"
+    }, {
+      "name" : "China Standard Time",
+      "value" : "China Standard Time"
+    }, {
+      "name" : "Cuba Standard Time",
+      "value" : "Cuba Standard Time"
+    }, {
+      "name" : "Dateline Standard Time",
+      "value" : "Dateline Standard Time"
+    }, {
+      "name" : "E. Africa Standard Time",
+      "value" : "E. Africa Standard Time"
+    }, {
+      "name" : "E. Australia Standard Time",
+      "value" : "E. Australia Standard Time"
+    }, {
+      "name" : "E. Europe Standard Time",
+      "value" : "E. Europe Standard Time"
+    }, {
+      "name" : "E. South America Standard Time",
+      "value" : "E. South America Standard Time"
+    }, {
+      "name" : "Easter Island Standard Time",
+      "value" : "Easter Island Standard Time"
+    }, {
+      "name" : "Eastern Standard Time",
+      "value" : "Eastern Standard Time"
+    }, {
+      "name" : "Eastern Standard Time (Mexico)",
+      "value" : "Eastern Standard Time (Mexico)"
+    }, {
+      "name" : "Egypt Standard Time",
+      "value" : "Egypt Standard Time"
+    }, {
+      "name" : "Ekaterinburg Standard Time",
+      "value" : "Ekaterinburg Standard Time"
+    }, {
+      "name" : "Etc/GMT",
+      "value" : "Etc/GMT"
+    }, {
+      "name" : "Etc/GMT-12",
+      "value" : "Etc/GMT-12"
+    }, {
+      "name" : "Etc/GMT+11",
+      "value" : "Etc/GMT+11"
+    }, {
+      "name" : "Etc/GMT+12",
+      "value" : "Etc/GMT+12"
+    }, {
+      "name" : "Etc/GMT+2",
+      "value" : "Etc/GMT+2"
+    }, {
+      "name" : "Europe/Berlin",
+      "value" : "Europe/Berlin"
+    }, {
+      "name" : "Europe/Bucharest",
+      "value" : "Europe/Bucharest"
+    }, {
+      "name" : "Europe/Budapest",
+      "value" : "Europe/Budapest"
+    }, {
+      "name" : "Europe/Istanbul",
+      "value" : "Europe/Istanbul"
+    }, {
+      "name" : "Europe/Kaliningrad",
+      "value" : "Europe/Kaliningrad"
+    }, {
+      "name" : "Europe/Kyiv (Kiev)",
+      "value" : "Europe/Kyiv (Kiev)"
+    }, {
+      "name" : "Europe/London",
+      "value" : "Europe/London"
+    }, {
+      "name" : "Europe/Moscow",
+      "value" : "Europe/Moscow"
+    }, {
+      "name" : "Europe/Paris",
+      "value" : "Europe/Paris"
+    }, {
+      "name" : "Europe/Warsaw",
+      "value" : "Europe/Warsaw"
+    }, {
+      "name" : "Fiji Standard Time",
+      "value" : "Fiji Standard Time"
+    }, {
+      "name" : "FLE Standard Time",
+      "value" : "FLE Standard Time"
+    }, {
+      "name" : "Georgian Standard Time",
+      "value" : "Georgian Standard Time"
+    }, {
+      "name" : "GMT Standard Time",
+      "value" : "GMT Standard Time"
+    }, {
+      "name" : "Greenland Standard Time",
+      "value" : "Greenland Standard Time"
+    }, {
+      "name" : "Greenwich Standard Time",
+      "value" : "Greenwich Standard Time"
+    }, {
+      "name" : "GTB Standard Time",
+      "value" : "GTB Standard Time"
+    }, {
+      "name" : "Haiti Standard Time",
+      "value" : "Haiti Standard Time"
+    }, {
+      "name" : "Hawaiian Standard Time",
+      "value" : "Hawaiian Standard Time"
+    }, {
+      "name" : "India Standard Time",
+      "value" : "India Standard Time"
+    }, {
+      "name" : "Indian/Mauritius",
+      "value" : "Indian/Mauritius"
+    }, {
+      "name" : "Iran Standard Time",
+      "value" : "Iran Standard Time"
+    }, {
+      "name" : "Israel Standard Time",
+      "value" : "Israel Standard Time"
+    }, {
+      "name" : "Jordan Standard Time",
+      "value" : "Jordan Standard Time"
+    }, {
+      "name" : "Kaliningrad Standard Time",
+      "value" : "Kaliningrad Standard Time"
+    }, {
+      "name" : "Korea Standard Time",
+      "value" : "Korea Standard Time"
+    }, {
+      "name" : "Libya Standard Time",
+      "value" : "Libya Standard Time"
+    }, {
+      "name" : "Line Islands Standard Time",
+      "value" : "Line Islands Standard Time"
+    }, {
+      "name" : "Lord Howe Standard Time",
+      "value" : "Lord Howe Standard Time"
+    }, {
+      "name" : "Magadan Standard Time",
+      "value" : "Magadan Standard Time"
+    }, {
+      "name" : "Magallanes Standard Time",
+      "value" : "Magallanes Standard Time"
+    }, {
+      "name" : "Marquesas Standard Time",
+      "value" : "Marquesas Standard Time"
+    }, {
+      "name" : "Mauritius Standard Time",
+      "value" : "Mauritius Standard Time"
+    }, {
+      "name" : "Middle East Standard Time",
+      "value" : "Middle East Standard Time"
+    }, {
+      "name" : "Montevideo Standard Time",
+      "value" : "Montevideo Standard Time"
+    }, {
+      "name" : "Morocco Standard Time",
+      "value" : "Morocco Standard Time"
+    }, {
+      "name" : "Mountain Standard Time",
+      "value" : "Mountain Standard Time"
+    }, {
+      "name" : "Mountain Standard Time (Mexico)",
+      "value" : "Mountain Standard Time (Mexico)"
+    }, {
+      "name" : "Myanmar Standard Time",
+      "value" : "Myanmar Standard Time"
+    }, {
+      "name" : "N. Central Asia Standard Time",
+      "value" : "N. Central Asia Standard Time"
+    }, {
+      "name" : "Namibia Standard Time",
+      "value" : "Namibia Standard Time"
+    }, {
+      "name" : "Nepal Standard Time",
+      "value" : "Nepal Standard Time"
+    }, {
+      "name" : "New Zealand Standard Time",
+      "value" : "New Zealand Standard Time"
+    }, {
+      "name" : "Newfoundland Standard Time",
+      "value" : "Newfoundland Standard Time"
+    }, {
+      "name" : "Norfolk Standard Time",
+      "value" : "Norfolk Standard Time"
+    }, {
+      "name" : "North Asia East Standard Time",
+      "value" : "North Asia East Standard Time"
+    }, {
+      "name" : "North Asia Standard Time",
+      "value" : "North Asia Standard Time"
+    }, {
+      "name" : "North Korea Standard Time",
+      "value" : "North Korea Standard Time"
+    }, {
+      "name" : "Omsk Standard Time",
+      "value" : "Omsk Standard Time"
+    }, {
+      "name" : "Pacific SA Standard Time",
+      "value" : "Pacific SA Standard Time"
+    }, {
+      "name" : "Pacific Standard Time",
+      "value" : "Pacific Standard Time"
+    }, {
+      "name" : "Pacific Standard Time (Mexico)",
+      "value" : "Pacific Standard Time (Mexico)"
+    }, {
+      "name" : "Pacific/Apia",
+      "value" : "Pacific/Apia"
+    }, {
+      "name" : "Pacific/Auckland",
+      "value" : "Pacific/Auckland"
+    }, {
+      "name" : "Pacific/Fiji",
+      "value" : "Pacific/Fiji"
+    }, {
+      "name" : "Pacific/Guadalcanal",
+      "value" : "Pacific/Guadalcanal"
+    }, {
+      "name" : "Pacific/Honolulu",
+      "value" : "Pacific/Honolulu"
+    }, {
+      "name" : "Pacific/Kiritimati",
+      "value" : "Pacific/Kiritimati"
+    }, {
+      "name" : "Pacific/Port_Moresby",
+      "value" : "Pacific/Port_Moresby"
+    }, {
+      "name" : "Pacific/Tongatapu",
+      "value" : "Pacific/Tongatapu"
+    }, {
+      "name" : "Pakistan Standard Time",
+      "value" : "Pakistan Standard Time"
+    }, {
+      "name" : "Paraguay Standard Time",
+      "value" : "Paraguay Standard Time"
+    }, {
+      "name" : "Qyzylorda Standard Time",
+      "value" : "Qyzylorda Standard Time"
+    }, {
+      "name" : "Romance Standard Time",
+      "value" : "Romance Standard Time"
+    }, {
+      "name" : "Russia Time Zone 10",
+      "value" : "Russia Time Zone 10"
+    }, {
+      "name" : "Russia Time Zone 11",
+      "value" : "Russia Time Zone 11"
+    }, {
+      "name" : "Russia Time Zone 3",
+      "value" : "Russia Time Zone 3"
+    }, {
+      "name" : "Russian Standard Time",
+      "value" : "Russian Standard Time"
+    }, {
+      "name" : "SA Eastern Standard Time",
+      "value" : "SA Eastern Standard Time"
+    }, {
+      "name" : "SA Pacific Standard Time",
+      "value" : "SA Pacific Standard Time"
+    }, {
+      "name" : "SA Western Standard Time",
+      "value" : "SA Western Standard Time"
+    }, {
+      "name" : "Saint Pierre Standard Time",
+      "value" : "Saint Pierre Standard Time"
+    }, {
+      "name" : "Sakhalin Standard Time",
+      "value" : "Sakhalin Standard Time"
+    }, {
+      "name" : "Samoa Standard Time",
+      "value" : "Samoa Standard Time"
+    }, {
+      "name" : "Sao Tome Standard Time",
+      "value" : "Sao Tome Standard Time"
+    }, {
+      "name" : "Saratov Standard Time",
+      "value" : "Saratov Standard Time"
+    }, {
+      "name" : "SE Asia Standard Time",
+      "value" : "SE Asia Standard Time"
+    }, {
+      "name" : "Singapore Standard Time",
+      "value" : "Singapore Standard Time"
+    }, {
+      "name" : "South Africa Standard Time",
+      "value" : "South Africa Standard Time"
+    }, {
+      "name" : "South Sudan Standard Time",
+      "value" : "South Sudan Standard Time"
+    }, {
+      "name" : "Sri Lanka Standard Time",
+      "value" : "Sri Lanka Standard Time"
+    }, {
+      "name" : "Sudan Standard Time",
+      "value" : "Sudan Standard Time"
+    }, {
+      "name" : "Syria Standard Time",
+      "value" : "Syria Standard Time"
+    }, {
+      "name" : "Taipei Standard Time",
+      "value" : "Taipei Standard Time"
+    }, {
+      "name" : "Tasmania Standard Time",
+      "value" : "Tasmania Standard Time"
+    }, {
+      "name" : "Tocantins Standard Time",
+      "value" : "Tocantins Standard Time"
+    }, {
+      "name" : "Tokyo Standard Time",
+      "value" : "Tokyo Standard Time"
+    }, {
+      "name" : "Tomsk Standard Time",
+      "value" : "Tomsk Standard Time"
+    }, {
+      "name" : "Tonga Standard Time",
+      "value" : "Tonga Standard Time"
+    }, {
+      "name" : "Transbaikal Standard Time",
+      "value" : "Transbaikal Standard Time"
+    }, {
+      "name" : "Turkey Standard Time",
+      "value" : "Turkey Standard Time"
+    }, {
+      "name" : "Turks And Caicos Standard Time",
+      "value" : "Turks And Caicos Standard Time"
+    }, {
+      "name" : "Ulaanbaatar Standard Time",
+      "value" : "Ulaanbaatar Standard Time"
+    }, {
+      "name" : "US Eastern Standard Time",
+      "value" : "US Eastern Standard Time"
+    }, {
+      "name" : "US Mountain Standard Time",
+      "value" : "US Mountain Standard Time"
+    }, {
+      "name" : "UTC",
+      "value" : "UTC"
+    }, {
+      "name" : "UTC-02",
+      "value" : "UTC-02"
+    }, {
+      "name" : "UTC-08",
+      "value" : "UTC-08"
+    }, {
+      "name" : "UTC-09",
+      "value" : "UTC-09"
+    }, {
+      "name" : "UTC-11",
+      "value" : "UTC-11"
+    }, {
+      "name" : "UTC+12",
+      "value" : "UTC+12"
+    }, {
+      "name" : "UTC+13",
+      "value" : "UTC+13"
+    }, {
+      "name" : "Venezuela Standard Time",
+      "value" : "Venezuela Standard Time"
+    }, {
+      "name" : "Vladivostok Standard Time",
+      "value" : "Vladivostok Standard Time"
+    }, {
+      "name" : "Volgograd Standard Time",
+      "value" : "Volgograd Standard Time"
+    }, {
+      "name" : "W. Australia Standard Time",
+      "value" : "W. Australia Standard Time"
+    }, {
+      "name" : "W. Central Africa Standard Time",
+      "value" : "W. Central Africa Standard Time"
+    }, {
+      "name" : "W. Europe Standard Time",
+      "value" : "W. Europe Standard Time"
+    }, {
+      "name" : "W. Mongolia Standard Time",
+      "value" : "W. Mongolia Standard Time"
+    }, {
+      "name" : "West Asia Standard Time",
+      "value" : "West Asia Standard Time"
+    }, {
+      "name" : "West Bank Standard Time",
+      "value" : "West Bank Standard Time"
+    }, {
+      "name" : "West Pacific Standard Time",
+      "value" : "West Pacific Standard Time"
+    }, {
+      "name" : "Yakutsk Standard Time",
+      "value" : "Yakutsk Standard Time"
+    }, {
+      "name" : "Yukon Standard Time",
+      "value" : "Yukon Standard Time"
+    } ]
+  }, {
     "id" : "updateTaskOptions.title",
     "label" : "Title",
     "description" : "The Title of the Task",
@@ -4301,6 +5056,761 @@
     "condition" : {
       "property" : "operation.operation",
       "oneOf" : [ "UPDATE_TASK" ],
+      "type" : "simple"
+    },
+    "type" : "Dropdown",
+    "choices" : [ {
+      "name" : "Afghanistan Standard Time",
+      "value" : "Afghanistan Standard Time"
+    }, {
+      "name" : "Africa/Cairo",
+      "value" : "Africa/Cairo"
+    }, {
+      "name" : "Africa/Casablanca",
+      "value" : "Africa/Casablanca"
+    }, {
+      "name" : "Africa/Johannesburg",
+      "value" : "Africa/Johannesburg"
+    }, {
+      "name" : "Africa/Lagos",
+      "value" : "Africa/Lagos"
+    }, {
+      "name" : "Africa/Nairobi",
+      "value" : "Africa/Nairobi"
+    }, {
+      "name" : "Africa/Windhoek",
+      "value" : "Africa/Windhoek"
+    }, {
+      "name" : "Alaskan Standard Time",
+      "value" : "Alaskan Standard Time"
+    }, {
+      "name" : "Aleutian Standard Time",
+      "value" : "Aleutian Standard Time"
+    }, {
+      "name" : "Altai Standard Time",
+      "value" : "Altai Standard Time"
+    }, {
+      "name" : "America/Anchorage",
+      "value" : "America/Anchorage"
+    }, {
+      "name" : "America/Argentina/Buenos_Aires",
+      "value" : "America/Argentina/Buenos_Aires"
+    }, {
+      "name" : "America/Asuncion",
+      "value" : "America/Asuncion"
+    }, {
+      "name" : "America/Bahia",
+      "value" : "America/Bahia"
+    }, {
+      "name" : "America/Bogota",
+      "value" : "America/Bogota"
+    }, {
+      "name" : "America/Caracas",
+      "value" : "America/Caracas"
+    }, {
+      "name" : "America/Cayenne",
+      "value" : "America/Cayenne"
+    }, {
+      "name" : "America/Chicago",
+      "value" : "America/Chicago"
+    }, {
+      "name" : "America/Chihuahua",
+      "value" : "America/Chihuahua"
+    }, {
+      "name" : "America/Cuiaba",
+      "value" : "America/Cuiaba"
+    }, {
+      "name" : "America/Denver",
+      "value" : "America/Denver"
+    }, {
+      "name" : "America/Godthab",
+      "value" : "America/Godthab"
+    }, {
+      "name" : "America/Guatemala",
+      "value" : "America/Guatemala"
+    }, {
+      "name" : "America/Halifax",
+      "value" : "America/Halifax"
+    }, {
+      "name" : "America/Indiana/Indianapolis",
+      "value" : "America/Indiana/Indianapolis"
+    }, {
+      "name" : "America/La_Paz",
+      "value" : "America/La_Paz"
+    }, {
+      "name" : "America/Los_Angeles",
+      "value" : "America/Los_Angeles"
+    }, {
+      "name" : "America/Mexico_City",
+      "value" : "America/Mexico_City"
+    }, {
+      "name" : "America/Montevideo",
+      "value" : "America/Montevideo"
+    }, {
+      "name" : "America/New_York",
+      "value" : "America/New_York"
+    }, {
+      "name" : "America/Phoenix",
+      "value" : "America/Phoenix"
+    }, {
+      "name" : "America/Regina",
+      "value" : "America/Regina"
+    }, {
+      "name" : "America/Santa_Isabel",
+      "value" : "America/Santa_Isabel"
+    }, {
+      "name" : "America/Santiago",
+      "value" : "America/Santiago"
+    }, {
+      "name" : "America/Sao_Paulo",
+      "value" : "America/Sao_Paulo"
+    }, {
+      "name" : "America/St_Johns",
+      "value" : "America/St_Johns"
+    }, {
+      "name" : "Arab Standard Time",
+      "value" : "Arab Standard Time"
+    }, {
+      "name" : "Arabian Standard Time",
+      "value" : "Arabian Standard Time"
+    }, {
+      "name" : "Arabic Standard Time",
+      "value" : "Arabic Standard Time"
+    }, {
+      "name" : "Argentina Standard Time",
+      "value" : "Argentina Standard Time"
+    }, {
+      "name" : "Asia/Amman",
+      "value" : "Asia/Amman"
+    }, {
+      "name" : "Asia/Astana (Almaty)",
+      "value" : "Asia/Astana (Almaty)"
+    }, {
+      "name" : "Asia/Baghdad",
+      "value" : "Asia/Baghdad"
+    }, {
+      "name" : "Asia/Baku",
+      "value" : "Asia/Baku"
+    }, {
+      "name" : "Asia/Bangkok",
+      "value" : "Asia/Bangkok"
+    }, {
+      "name" : "Asia/Beirut",
+      "value" : "Asia/Beirut"
+    }, {
+      "name" : "Asia/Colombo",
+      "value" : "Asia/Colombo"
+    }, {
+      "name" : "Asia/Damascus",
+      "value" : "Asia/Damascus"
+    }, {
+      "name" : "Asia/Dhaka",
+      "value" : "Asia/Dhaka"
+    }, {
+      "name" : "Asia/Dubai",
+      "value" : "Asia/Dubai"
+    }, {
+      "name" : "Asia/Irkutsk",
+      "value" : "Asia/Irkutsk"
+    }, {
+      "name" : "Asia/Jerusalem",
+      "value" : "Asia/Jerusalem"
+    }, {
+      "name" : "Asia/Kabul",
+      "value" : "Asia/Kabul"
+    }, {
+      "name" : "Asia/Karachi",
+      "value" : "Asia/Karachi"
+    }, {
+      "name" : "Asia/Kathmandu",
+      "value" : "Asia/Kathmandu"
+    }, {
+      "name" : "Asia/Kolkata",
+      "value" : "Asia/Kolkata"
+    }, {
+      "name" : "Asia/Krasnoyarsk",
+      "value" : "Asia/Krasnoyarsk"
+    }, {
+      "name" : "Asia/Magadan",
+      "value" : "Asia/Magadan"
+    }, {
+      "name" : "Asia/Novosibirsk",
+      "value" : "Asia/Novosibirsk"
+    }, {
+      "name" : "Asia/Riyadh",
+      "value" : "Asia/Riyadh"
+    }, {
+      "name" : "Asia/Seoul",
+      "value" : "Asia/Seoul"
+    }, {
+      "name" : "Asia/Shanghai",
+      "value" : "Asia/Shanghai"
+    }, {
+      "name" : "Asia/Singapore",
+      "value" : "Asia/Singapore"
+    }, {
+      "name" : "Asia/Taipei",
+      "value" : "Asia/Taipei"
+    }, {
+      "name" : "Asia/Tbilisi",
+      "value" : "Asia/Tbilisi"
+    }, {
+      "name" : "Asia/Tehran",
+      "value" : "Asia/Tehran"
+    }, {
+      "name" : "Asia/Tokyo",
+      "value" : "Asia/Tokyo"
+    }, {
+      "name" : "Asia/Toshkent (Tashkent)",
+      "value" : "Asia/Toshkent (Tashkent)"
+    }, {
+      "name" : "Asia/Ulaanbaatar",
+      "value" : "Asia/Ulaanbaatar"
+    }, {
+      "name" : "Asia/Vladivostok",
+      "value" : "Asia/Vladivostok"
+    }, {
+      "name" : "Asia/Yakutsk",
+      "value" : "Asia/Yakutsk"
+    }, {
+      "name" : "Asia/Yangon (Rangoon)",
+      "value" : "Asia/Yangon (Rangoon)"
+    }, {
+      "name" : "Asia/Yekaterinburg",
+      "value" : "Asia/Yekaterinburg"
+    }, {
+      "name" : "Asia/Yerevan",
+      "value" : "Asia/Yerevan"
+    }, {
+      "name" : "Astrakhan Standard Time",
+      "value" : "Astrakhan Standard Time"
+    }, {
+      "name" : "Atlantic Standard Time",
+      "value" : "Atlantic Standard Time"
+    }, {
+      "name" : "Atlantic/Azores",
+      "value" : "Atlantic/Azores"
+    }, {
+      "name" : "Atlantic/Cape_Verde",
+      "value" : "Atlantic/Cape_Verde"
+    }, {
+      "name" : "Atlantic/Reykjavik",
+      "value" : "Atlantic/Reykjavik"
+    }, {
+      "name" : "AUS Central Standard Time",
+      "value" : "AUS Central Standard Time"
+    }, {
+      "name" : "Aus Central W. Standard Time",
+      "value" : "Aus Central W. Standard Time"
+    }, {
+      "name" : "AUS Eastern Standard Time",
+      "value" : "AUS Eastern Standard Time"
+    }, {
+      "name" : "Australia/Adelaide",
+      "value" : "Australia/Adelaide"
+    }, {
+      "name" : "Australia/Brisbane",
+      "value" : "Australia/Brisbane"
+    }, {
+      "name" : "Australia/Darwin",
+      "value" : "Australia/Darwin"
+    }, {
+      "name" : "Australia/Hobart",
+      "value" : "Australia/Hobart"
+    }, {
+      "name" : "Australia/Perth",
+      "value" : "Australia/Perth"
+    }, {
+      "name" : "Australia/Sydney",
+      "value" : "Australia/Sydney"
+    }, {
+      "name" : "Azerbaijan Standard Time",
+      "value" : "Azerbaijan Standard Time"
+    }, {
+      "name" : "Azores Standard Time",
+      "value" : "Azores Standard Time"
+    }, {
+      "name" : "Bahia Standard Time",
+      "value" : "Bahia Standard Time"
+    }, {
+      "name" : "Bangladesh Standard Time",
+      "value" : "Bangladesh Standard Time"
+    }, {
+      "name" : "Belarus Standard Time",
+      "value" : "Belarus Standard Time"
+    }, {
+      "name" : "Bougainville Standard Time",
+      "value" : "Bougainville Standard Time"
+    }, {
+      "name" : "Canada Central Standard Time",
+      "value" : "Canada Central Standard Time"
+    }, {
+      "name" : "Cape Verde Standard Time",
+      "value" : "Cape Verde Standard Time"
+    }, {
+      "name" : "Caucasus Standard Time",
+      "value" : "Caucasus Standard Time"
+    }, {
+      "name" : "Cen. Australia Standard Time",
+      "value" : "Cen. Australia Standard Time"
+    }, {
+      "name" : "Central America Standard Time",
+      "value" : "Central America Standard Time"
+    }, {
+      "name" : "Central Asia Standard Time",
+      "value" : "Central Asia Standard Time"
+    }, {
+      "name" : "Central Brazilian Standard Time",
+      "value" : "Central Brazilian Standard Time"
+    }, {
+      "name" : "Central Europe Standard Time",
+      "value" : "Central Europe Standard Time"
+    }, {
+      "name" : "Central European Standard Time",
+      "value" : "Central European Standard Time"
+    }, {
+      "name" : "Central Pacific Standard Time",
+      "value" : "Central Pacific Standard Time"
+    }, {
+      "name" : "Central Standard Time",
+      "value" : "Central Standard Time"
+    }, {
+      "name" : "Central Standard Time (Mexico)",
+      "value" : "Central Standard Time (Mexico)"
+    }, {
+      "name" : "Chatham Islands Standard Time",
+      "value" : "Chatham Islands Standard Time"
+    }, {
+      "name" : "China Standard Time",
+      "value" : "China Standard Time"
+    }, {
+      "name" : "Cuba Standard Time",
+      "value" : "Cuba Standard Time"
+    }, {
+      "name" : "Dateline Standard Time",
+      "value" : "Dateline Standard Time"
+    }, {
+      "name" : "E. Africa Standard Time",
+      "value" : "E. Africa Standard Time"
+    }, {
+      "name" : "E. Australia Standard Time",
+      "value" : "E. Australia Standard Time"
+    }, {
+      "name" : "E. Europe Standard Time",
+      "value" : "E. Europe Standard Time"
+    }, {
+      "name" : "E. South America Standard Time",
+      "value" : "E. South America Standard Time"
+    }, {
+      "name" : "Easter Island Standard Time",
+      "value" : "Easter Island Standard Time"
+    }, {
+      "name" : "Eastern Standard Time",
+      "value" : "Eastern Standard Time"
+    }, {
+      "name" : "Eastern Standard Time (Mexico)",
+      "value" : "Eastern Standard Time (Mexico)"
+    }, {
+      "name" : "Egypt Standard Time",
+      "value" : "Egypt Standard Time"
+    }, {
+      "name" : "Ekaterinburg Standard Time",
+      "value" : "Ekaterinburg Standard Time"
+    }, {
+      "name" : "Etc/GMT",
+      "value" : "Etc/GMT"
+    }, {
+      "name" : "Etc/GMT-12",
+      "value" : "Etc/GMT-12"
+    }, {
+      "name" : "Etc/GMT+11",
+      "value" : "Etc/GMT+11"
+    }, {
+      "name" : "Etc/GMT+12",
+      "value" : "Etc/GMT+12"
+    }, {
+      "name" : "Etc/GMT+2",
+      "value" : "Etc/GMT+2"
+    }, {
+      "name" : "Europe/Berlin",
+      "value" : "Europe/Berlin"
+    }, {
+      "name" : "Europe/Bucharest",
+      "value" : "Europe/Bucharest"
+    }, {
+      "name" : "Europe/Budapest",
+      "value" : "Europe/Budapest"
+    }, {
+      "name" : "Europe/Istanbul",
+      "value" : "Europe/Istanbul"
+    }, {
+      "name" : "Europe/Kaliningrad",
+      "value" : "Europe/Kaliningrad"
+    }, {
+      "name" : "Europe/Kyiv (Kiev)",
+      "value" : "Europe/Kyiv (Kiev)"
+    }, {
+      "name" : "Europe/London",
+      "value" : "Europe/London"
+    }, {
+      "name" : "Europe/Moscow",
+      "value" : "Europe/Moscow"
+    }, {
+      "name" : "Europe/Paris",
+      "value" : "Europe/Paris"
+    }, {
+      "name" : "Europe/Warsaw",
+      "value" : "Europe/Warsaw"
+    }, {
+      "name" : "Fiji Standard Time",
+      "value" : "Fiji Standard Time"
+    }, {
+      "name" : "FLE Standard Time",
+      "value" : "FLE Standard Time"
+    }, {
+      "name" : "Georgian Standard Time",
+      "value" : "Georgian Standard Time"
+    }, {
+      "name" : "GMT Standard Time",
+      "value" : "GMT Standard Time"
+    }, {
+      "name" : "Greenland Standard Time",
+      "value" : "Greenland Standard Time"
+    }, {
+      "name" : "Greenwich Standard Time",
+      "value" : "Greenwich Standard Time"
+    }, {
+      "name" : "GTB Standard Time",
+      "value" : "GTB Standard Time"
+    }, {
+      "name" : "Haiti Standard Time",
+      "value" : "Haiti Standard Time"
+    }, {
+      "name" : "Hawaiian Standard Time",
+      "value" : "Hawaiian Standard Time"
+    }, {
+      "name" : "India Standard Time",
+      "value" : "India Standard Time"
+    }, {
+      "name" : "Indian/Mauritius",
+      "value" : "Indian/Mauritius"
+    }, {
+      "name" : "Iran Standard Time",
+      "value" : "Iran Standard Time"
+    }, {
+      "name" : "Israel Standard Time",
+      "value" : "Israel Standard Time"
+    }, {
+      "name" : "Jordan Standard Time",
+      "value" : "Jordan Standard Time"
+    }, {
+      "name" : "Kaliningrad Standard Time",
+      "value" : "Kaliningrad Standard Time"
+    }, {
+      "name" : "Korea Standard Time",
+      "value" : "Korea Standard Time"
+    }, {
+      "name" : "Libya Standard Time",
+      "value" : "Libya Standard Time"
+    }, {
+      "name" : "Line Islands Standard Time",
+      "value" : "Line Islands Standard Time"
+    }, {
+      "name" : "Lord Howe Standard Time",
+      "value" : "Lord Howe Standard Time"
+    }, {
+      "name" : "Magadan Standard Time",
+      "value" : "Magadan Standard Time"
+    }, {
+      "name" : "Magallanes Standard Time",
+      "value" : "Magallanes Standard Time"
+    }, {
+      "name" : "Marquesas Standard Time",
+      "value" : "Marquesas Standard Time"
+    }, {
+      "name" : "Mauritius Standard Time",
+      "value" : "Mauritius Standard Time"
+    }, {
+      "name" : "Middle East Standard Time",
+      "value" : "Middle East Standard Time"
+    }, {
+      "name" : "Montevideo Standard Time",
+      "value" : "Montevideo Standard Time"
+    }, {
+      "name" : "Morocco Standard Time",
+      "value" : "Morocco Standard Time"
+    }, {
+      "name" : "Mountain Standard Time",
+      "value" : "Mountain Standard Time"
+    }, {
+      "name" : "Mountain Standard Time (Mexico)",
+      "value" : "Mountain Standard Time (Mexico)"
+    }, {
+      "name" : "Myanmar Standard Time",
+      "value" : "Myanmar Standard Time"
+    }, {
+      "name" : "N. Central Asia Standard Time",
+      "value" : "N. Central Asia Standard Time"
+    }, {
+      "name" : "Namibia Standard Time",
+      "value" : "Namibia Standard Time"
+    }, {
+      "name" : "Nepal Standard Time",
+      "value" : "Nepal Standard Time"
+    }, {
+      "name" : "New Zealand Standard Time",
+      "value" : "New Zealand Standard Time"
+    }, {
+      "name" : "Newfoundland Standard Time",
+      "value" : "Newfoundland Standard Time"
+    }, {
+      "name" : "Norfolk Standard Time",
+      "value" : "Norfolk Standard Time"
+    }, {
+      "name" : "North Asia East Standard Time",
+      "value" : "North Asia East Standard Time"
+    }, {
+      "name" : "North Asia Standard Time",
+      "value" : "North Asia Standard Time"
+    }, {
+      "name" : "North Korea Standard Time",
+      "value" : "North Korea Standard Time"
+    }, {
+      "name" : "Omsk Standard Time",
+      "value" : "Omsk Standard Time"
+    }, {
+      "name" : "Pacific SA Standard Time",
+      "value" : "Pacific SA Standard Time"
+    }, {
+      "name" : "Pacific Standard Time",
+      "value" : "Pacific Standard Time"
+    }, {
+      "name" : "Pacific Standard Time (Mexico)",
+      "value" : "Pacific Standard Time (Mexico)"
+    }, {
+      "name" : "Pacific/Apia",
+      "value" : "Pacific/Apia"
+    }, {
+      "name" : "Pacific/Auckland",
+      "value" : "Pacific/Auckland"
+    }, {
+      "name" : "Pacific/Fiji",
+      "value" : "Pacific/Fiji"
+    }, {
+      "name" : "Pacific/Guadalcanal",
+      "value" : "Pacific/Guadalcanal"
+    }, {
+      "name" : "Pacific/Honolulu",
+      "value" : "Pacific/Honolulu"
+    }, {
+      "name" : "Pacific/Kiritimati",
+      "value" : "Pacific/Kiritimati"
+    }, {
+      "name" : "Pacific/Port_Moresby",
+      "value" : "Pacific/Port_Moresby"
+    }, {
+      "name" : "Pacific/Tongatapu",
+      "value" : "Pacific/Tongatapu"
+    }, {
+      "name" : "Pakistan Standard Time",
+      "value" : "Pakistan Standard Time"
+    }, {
+      "name" : "Paraguay Standard Time",
+      "value" : "Paraguay Standard Time"
+    }, {
+      "name" : "Qyzylorda Standard Time",
+      "value" : "Qyzylorda Standard Time"
+    }, {
+      "name" : "Romance Standard Time",
+      "value" : "Romance Standard Time"
+    }, {
+      "name" : "Russia Time Zone 10",
+      "value" : "Russia Time Zone 10"
+    }, {
+      "name" : "Russia Time Zone 11",
+      "value" : "Russia Time Zone 11"
+    }, {
+      "name" : "Russia Time Zone 3",
+      "value" : "Russia Time Zone 3"
+    }, {
+      "name" : "Russian Standard Time",
+      "value" : "Russian Standard Time"
+    }, {
+      "name" : "SA Eastern Standard Time",
+      "value" : "SA Eastern Standard Time"
+    }, {
+      "name" : "SA Pacific Standard Time",
+      "value" : "SA Pacific Standard Time"
+    }, {
+      "name" : "SA Western Standard Time",
+      "value" : "SA Western Standard Time"
+    }, {
+      "name" : "Saint Pierre Standard Time",
+      "value" : "Saint Pierre Standard Time"
+    }, {
+      "name" : "Sakhalin Standard Time",
+      "value" : "Sakhalin Standard Time"
+    }, {
+      "name" : "Samoa Standard Time",
+      "value" : "Samoa Standard Time"
+    }, {
+      "name" : "Sao Tome Standard Time",
+      "value" : "Sao Tome Standard Time"
+    }, {
+      "name" : "Saratov Standard Time",
+      "value" : "Saratov Standard Time"
+    }, {
+      "name" : "SE Asia Standard Time",
+      "value" : "SE Asia Standard Time"
+    }, {
+      "name" : "Singapore Standard Time",
+      "value" : "Singapore Standard Time"
+    }, {
+      "name" : "South Africa Standard Time",
+      "value" : "South Africa Standard Time"
+    }, {
+      "name" : "South Sudan Standard Time",
+      "value" : "South Sudan Standard Time"
+    }, {
+      "name" : "Sri Lanka Standard Time",
+      "value" : "Sri Lanka Standard Time"
+    }, {
+      "name" : "Sudan Standard Time",
+      "value" : "Sudan Standard Time"
+    }, {
+      "name" : "Syria Standard Time",
+      "value" : "Syria Standard Time"
+    }, {
+      "name" : "Taipei Standard Time",
+      "value" : "Taipei Standard Time"
+    }, {
+      "name" : "Tasmania Standard Time",
+      "value" : "Tasmania Standard Time"
+    }, {
+      "name" : "Tocantins Standard Time",
+      "value" : "Tocantins Standard Time"
+    }, {
+      "name" : "Tokyo Standard Time",
+      "value" : "Tokyo Standard Time"
+    }, {
+      "name" : "Tomsk Standard Time",
+      "value" : "Tomsk Standard Time"
+    }, {
+      "name" : "Tonga Standard Time",
+      "value" : "Tonga Standard Time"
+    }, {
+      "name" : "Transbaikal Standard Time",
+      "value" : "Transbaikal Standard Time"
+    }, {
+      "name" : "Turkey Standard Time",
+      "value" : "Turkey Standard Time"
+    }, {
+      "name" : "Turks And Caicos Standard Time",
+      "value" : "Turks And Caicos Standard Time"
+    }, {
+      "name" : "Ulaanbaatar Standard Time",
+      "value" : "Ulaanbaatar Standard Time"
+    }, {
+      "name" : "US Eastern Standard Time",
+      "value" : "US Eastern Standard Time"
+    }, {
+      "name" : "US Mountain Standard Time",
+      "value" : "US Mountain Standard Time"
+    }, {
+      "name" : "UTC",
+      "value" : "UTC"
+    }, {
+      "name" : "UTC-02",
+      "value" : "UTC-02"
+    }, {
+      "name" : "UTC-08",
+      "value" : "UTC-08"
+    }, {
+      "name" : "UTC-09",
+      "value" : "UTC-09"
+    }, {
+      "name" : "UTC-11",
+      "value" : "UTC-11"
+    }, {
+      "name" : "UTC+12",
+      "value" : "UTC+12"
+    }, {
+      "name" : "UTC+13",
+      "value" : "UTC+13"
+    }, {
+      "name" : "Venezuela Standard Time",
+      "value" : "Venezuela Standard Time"
+    }, {
+      "name" : "Vladivostok Standard Time",
+      "value" : "Vladivostok Standard Time"
+    }, {
+      "name" : "Volgograd Standard Time",
+      "value" : "Volgograd Standard Time"
+    }, {
+      "name" : "W. Australia Standard Time",
+      "value" : "W. Australia Standard Time"
+    }, {
+      "name" : "W. Central Africa Standard Time",
+      "value" : "W. Central Africa Standard Time"
+    }, {
+      "name" : "W. Europe Standard Time",
+      "value" : "W. Europe Standard Time"
+    }, {
+      "name" : "W. Mongolia Standard Time",
+      "value" : "W. Mongolia Standard Time"
+    }, {
+      "name" : "West Asia Standard Time",
+      "value" : "West Asia Standard Time"
+    }, {
+      "name" : "West Bank Standard Time",
+      "value" : "West Bank Standard Time"
+    }, {
+      "name" : "West Pacific Standard Time",
+      "value" : "West Pacific Standard Time"
+    }, {
+      "name" : "Yakutsk Standard Time",
+      "value" : "Yakutsk Standard Time"
+    }, {
+      "name" : "Yukon Standard Time",
+      "value" : "Yukon Standard Time"
+    } ]
+  }, {
+    "id" : "updateTaskOptions.reminderDateTime",
+    "label" : "Reminder Date & Time",
+    "description" : "Date and Time the User will be reminded of their Task",
+    "optional" : true,
+    "constraints" : {
+      "notEmpty" : false,
+      "pattern" : {
+        "value" : "^([1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9][0-9][0-9][0-9])?$",
+        "message" : "Please use the format 'YYYY-MM-DDThh:mm:ss.SSSSSS'"
+      }
+    },
+    "feel" : "optional",
+    "group" : "task",
+    "binding" : {
+      "name" : "updateTaskOptions.reminderDateTime",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "operation.operation",
+      "oneOf" : [ "CREATE_TASK" ],
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
+    "id" : "updateTaskOptions.reminderDateTimeTimeZone",
+    "label" : "Reminder Date & Time Timezone",
+    "description" : "Timezone for the Date & Time the User will be reminded of their Task",
+    "optional" : true,
+    "group" : "task",
+    "binding" : {
+      "name" : "updateTaskOptions.reminderDateTimeTimeZone",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "operation.operation",
+      "oneOf" : [ "CREATE_TASK" ],
       "type" : "simple"
     },
     "type" : "Dropdown",

@@ -37,6 +37,9 @@ public class TaskMapper {
       taskDto.setDueDateTime(DateTimeTimeZoneMapper.mapDateTimeTimeZone(todoTask.getDueDateTime()));
       taskDto.setImportance(EnumMapper.mapImportance(todoTask.getImportance()));
       taskDto.setLastModifiedDateTime(todoTask.getLastModifiedDateTime());
+      taskDto.setReminderOn(todoTask.getIsReminderOn());
+      taskDto.setReminderDateTime(
+              DateTimeTimeZoneMapper.mapDateTimeTimeZone(todoTask.getReminderDateTime()));
       taskDto.setStartDateTime(
           DateTimeTimeZoneMapper.mapDateTimeTimeZone(todoTask.getStartDateTime()));
       taskDto.setStatus(EnumMapper.mapTaskStatus(todoTask.getStatus()));
@@ -60,6 +63,9 @@ public class TaskMapper {
       todoTask.setDueDateTime(
           DateTimeTimeZoneMapper.mapDateTimeTimeZoneDto(createUpdateTaskDto.getDueDateTime()));
       todoTask.setImportance(EnumMapper.mapImportanceDto(createUpdateTaskDto.getImportance()));
+      todoTask.setIsReminderOn(createUpdateTaskDto.getReminderOn());
+      todoTask.setReminderDateTime(
+              DateTimeTimeZoneMapper.mapDateTimeTimeZoneDto(createUpdateTaskDto.getReminderDateTime()));
       todoTask.setStartDateTime(
           DateTimeTimeZoneMapper.mapDateTimeTimeZoneDto(createUpdateTaskDto.getStartDateTime()));
       todoTask.setStatus(EnumMapper.mapTaskStatusDto(createUpdateTaskDto.getStatus()));

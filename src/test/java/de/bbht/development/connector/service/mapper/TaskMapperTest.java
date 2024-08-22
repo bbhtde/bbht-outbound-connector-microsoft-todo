@@ -45,6 +45,8 @@ class TaskMapperTest {
     todoTask.setStartDateTime(createDateTimeTimeZone());
     todoTask.setDueDateTime(createDateTimeTimeZone());
     todoTask.setCompletedDateTime(createDateTimeTimeZone());
+    todoTask.setReminderDateTime(createDateTimeTimeZone());
+    todoTask.setIsReminderOn(Boolean.TRUE);
 
     // when
     var taskDto = TaskMapper.mapTask(todoTask);
@@ -58,6 +60,7 @@ class TaskMapperTest {
         .returns(OFFSET_DATE_TIME, TaskDto::getBodyLastModifiedDateTime)
         .returns(OFFSET_DATE_TIME, TaskDto::getLastModifiedDateTime)
         .returns(OFFSET_DATE_TIME, TaskDto::getCreatedDateTime)
+        .returns(Boolean.TRUE, TaskDto::getReminderOn)
         .satisfies(
             taskDto1 -> assertThat(taskDto1.getStartDateTime()).returns(DATE_TIME, DateTimeTimeZoneDto::getDateTime)
                 .returns("UTC", DateTimeTimeZoneDto::getTimeZone))
@@ -67,6 +70,9 @@ class TaskMapperTest {
         .satisfies(
             taskDto1 -> assertThat(taskDto1.getDueDateTime()).returns(DATE_TIME, DateTimeTimeZoneDto::getDateTime)
                 .returns("UTC", DateTimeTimeZoneDto::getTimeZone))
+        .satisfies(
+                taskDto1 -> assertThat(taskDto1.getReminderDateTime()).returns(DATE_TIME, DateTimeTimeZoneDto::getDateTime)
+                        .returns("UTC", DateTimeTimeZoneDto::getTimeZone))
         .extracting(TaskDto::getCategories, as(InstanceOfAssertFactories.LIST))
         .hasSize(2)
         .satisfiesExactly(item1 -> assertThat(item1).isNotNull()

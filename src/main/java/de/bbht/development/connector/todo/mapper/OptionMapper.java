@@ -42,6 +42,9 @@ public class OptionMapper {
                 mapDateTimeTimeZone(taskOptions.dueDateTime(), taskOptions.startDateTimeTimeZone()));
         createUpdateTaskDto.setCompletedDateTime(mapDateTimeTimeZone(taskOptions.completedDateTime(),
                 taskOptions.completedDateTimeTimeZone()));
+        createUpdateTaskDto.setReminderDateTime(mapDateTimeTimeZone(taskOptions.reminderDateTime(),
+                taskOptions.reminderDateTimeTimeZone()));
+        createUpdateTaskDto.setReminderOn(taskOptions.reminderOn());
         return createUpdateTaskDto;
     }
 
@@ -58,6 +61,9 @@ public class OptionMapper {
                 mapDateTimeTimeZone(updateTaskOptions.dueDateTime(), updateTaskOptions.startDateTimeTimeZone()));
         createUpdateTaskDto.setCompletedDateTime(mapDateTimeTimeZone(updateTaskOptions.completedDateTime(),
                 updateTaskOptions.completedDateTimeTimeZone()));
+        createUpdateTaskDto.setReminderDateTime(mapDateTimeTimeZone(updateTaskOptions.reminderDateTime(),
+                updateTaskOptions.reminderDateTimeTimeZone()));
+        createUpdateTaskDto.setReminderOn(updateTaskOptions.reminderOn());
         return createUpdateTaskDto;
     }
 
