@@ -301,6 +301,11 @@ The result is an array with 0..n entries of the following type:
         },
         "importance": string-with-enum,
         "lastModifiedDateTime": string,
+        "reminderDateTime": {
+            "dateTime": string,
+            "timeZone": string
+        },
+        "reminderOn": boolean,
         "startDateTime": {
             "dateTime": string,
             "timeZone": string
@@ -324,6 +329,11 @@ The result is an array with 0..n entries of the following type:
         },
         "importance": string-with-enum,
         "lastModifiedDateTime": offsetDateTime,
+        "reminderDateTime": {
+            "dateTime": string,
+            "timeZone": string
+        },
+        "reminderOn": boolean,
         "startDateTime": {
             "dateTime": string,
             "timeZone": string
@@ -349,20 +359,22 @@ This operation gets a single Task in a Task List for the given user.
 
 The result is one or none object of the following type:
 
-| Attribute | Type | Description |
-|:----|:----|:----|
-| id | string | Unique ID of the task  | 
-| title | string | The title of the task |
-| body | string | The body of the task (currently only Plain-Text is supported) |
+| Attribute | Type | Description                                                                                                                                                      |
+|:----|:----|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| id | string | Unique ID of the task                                                                                                                                            | 
+| title | string | The title of the task                                                                                                                                            |
+| body | string | The body of the task (currently only Plain-Text is supported)                                                                                                    |
 | bodyLastModifiedDateTime | string | The date and time the body was last modified. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS{timezone}`, where timezone can be `Z` for UTC or `+hh:mm` or `-hh:mm` |
-| categories | string[] | An array of categories of this task |
-| completedDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task was completed. |
-| createdDateTime | string | The date and time the task was created. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS{timezone}`, where timezone can be `Z` for UTC or `+hh:mm` or `-hh:mm` |
-| dueDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task is due. |
-| importance | enum | The importance of the task. Possible values are `HIGH`, `NORMAL` or `LOW`. |
+| categories | string[] | An array of categories of this task                                                                                                                              |
+| completedDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task was completed.                                                                                                                        |
+| createdDateTime | string | The date and time the task was created. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS{timezone}`, where timezone can be `Z` for UTC or `+hh:mm` or `-hh:mm`       |
+| dueDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task is due.                                                                                                                               |
+| importance | enum | The importance of the task. Possible values are `HIGH`, `NORMAL` or `LOW`.                                                                                       |
 | lastModifiedDateTime | string | The date and time the task was last modified. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS{timezone}`, where timezone can be `Z` for UTC or `+hh:mm` or `-hh:mm` |
-| startDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task was started. |
-| status | enum | The status of the task. Possible values are `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`, `WAITING_ON_OTHERS`, `DEFERRED`. |
+| reminderOn | boolean | Set to `true` to activate the reminder of the task, else set to `false`                                                                                          | 
+| reminderDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time for the task reminder. |  
+| startDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task was started.                                                                                                                          |
+| status | enum | The status of the task. Possible values are `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`, `WAITING_ON_OTHERS`, `DEFERRED`.                                          |
 
 ```json
 {
@@ -382,6 +394,11 @@ The result is one or none object of the following type:
     },
     "importance": string-with-enum,
     "lastModifiedDateTime": string,
+    "reminderDateTime": {
+        "dateTime": string,
+        "timeZone": string
+    },
+    "reminderOn": boolean,
     "startDateTime": {
         "dateTime": string,
         "timeZone": string
@@ -396,20 +413,22 @@ This operation creates a new Task in a Task List of the given user.
 #### Input
 
 | Parameter | Type | Optional? | Description
-|:---|:---|:---|:---|
-| Task List ID | string | no | The unique ID of the task list |
-| Title | string | no | The title of the task |
-| Body | string | no | The body of the task (currently only Plain-Text is supported) |
-| Categories | string | yes | Comma-separated list of categories for the task |
-| Importance | enum | no | The importance of the task |
-| Status | enum | no | The current status of the task |
-| Start Date & Time | string | yes | Timestamp containing date and time the task was started. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).
-| Start Date & Time Time Zone | enum | yes | Time Zone of the start date. |
-| Due Date & Time | string | yes | Timestamp containing date and time the task is due. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).
-| Due Date & Time Time Zone | enum | yes | Time Zone of the due date. |
-| Completed Date & Time | string | yes | Timestamp containing date and time the task was completed. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).
-| Completed Date & Time Time Zone | enum | yes | Time Zone of the completion date. |
-
+|:---|:---|:----------|:---|
+| Task List ID | string | no        | The unique ID of the task list |
+| Title | string | no        | The title of the task |
+| Body | string | no        | The body of the task (currently only Plain-Text is supported) |
+| Categories | string | yes       | Comma-separated list of categories for the task |
+| Importance | enum | no        | The importance of the task |
+| Status | enum | no        | The current status of the task |
+| Start Date & Time | string | yes       | Timestamp containing date and time the task was started. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).
+| Start Date & Time Time Zone | enum | yes       | Time Zone of the start date. |
+| Due Date & Time | string | yes       | Timestamp containing date and time the task is due. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).
+| Due Date & Time Time Zone | enum | yes       | Time Zone of the due date. |
+| Completed Date & Time | string | yes       | Timestamp containing date and time the task was completed. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).
+| Completed Date & Time Time Zone | enum | yes       | Time Zone of the completion date. |
+| Reminder Date & Time            | string | yes       | Timestamp containing date and time for the task reminder. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).  
+| Reminder Date & Time Time Zone  | enum | yes       | Time Zone of the date for the task reminder.                                                                                                 |
+| Is Reminder Active?             | boolean | yes       | Check if the reminder is active, else uncheck. |
 #### Output
 
 The result is one or none object of the following type:
@@ -426,6 +445,8 @@ The result is one or none object of the following type:
 | dueDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task is due. |
 | importance | enum | The importance of the task. Possible values are `HIGH`, `NORMAL` or `LOW`. |
 | lastModifiedDateTime | string | The date and time the task was last modified. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS{timezone}`, where timezone can be `Z` for UTC or `+hh:mm` or `-hh:mm` |
+| reminderOn | boolean | Set to `true` to activate the reminder of the task, else set to `false`                                                                                          | 
+| reminderDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time for the task reminder. |  
 | startDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task was started. |
 | status | enum | The status of the task. Possible values are `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`, `WAITING_ON_OTHERS`, `DEFERRED`. |
 
@@ -447,6 +468,11 @@ The result is one or none object of the following type:
     },
     "importance": string-with-enum,
     "lastModifiedDateTime": string,
+    "reminderDateTime": {
+        "dateTime": string,
+        "timeZone": string
+    },
+    "reminderOn": boolean,
     "startDateTime": {
         "dateTime": string,
         "timeZone": string
@@ -461,21 +487,24 @@ This operation updates a new Task in a Task List of the given user.
 
 #### Input
 
-| Parameter | Type | Optional? | Description
-|:---|:---|:---|:---|
-| Task List ID | string | no | The unique ID of the task list |
-| Task  ID | string | no | The unique ID of the task to be updated |
-| Title | string | yes[*](#note2) | The title of the task |
-| Body | string | yes[*](#note2) | The body of the task (currently only Plain-Text is supported) |
-| Categories | string | yes[*](#note2) | Comma-separated list of categories for the task |
-| Importance | enum | yes[*](#note2) | The importance of the task |
-| Status | enum | yes[*](#note2) | The current status of the task |
-| Start Date & Time | string | yes[*](#note2) | Timestamp containing date and time the task was started. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).
-| Start Date & Time Time Zone | enum | yes[*](#note2) | Time Zone of the start date. |
-| Due Date & Time | string | yes[*](#note2) | Timestamp containing date and time the task is due. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).
-| Due Date & Time Time Zone | enum | yes[*](#note2) | Time Zone of the due date. |
-| Completed Date & Time | string | yes[*](#note2) | Timestamp containing date and time the task was completed. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).
-| Completed Date & Time Time Zone | enum | yes[*](#note2) | Time Zone of the completion date. |
+| Parameter                       | Type | Optional? | Description                                                                                                                                  
+|:--------------------------------|:---|:---|:---------------------------------------------------------------------------------------------------------------------------------------------|
+| Task List ID                    | string | no | The unique ID of the task list                                                                                                               |
+| Task  ID                        | string | no | The unique ID of the task to be updated                                                                                                      |
+| Title                           | string | yes[*](#note2) | The title of the task                                                                                                                        |
+| Body                            | string | yes[*](#note2) | The body of the task (currently only Plain-Text is supported)                                                                                |
+| Categories                      | string | yes[*](#note2) | Comma-separated list of categories for the task                                                                                              |
+| Importance                      | enum | yes[*](#note2) | The importance of the task                                                                                                                   |
+| Status                          | enum | yes[*](#note2) | The current status of the task                                                                                                               |
+| Start Date & Time               | string | yes[*](#note2) | Timestamp containing date and time the task was started. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).   
+| Start Date & Time Time Zone     | enum | yes[*](#note2) | Time Zone of the start date.                                                                                                                 |
+| Due Date & Time                 | string | yes[*](#note2) | Timestamp containing date and time the task is due. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).        
+| Due Date & Time Time Zone       | enum | yes[*](#note2) | Time Zone of the due date.                                                                                                                   |
+| Completed Date & Time           | string | yes[*](#note2) | Timestamp containing date and time the task was completed. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T). 
+| Completed Date & Time Time Zone | enum | yes[*](#note2) | Time Zone of the completion date.                                                                                                            |
+| Reminder Date & Time            | string | yes[*](#note2) | Timestamp containing date and time for the task reminder. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).  
+| Reminder Date & Time Time Zone  | enum | yes[*](#note2) | Time Zone of the date for the task reminder.                                                                                                 |
+| Is Reminder Active?             | boolean | yes[*](#note2) | Check if the reminder is active, else uncheck. |
 
 <a id="note2"></a>* **Note:** *If this field is left empty, the update operation will not change it.*
 
@@ -495,6 +524,8 @@ The result is one or none object of the following type:
 | dueDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task is due. |
 | importance | enum | The importance of the task. Possible values are `HIGH`, `NORMAL` or `LOW`. |
 | lastModifiedDateTime | string | The date and time the task was last modified. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS{timezone}`, where timezone can be `Z` for UTC or `+hh:mm` or `-hh:mm` |
+| reminderOn | boolean | Set to `true` to activate the reminder of the task, else set to `false`                                                                                          | 
+| reminderDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time for the task reminder. |  
 | startDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task was started. |
 | status | enum | The status of the task. Possible values are `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`, `WAITING_ON_OTHERS`, `DEFERRED`. |
 
@@ -516,6 +547,11 @@ The result is one or none object of the following type:
     },
     "importance": string-with-enum,
     "lastModifiedDateTime": string,
+    "reminderDateTime": {
+        "dateTime": string,
+        "timeZone": string
+    },
+    "reminderOn": boolean,
     "startDateTime": {
         "dateTime": string,
         "timeZone": string
@@ -724,14 +760,15 @@ You can find more information on secret management in the [Camunda Documentation
 To filter a for specific item, you can use *Result expressions* such as the following:
 
 **Filtering for a task list with a specific display name and either returning its id or `null`:**
-  ```java
-  {
-    tasklistid: 
-      if empty = true 
-      then null 
-      else result[item.displayName = "<filter-criterion>"][1].id
-  }
-  ```
+```java
+{
+  tasklistid: 
+    if empty = true then 
+      null 
+    else 
+      result[item.displayName = "<filter-criterion>"][1].id
+}
+```
 
 ### Evaluating the result for possible errors
 
@@ -739,7 +776,12 @@ To check if an error occurred, you can use an *Error Expression* similar to the 
 
 ```java
 if error != null then
-  bpmnError(if error.errorCode != null then error.errorCode else "", error.errorMessage)
+  bpmnError(
+    if error.errorCode != null then 
+      error.errorCode 
+    else "",
+      error.errorMessage
+  )
 else 
   null
 ```
