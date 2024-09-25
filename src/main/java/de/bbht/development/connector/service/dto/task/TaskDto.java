@@ -21,6 +21,7 @@ public class TaskDto {
   private Boolean reminderOn;
   private DateTimeTimeZoneDto reminderDateTime;
   private DateTimeTimeZoneDto startDateTime;
+
   private TaskStatusDto status;
 
   public TaskDto() {

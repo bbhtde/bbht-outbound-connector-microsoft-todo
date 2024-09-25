@@ -11,7 +11,7 @@ import java.util.List;
 
 import static java.util.function.Predicate.not;
 
-public class OptionMapper {
+public final class OptionMapper {
 
     private OptionMapper() {
         // private constructor to prevent instantiation.

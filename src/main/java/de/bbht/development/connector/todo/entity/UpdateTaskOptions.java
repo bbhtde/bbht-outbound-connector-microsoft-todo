@@ -4,6 +4,7 @@ import de.bbht.development.connector.service.dto.enums.ImportanceDto;
 import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
 import io.camunda.connector.generator.java.annotation.TemplateProperty;
 import io.camunda.connector.generator.java.annotation.TemplateProperty.Pattern;
+import io.camunda.connector.generator.java.annotation.TemplateProperty.PropertyType;
 
 public record UpdateTaskOptions(
 

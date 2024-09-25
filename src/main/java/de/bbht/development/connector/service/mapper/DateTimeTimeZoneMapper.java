@@ -3,7 +3,7 @@ package de.bbht.development.connector.service.mapper;
 import com.microsoft.graph.models.DateTimeTimeZone;
 import de.bbht.development.connector.service.dto.task.DateTimeTimeZoneDto;
 
-public class DateTimeTimeZoneMapper {
+public final class DateTimeTimeZoneMapper {
 
   private DateTimeTimeZoneMapper() {
     // private constructor to prevent instantiation.

@@ -9,6 +9,7 @@ public record ToDoConnectorRequest(@Valid @NotNull GraphAuthentication authentic
                                    @Valid UpdateTaskListOptions updateTaskListOptions,
                                    @Valid TaskOptions taskOptions,
                                    @Valid UpdateTaskOptions updateTaskOptions,
+                                   @Valid TaskRecurrenceOptions taskRecurrenceOptions,
                                    @Valid CheckListItemOptions checkListItemOptions,
                                    @Valid UpdateCheckListItemOptions updateCheckListItemOptions) {
 

@@ -20,7 +20,7 @@ class ToDoConnectorRequestTest {
     var authentication = new GraphAuthentication("{{secrets.TENANT_ID}}", "{{secrets.CLIENT_ID}}",
         "{{secrets.CLIENT_SECRET}}");
     var operation = new Operation(ToDoOperation.LIST_TASK_LISTS, "test@bbht.de", null, null, null);
-    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null, null);
+    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null,null, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")
@@ -46,7 +46,7 @@ class ToDoConnectorRequestTest {
     var authentication = new GraphAuthentication("{{secrets.TENANT_ID}}", "{{secrets.CLIENT_ID}}",
         "{{secrets.CLIENT_SECRET}}");
     var operation = new Operation(null, "test@bbht.de", null, null, null);
-    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null, null);
+    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null,null, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")
@@ -68,7 +68,7 @@ class ToDoConnectorRequestTest {
     var authentication = new GraphAuthentication("{{secrets.TENANT_ID}}", "{{secrets.CLIENT_ID}}",
         "{{secrets.CLIENT_SECRET}}");
     var operation = new Operation(ToDoOperation.LIST_TASK_LISTS, null, null, null, null);
-    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null, null);
+    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null,null, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")
@@ -90,7 +90,7 @@ class ToDoConnectorRequestTest {
     var authentication = new GraphAuthentication("{{secrets.TENANT_ID}}", "{{secrets.CLIENT_ID}}",
         "{{secrets.CLIENT_SECRET}}");
     var operation = new Operation(ToDoOperation.LIST_TASK_LISTS, "", null, null, null);
-    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null, null);
+    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null,null, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")
@@ -113,7 +113,7 @@ class ToDoConnectorRequestTest {
         "{{secrets.CLIENT_SECRET}}");
     var operation = new Operation(ToDoOperation.LIST_TASK_LISTS, "test@bbht.de", null, null, null);
     var taskListOptions = new TaskListOptions("Display Name");
-    var input = new ToDoConnectorRequest(authentication, operation, taskListOptions, null, null, null, null, null);
+    var input = new ToDoConnectorRequest(authentication, operation, taskListOptions, null, null, null, null,null, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")
@@ -140,7 +140,7 @@ class ToDoConnectorRequestTest {
     var taskOptions = new TaskOptions("Titel", "Body", "Category 1, Category 2", ImportanceDto.HIGH,
         TaskStatusDto.IN_PROGRESS, createDateTime(2023), "UTC", createDateTime(2024), "UTC",
         createDateTime(2025), "UTC", createDateTime(2024), "UTC", Boolean.TRUE);
-    var input = new ToDoConnectorRequest(authentication, operation, null, null, taskOptions, null, null, null);
+    var input = new ToDoConnectorRequest(authentication, operation, null, null, taskOptions, null, null,null, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")
@@ -182,7 +182,7 @@ class ToDoConnectorRequestTest {
     var operation = new Operation(ToDoOperation.LIST_TASK_LISTS, "test@bbht.de", null, null, null);
     var checkListItemOptions = new CheckListItemOptions("Display Name", Boolean.TRUE);
     var input = new ToDoConnectorRequest(authentication, operation, null, null, null,
-            null, checkListItemOptions, null);
+            null, null,checkListItemOptions, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")

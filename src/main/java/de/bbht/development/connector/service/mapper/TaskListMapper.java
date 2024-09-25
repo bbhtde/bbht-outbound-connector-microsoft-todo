@@ -5,7 +5,7 @@ import de.bbht.development.connector.service.dto.tasklist.CreateUpdateTaskListDt
 import de.bbht.development.connector.service.dto.tasklist.TaskListDto;
 import java.util.List;
 
-public class TaskListMapper {
+public final class TaskListMapper {
 
   private TaskListMapper() {
     // private constructor to prevent instantiation.

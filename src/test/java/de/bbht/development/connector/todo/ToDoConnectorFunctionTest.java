@@ -107,7 +107,7 @@ class ToDoConnectorFunctionTest {
   void shouldReturnListOfTaskLists() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.LIST_TASK_LISTS, testUserId, null, null, null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.LIST_TASK_LISTS, testUserId, null, null, null), null, null, null, null, null,null, null);
 
     // Mock Setup
     final var listOfTaskLists = createListOfTaskLists();
@@ -141,6 +141,7 @@ class ToDoConnectorFunctionTest {
                                                                      UpdateTaskListOptions updateTaskListOptions,
                                                                      TaskOptions taskOptions,
                                                                      UpdateTaskOptions updateTaskOptions,
+                                                                     TaskRecurrenceOptions taskRecurrenceOptions,
                                                                      CheckListItemOptions checkListItemOptions,
                                                                      UpdateCheckListItemOptions updateCheckListItemOptions)
       throws Exception {
@@ -149,7 +150,7 @@ class ToDoConnectorFunctionTest {
     var secret = "testClientSecret";
 
     var request = new ToDoConnectorRequest(authentication, operation, taskListOption, updateTaskListOptions, taskOptions,
-            updateTaskOptions, checkListItemOptions, updateCheckListItemOptions);
+            updateTaskOptions, taskRecurrenceOptions, checkListItemOptions, updateCheckListItemOptions);
     return OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", tenant)
         .secret("CLIENT_ID", client)
@@ -162,7 +163,7 @@ class ToDoConnectorFunctionTest {
   void shouldReturnTaskListById() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "1", null, null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "1", null, null), null, null, null, null, null,null, null);
 
     // Mock Setup
     final var taskList = createTaskList();
@@ -188,7 +189,7 @@ class ToDoConnectorFunctionTest {
     // Given
     var taskListOptions = new TaskListOptions("Task List 1");
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.CREATE_TASK_LIST, testUserId, "1", null, null), taskListOptions, null, null, null, null, null);
+        new Operation(ToDoOperation.CREATE_TASK_LIST, testUserId, "1", null, null), taskListOptions, null, null, null, null, null,null);
 
     // Mock Setup
     final var createTaskList = new CreateUpdateTaskListDto();
@@ -218,7 +219,7 @@ class ToDoConnectorFunctionTest {
     // Given
     var updateTaskListOptions = new UpdateTaskListOptions("Updated Task List 1");
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.UPDATE_TASK_LIST, testUserId, "1", null, null), null, updateTaskListOptions, null, null, null, null);
+        new Operation(ToDoOperation.UPDATE_TASK_LIST, testUserId, "1", null, null), null, updateTaskListOptions, null, null, null,null, null);
 
     // Mock Setup
     final var updateTaskList = new CreateUpdateTaskListDto();
@@ -247,7 +248,7 @@ class ToDoConnectorFunctionTest {
   void shouldDeleteTaskList() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.DELETE_TASK_LIST, testUserId, "1", null, null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.DELETE_TASK_LIST, testUserId, "1", null, null), null, null, null, null, null,null, null);
 
     // Mock Setup
     doNothing().when(msGraphService)
@@ -325,7 +326,7 @@ class ToDoConnectorFunctionTest {
   void shouldReturnListOfTasks() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.LIST_TASKS, testUserId, "1", null, null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.LIST_TASKS, testUserId, "1", null, null), null, null, null, null, null,null, null);
 
     // Mock Setup
     final var listOfTasks = createListOfTasks();
@@ -360,7 +361,7 @@ class ToDoConnectorFunctionTest {
   void shouldReturnTask() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_TASK, testUserId, "1", "1", null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_TASK, testUserId, "1", "1", null), null, null, null, null, null,null, null);
 
     // Mock Setup
     final var task = createTask();
@@ -387,7 +388,7 @@ class ToDoConnectorFunctionTest {
     var taskOptions = new TaskOptions("Title", "Item Body", "Category 1, Category 2", ImportanceDto.HIGH,
         TaskStatusDto.COMPLETED, "2023-08-13T14:38:43.104312", "UTC", null, null, null, null, "2024-08-13T14:38:43.104312", "UTC", Boolean.TRUE);
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.CREATE_TASK, testUserId, "1", null, null), null, null, taskOptions, null, null, null);
+        new Operation(ToDoOperation.CREATE_TASK, testUserId, "1", null, null), null, null, taskOptions, null, null,null, null);
 
     // Mock Setup
     final var createTask = new CreateUpdateTaskDto();
@@ -437,7 +438,7 @@ class ToDoConnectorFunctionTest {
     // Given
     var updateTaskOptions = new UpdateTaskOptions("New Title", null, "", null, null, null, null, null, null, null, null, null, null, null);
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.UPDATE_TASK, testUserId, "1", "1", null), null, null, null, updateTaskOptions, null, null);
+        new Operation(ToDoOperation.UPDATE_TASK, testUserId, "1", "1", null), null, null, null, updateTaskOptions, null,null, null);
 
     // Mock Setup
     final var updateTask = new CreateUpdateTaskDto();
@@ -468,7 +469,7 @@ class ToDoConnectorFunctionTest {
   void shouldDeleteTask() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.DELETE_TASK, testUserId, "1", "1", null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.DELETE_TASK, testUserId, "1", "1", null), null, null, null, null, null,null, null);
 
     // Mock Setup
     doNothing().when(msGraphService)
@@ -514,7 +515,7 @@ class ToDoConnectorFunctionTest {
   void shouldReturnListOfCheckListItems() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.LIST_CHECK_LIST_ITEMS, testUserId, "1", "1", null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.LIST_CHECK_LIST_ITEMS, testUserId, "1", "1", null), null, null, null, null, null,null, null);
 
     // Mock Setup
     final var listOfCheckListItems = createListOfCheckListItems();
@@ -544,7 +545,7 @@ class ToDoConnectorFunctionTest {
   void shouldReturnCheckListItem() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null, null, null, null,null, null);
 
     // Mock Setup
     final var checkListItem = createCheckListItem();
@@ -569,7 +570,7 @@ class ToDoConnectorFunctionTest {
     var checkListItemOptions = new CheckListItemOptions("Display Name", Boolean.FALSE);
     var context = createDefaultOutboundConnectorContext(
         new Operation(ToDoOperation.CREATE_CHECK_LIST_ITEM, testUserId, "1", "1", null), null, null, null,
-            null, checkListItemOptions, null);
+            null, null,checkListItemOptions, null);
 
     // Mock Setup
     final var createCheckListItem = new CreateUpdateCheckListItemDto();
@@ -599,7 +600,7 @@ class ToDoConnectorFunctionTest {
     var updateCheckListItemOptions = new UpdateCheckListItemOptions("Updated Check List Item", null);
     var context = createDefaultOutboundConnectorContext(
         new Operation(ToDoOperation.UPDATE_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null, null,
-            null, null, updateCheckListItemOptions);
+            null, null,null, updateCheckListItemOptions);
 
     // Mock Setup
     final var updateCheckListItem = new CreateUpdateCheckListItemDto();
@@ -627,7 +628,7 @@ class ToDoConnectorFunctionTest {
   void shouldDeleteCheckListItem() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.DELETE_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null, null, null, null, null);
+        new Operation(ToDoOperation.DELETE_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null, null, null, null,null, null);
 
     // Mock Setup
     doNothing().when(msGraphService)
@@ -646,7 +647,7 @@ class ToDoConnectorFunctionTest {
   void shouldReturnErrorResponseOnMsGraphException() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "999", null, null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "999", null, null), null, null, null, null, null,null, null);
 
     // Mock Setup
     var msGraphException = new MsGraphException("Task List with ID 999 not found", "404");
@@ -669,7 +670,7 @@ class ToDoConnectorFunctionTest {
   void shouldReturnErrorResponseOnOtherException() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "999", null, null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "999", null, null), null, null, null, null, null,null, null);
 
     // Mock Setup
     var runtimeException = new RuntimeException("Some other exception");

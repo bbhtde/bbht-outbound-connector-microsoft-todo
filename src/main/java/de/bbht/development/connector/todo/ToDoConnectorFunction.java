@@ -33,6 +33,7 @@ import java.util.function.Predicate;
     @ElementTemplate.PropertyGroup(id = "operation", label = "Operations"),
     @ElementTemplate.PropertyGroup(id = "tasklist", label = "Task List Parameters"),
     @ElementTemplate.PropertyGroup(id = "task", label = "Task Parameters"),
+    @ElementTemplate.PropertyGroup(id = "recurrence", label = "Task Recurrence Parameters"),
     @ElementTemplate.PropertyGroup(id = "checklistitem", label = "Check List Item Parameters")})
 public class ToDoConnectorFunction implements OutboundConnectorFunction {
 
