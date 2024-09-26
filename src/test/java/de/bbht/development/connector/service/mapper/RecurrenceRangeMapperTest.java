@@ -1,16 +1,14 @@
 package de.bbht.development.connector.service.mapper;
 
-import static net.bytebuddy.matcher.ElementMatchers.returns;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.microsoft.graph.models.RecurrenceRange;
 import com.microsoft.graph.models.RecurrenceRangeType;
 import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
 import de.bbht.development.connector.service.dto.task.RecurrenceRangeDto;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class RecurrenceRangeMapperTest {
 

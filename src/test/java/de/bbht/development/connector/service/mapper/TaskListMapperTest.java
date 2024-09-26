@@ -1,14 +1,15 @@
 package de.bbht.development.connector.service.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.microsoft.graph.models.TodoTaskList;
 import com.microsoft.graph.models.WellknownListName;
 import de.bbht.development.connector.service.dto.enums.WellknownListNameDto;
 import de.bbht.development.connector.service.dto.tasklist.CreateUpdateTaskListDto;
 import de.bbht.development.connector.service.dto.tasklist.TaskListDto;
-import java.util.List;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class TaskListMapperTest {
 

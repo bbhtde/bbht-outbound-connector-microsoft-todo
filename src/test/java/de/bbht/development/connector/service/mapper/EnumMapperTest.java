@@ -1,31 +1,19 @@
 package de.bbht.development.connector.service.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import com.microsoft.graph.models.DayOfWeek;
-import com.microsoft.graph.models.Importance;
-import com.microsoft.graph.models.RecurrencePatternType;
-import com.microsoft.graph.models.RecurrenceRangeType;
-import com.microsoft.graph.models.TaskStatus;
-import com.microsoft.graph.models.WeekIndex;
-import com.microsoft.graph.models.WellknownListName;
-import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
-import de.bbht.development.connector.service.dto.enums.ImportanceDto;
-import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
-import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
-import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
-import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
-import de.bbht.development.connector.service.dto.enums.WellknownListNameDto;
+import com.microsoft.graph.models.*;
+import de.bbht.development.connector.service.dto.enums.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EnumMapperTest {
 

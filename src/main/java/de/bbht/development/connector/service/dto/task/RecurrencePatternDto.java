@@ -3,7 +3,7 @@ package de.bbht.development.connector.service.dto.task;
 import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
 import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
 import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
-import java.util.List;
+
 import java.util.Objects;
 import java.util.Set;
 

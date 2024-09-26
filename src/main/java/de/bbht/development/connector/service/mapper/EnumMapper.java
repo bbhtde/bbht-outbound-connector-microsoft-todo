@@ -1,21 +1,12 @@
 package de.bbht.development.connector.service.mapper;
 
-import com.microsoft.graph.models.DayOfWeek;
-import com.microsoft.graph.models.Importance;
-import com.microsoft.graph.models.RecurrencePatternType;
-import com.microsoft.graph.models.RecurrenceRangeType;
-import com.microsoft.graph.models.TaskStatus;
-import com.microsoft.graph.models.WeekIndex;
-import com.microsoft.graph.models.WellknownListName;
-import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
-import de.bbht.development.connector.service.dto.enums.ImportanceDto;
-import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
-import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
-import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
-import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
-import de.bbht.development.connector.service.dto.enums.WellknownListNameDto;
+import com.microsoft.graph.models.*;
+import de.bbht.development.connector.service.dto.enums.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 public final class EnumMapper {
 
@@ -37,7 +28,7 @@ public final class EnumMapper {
       case Low -> ImportanceDto.LOW;
       case High -> ImportanceDto.HIGH;
       case Normal -> ImportanceDto.NORMAL;
-      case null, default -> null;
+      case null -> null;
     };
   }
 
@@ -68,7 +59,7 @@ public final class EnumMapper {
       case DEFERRED -> TaskStatus.Deferred;
       case NOT_STARTED -> TaskStatus.NotStarted;
       case WAITING_ON_OTHERS -> TaskStatus.WaitingOnOthers;
-      case null, default -> null;
+      case null -> null;
     };
   }
 
@@ -79,7 +70,7 @@ public final class EnumMapper {
       case Deferred -> TaskStatusDto.DEFERRED;
       case NotStarted -> TaskStatusDto.NOT_STARTED;
       case WaitingOnOthers -> TaskStatusDto.WAITING_ON_OTHERS;
-      case null, default -> null;
+      case null -> null;
     };
   }
 

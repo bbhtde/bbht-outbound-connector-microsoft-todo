@@ -49,6 +49,24 @@
     },
     "type" : "Hidden"
   }, {
+    "id" : "taskRecurrenceOptions.VALUE_RECURRING",
+    "label" : "VALUE_RECURRING",
+    "feel" : "optional",
+    "binding" : {
+      "name" : "taskRecurrenceOptions.VALUE_RECURRING",
+      "type" : "zeebe:input"
+    },
+    "type" : "String"
+  }, {
+    "id" : "taskRecurrenceOptions.VALUE_NON_RECURRING",
+    "label" : "VALUE_NON_RECURRING",
+    "feel" : "optional",
+    "binding" : {
+      "name" : "taskRecurrenceOptions.VALUE_NON_RECURRING",
+      "type" : "zeebe:input"
+    },
+    "type" : "String"
+  }, {
     "id" : "authentication.tenantId",
     "label" : "Tenant ID",
     "description" : "Your Microsoft Tenant ID",
@@ -6588,7 +6606,7 @@
     "type" : "Dropdown",
     "choices" : [ {
       "name" : "Task is not recurring",
-      "value" : "NO_RECURRING"
+      "value" : "NON_RECURRING"
     }, {
       "name" : "Recurring Task",
       "value" : "RECURRING"
@@ -6860,8 +6878,8 @@
     "constraints" : {
       "notEmpty" : true,
       "pattern" : {
-        "value" : "^([1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9][0-9][0-9][0-9])?$",
-        "message" : "Please use the format 'YYYY-MM-DDThh:mm:ss.SSSSSS'"
+        "value" : "^([1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9])?$",
+        "message" : "Please use the format 'YYYY-MM-DD'"
       }
     },
     "feel" : "optional",
@@ -6884,8 +6902,8 @@
     "constraints" : {
       "notEmpty" : true,
       "pattern" : {
-        "value" : "^([1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9][0-9][0-9][0-9])?$",
-        "message" : "Please use the format 'YYYY-MM-DDThh:mm:ss.SSSSSS'"
+        "value" : "^([1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9])?$",
+        "message" : "Please use the format 'YYYY-MM-DD'"
       }
     },
     "feel" : "optional",

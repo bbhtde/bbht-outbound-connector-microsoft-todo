@@ -99,7 +99,42 @@ Some operations may contain fields of the type `DateTimeTimeZone`, which is desc
 | dateTime | string | The Date and Time in the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (note that the hyphens around the 'T' are only for better readibility). |
 | timeZone | string | A timezone that is valid for Windows. In the Camunda Modeler, a selection of values is already given. |
 
+<a id="patternedrecurrence"></a> **PatternedRecurrence**
 
+Some task operations contains a field of the type `PatternedRecurrence`, which is described here.
+
+| Attribute | Type                                    | Description |
+|:---|:----------------------------------------|:---|
+| pattern | [RecurrencePattern](#recurrencepattern) | A pattern that describes the kind of recurrence for the task |
+| range | [RecurrengeRange](#recurrencerange)     | Describes the range of task recurrences |
+
+<a id="recurrencepattern"></a> **RecurrencePattern**
+
+The Recurrence Pattern describes the frequency by which a task is repeated. 
+As this is a somewhat complex type, see also the [official documentation](https://learn.microsoft.com/en-us/graph/api/resources/recurrencepattern?view=graph-rest-1.0).
+
+| Attribute | Type      | Description                                                                                                                                                                                                                                           |
+|:---|:----------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| type | enum      | The type of the recurrence pattern. Possible values are `DAILY`, `WEEKLY`, `ABSOLUTE_MONTHLY`, `ABSOLUTE_YEARLY`, `RELATIVE_MONTHLY` and `RELATIVE_YEARLY`                                                                                            |
+| dayOfMonth | number    | The day of the month on which the event occurs. This is a number from 1 to 31. For types `ABSOLUTE_MONTHLY` and `ABSOLUTE_YEARLY`                                                                                                                     |
+| daysOfWeek | enum[]    | A collection of days of the week on which the task occurs. May be `SUNDAY`, `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY` or `SATURDAY`. Required for `WEEKLY`, `RELATIVE_MONTHLY` and `RELATIVE_YEARLY`                                     |
+| firstDayOfWeek | enum  | The first day of the week. May be `SUNDAY`, `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY` or `SATURDAY`. Required for `WEEKLY`                                                                                                               |
+| index | enum | Specifies on which instance of the allowed days specified in daysOfWeek the event occurs, counted form the first instance in the month. May be `FIRST`, `SECOND`, `THIRD`, `FOURTH` and `LAST`. Required for `RELATIVE_MONTHLY` and `RELATIVE_YEARLY` |
+| interval | number | The number of units between occurrences, where units can be days, weeks, months or year, depending on the type.                                                                                                                                       |
+| month | number | The month in which the event occurs. This is a number from 1 to 12. |                                                                                                                                                                                   
+
+<a id="recurrencerange"></a> **RecurrenceRange**
+
+The Recurrence Range describes the date range for a recurring task.
+As this is a somewhat complex type, see also the [official documentation](https://learn.microsoft.com/en-us/graph/api/resources/recurrencerange?view=graph-rest-1.0).
+
+| Attribute          | Type    | Description                                                                                  |
+|:-------------------|:--------|:---------------------------------------------------------------------------------------------|
+| type               | enum    | The recurrence range. May be `END_DATE`, `NO_END` or `NUMBERED`                              |
+| startDate          | date    | The date to start applying the task recurrence. Has the format `YYYY-MM-DD`                  |
+| endDate            | date    | The date to stop applying the task recurrence. Required for type `END_DATE`                  |
+| numberOfOccurences | number  | The number of times to repeat the task. Must be positive and is required for type `NUMBERED` |
+| recurrenceTimeZone | string  | The time zone for `startDate` and `endDate`.
 
 ### <a id="op_list_task_lists"></a> Get List of Task Lists
 
@@ -371,6 +406,7 @@ The result is one or none object of the following type:
 | dueDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task is due.                                                                                                                               |
 | importance | enum | The importance of the task. Possible values are `HIGH`, `NORMAL` or `LOW`.                                                                                       |
 | lastModifiedDateTime | string | The date and time the task was last modified. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS{timezone}`, where timezone can be `Z` for UTC or `+hh:mm` or `-hh:mm` |
+| recurrence | [PatternedRecurrence](#patternedrecurrence) | The recurrence pattern for the task. | 
 | reminderOn | boolean | Set to `true` to activate the reminder of the task, else set to `false`                                                                                          | 
 | reminderDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time for the task reminder. |  
 | startDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task was started.                                                                                                                          |
@@ -394,6 +430,24 @@ The result is one or none object of the following type:
     },
     "importance": string-with-enum,
     "lastModifiedDateTime": string,
+    "recurrence": {
+        "pattern": {
+          "type": string-with-enum,
+          "dayOfMonth": number,
+          "daysOfWeek": string-with-enum[],
+          "firstDayOfWeek": string-with-enum[],
+          "index": string-with-enum,
+          "interval": number,
+          "month": number
+        },
+        "range": {
+          "type": string-with-enum,
+          "startDate": string,
+          "end-date": string,
+          "numberOfOccurrences": number,
+          "recurrenceTimeZone": string
+        }
+    }   
     "reminderDateTime": {
         "dateTime": string,
         "timeZone": string
@@ -412,23 +466,37 @@ This operation creates a new Task in a Task List of the given user.
 
 #### Input
 
-| Parameter | Type | Optional? | Description
-|:---|:---|:----------|:---|
-| Task List ID | string | no        | The unique ID of the task list |
-| Title | string | no        | The title of the task |
-| Body | string | no        | The body of the task (currently only Plain-Text is supported) |
-| Categories | string | yes       | Comma-separated list of categories for the task |
-| Importance | enum | no        | The importance of the task |
-| Status | enum | no        | The current status of the task |
-| Start Date & Time | string | yes       | Timestamp containing date and time the task was started. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).
-| Start Date & Time Time Zone | enum | yes       | Time Zone of the start date. |
-| Due Date & Time | string | yes       | Timestamp containing date and time the task is due. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).
-| Due Date & Time Time Zone | enum | yes       | Time Zone of the due date. |
-| Completed Date & Time | string | yes       | Timestamp containing date and time the task was completed. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).
-| Completed Date & Time Time Zone | enum | yes       | Time Zone of the completion date. |
-| Reminder Date & Time            | string | yes       | Timestamp containing date and time for the task reminder. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).  
-| Reminder Date & Time Time Zone  | enum | yes       | Time Zone of the date for the task reminder.                                                                                                 |
-| Is Reminder Active?             | boolean | yes       | Check if the reminder is active, else uncheck. |
+| Parameter                       | Type    | Optional? | Description                                                                                                                                   
+|:--------------------------------|:--------|:----------|:----------------------------------------------------------------------------------------------------------------------------------------------|
+| Task List ID                    | string  | no        | The unique ID of the task list                                                                                                                |
+| Title                           | string  | no        | The title of the task                                                                                                                         |
+| Body                            | string  | no        | The body of the task (currently only Plain-Text is supported)                                                                                 |
+| Categories                      | string  | yes       | Comma-separated list of categories for the task                                                                                               |
+| Importance                      | enum    | no        | The importance of the task                                                                                                                    |
+| Status                          | enum    | no        | The current status of the task                                                                                                                |
+| Start Date & Time               | string  | yes       | Timestamp containing date and time the task was started. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).    |
+| Start Date & Time Time Zone     | enum    | yes       | Time Zone of the start date.                                                                                                                  |
+| Due Date & Time                 | string  | yes       | Timestamp containing date and time the task is due. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).         |
+| Due Date & Time Time Zone       | enum    | yes       | Time Zone of the due date.                                                                                                                    |
+| Completed Date & Time           | string  | yes       | Timestamp containing date and time the task was completed. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).  |
+| Completed Date & Time Time Zone | enum    | yes       | Time Zone of the completion date.                                                                                                             |
+| Reminder Date & Time            | string  | yes       | Timestamp containing date and time for the task reminder. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).   |
+| Reminder Date & Time Time Zone  | enum    | yes       | Time Zone of the date for the task reminder.                                                                                                  |
+| Is Reminder Active?             | boolean | yes       | Check if the reminder is active, else uncheck.                                                                                                |
+| Recurring Task?                 | choice  | no        | Select "Recurring Task" to access task recurrence parameters.                                                                                 |
+| Recurrence Pattern Type         | enum    | no        | The pattern of task repetition                                                                                                                |
+| Interval                        | number  | no        | Interval between occurrences                                                                                                                  |
+| Days of Week                    | string  | no        | Days of Week on which the task occurs.                                                                                                        |
+| First Day of Week               | enum    | no        | What is the first day of the week?                                                                                                            |
+| Day of Month                    | number  | no        | The day of month on which the task occurs                                                                                                     |
+| Week Index                      | enum    | yes       | Specifies on which instance of the allowed days specified in Days of Week the task occurs, counted from the first instance of the month.      |
+| Month                           | number  | no        | The month in which the task occurs.                                                                                                           |
+| Recurrence Range Type           | enum    | no        | Describes the kind in which the task is repeated.                                                                                             |
+| Number of Occurrences           | number  | no        | The number of times to repeat the task                                                                                                        |
+| Start Date                      | string  | no        | The date to start applying the recurrence pattern.                                                                                            |
+| End Date                        | string  | no        | The date to stop applying the recurrence pattern                                                                                              |
+| Start & End Date Timezone       | string  | yes       | Timezone for the Start and End Date                                                                                                           |
+
 #### Output
 
 The result is one or none object of the following type:
@@ -445,6 +513,7 @@ The result is one or none object of the following type:
 | dueDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task is due. |
 | importance | enum | The importance of the task. Possible values are `HIGH`, `NORMAL` or `LOW`. |
 | lastModifiedDateTime | string | The date and time the task was last modified. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS{timezone}`, where timezone can be `Z` for UTC or `+hh:mm` or `-hh:mm` |
+| recurrence | [PatternedRecurrence](#patternedrecurrence) | Used to describe recurrings tasks |
 | reminderOn | boolean | Set to `true` to activate the reminder of the task, else set to `false`                                                                                          | 
 | reminderDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time for the task reminder. |  
 | startDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task was started. |
@@ -468,6 +537,24 @@ The result is one or none object of the following type:
     },
     "importance": string-with-enum,
     "lastModifiedDateTime": string,
+    "recurrence": {
+      "pattern": {
+        "type": string-with-enum,
+        "dayOfMonth": number,
+        "daysOfWeek": string-with-enum[],
+        "firstDayOfWeek": string-with-enum[],
+        "index": string-with-enum,
+        "interval": number,
+        "month": number
+      },
+      "range": {
+        "type": string-with-enum,
+        "startDate": string,
+        "end-date": string,
+        "numberOfOccurrences": number,
+        "recurrenceTimeZone": string
+      }
+    },
     "reminderDateTime": {
         "dateTime": string,
         "timeZone": string
@@ -505,6 +592,19 @@ This operation updates a new Task in a Task List of the given user.
 | Reminder Date & Time            | string | yes[*](#note2) | Timestamp containing date and time for the task reminder. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS` (without the hyphens around the T).  
 | Reminder Date & Time Time Zone  | enum | yes[*](#note2) | Time Zone of the date for the task reminder.                                                                                                 |
 | Is Reminder Active?             | boolean | yes[*](#note2) | Check if the reminder is active, else uncheck. |
+| Recurring Task?                 | choice  | no        | Select "Recurring Task" to access task recurrence parameters.                                                                                 |
+| Recurrence Pattern Type         | enum    | no        | The pattern of task repetition                                                                                                                |
+| Interval                        | number  | no        | Interval between occurrences                                                                                                                  |
+| Days of Week                    | string  | no        | Days of Week on which the task occurs.                                                                                                        |
+| First Day of Week               | enum    | no        | What is the first day of the week?                                                                                                            |
+| Day of Month                    | number  | no        | The day of month on which the task occurs                                                                                                     |
+| Week Index                      | enum    | yes       | Specifies on which instance of the allowed days specified in Days of Week the task occurs, counted from the first instance of the month.      |
+| Month                           | number  | no        | The month in which the task occurs.                                                                                                           |
+| Recurrence Range Type           | enum    | no        | Describes the kind in which the task is repeated.                                                                                             |
+| Number of Occurrences           | number  | no        | The number of times to repeat the task                                                                                                        |
+| Start Date                      | string  | no        | The date to start applying the recurrence pattern.                                                                                            |
+| End Date                        | string  | no        | The date to stop applying the recurrence pattern                                                                                              |
+| Start & End Date Timezone       | string  | yes       | Timezone for the Start and End Date                                                                                                           |
 
 <a id="note2"></a>* **Note:** *If this field is left empty, the update operation will not change it.*
 
@@ -524,6 +624,7 @@ The result is one or none object of the following type:
 | dueDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task is due. |
 | importance | enum | The importance of the task. Possible values are `HIGH`, `NORMAL` or `LOW`. |
 | lastModifiedDateTime | string | The date and time the task was last modified. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS{timezone}`, where timezone can be `Z` for UTC or `+hh:mm` or `-hh:mm` |
+| recurrence | [PatternedRecurrence](#patternedrecurrence) | Used to describe recurrings tasks |
 | reminderOn | boolean | Set to `true` to activate the reminder of the task, else set to `false`                                                                                          | 
 | reminderDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time for the task reminder. |  
 | startDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task was started. |
@@ -547,6 +648,24 @@ The result is one or none object of the following type:
     },
     "importance": string-with-enum,
     "lastModifiedDateTime": string,
+    "recurrence": {
+      "pattern": {
+        "type": string-with-enum,
+        "dayOfMonth": number,
+        "daysOfWeek": string-with-enum[],
+        "firstDayOfWeek": string-with-enum[],
+        "index": string-with-enum,
+        "interval": number,
+        "month": number
+      },
+      "range": {
+        "type": string-with-enum,
+        "startDate": string,
+        "end-date": string,
+        "numberOfOccurrences": number,
+        "recurrenceTimeZone": string
+      }
+    },
     "reminderDateTime": {
         "dateTime": string,
         "timeZone": string

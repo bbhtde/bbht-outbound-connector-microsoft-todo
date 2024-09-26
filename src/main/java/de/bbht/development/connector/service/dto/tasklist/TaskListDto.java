@@ -1,6 +1,7 @@
 package de.bbht.development.connector.service.dto.tasklist;
 
 import de.bbht.development.connector.service.dto.enums.WellknownListNameDto;
+
 import java.util.Objects;
 
 public final class TaskListDto {

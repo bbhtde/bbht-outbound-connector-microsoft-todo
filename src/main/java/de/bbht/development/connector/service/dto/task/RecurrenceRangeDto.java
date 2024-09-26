@@ -1,6 +1,7 @@
 package de.bbht.development.connector.service.dto.task;
 
 import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
+
 import java.time.LocalDate;
 import java.util.Objects;
 

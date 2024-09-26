@@ -1,11 +1,6 @@
 package de.bbht.development.connector.service;
 
-import com.microsoft.graph.models.ChecklistItem;
-import com.microsoft.graph.models.ChecklistItemCollectionResponse;
-import com.microsoft.graph.models.TodoTask;
-import com.microsoft.graph.models.TodoTaskCollectionResponse;
-import com.microsoft.graph.models.TodoTaskList;
-import com.microsoft.graph.models.TodoTaskListCollectionResponse;
+import com.microsoft.graph.models.*;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import com.microsoft.kiota.ApiException;
 import de.bbht.development.connector.service.dto.checklistitem.CheckListItemDto;
@@ -17,6 +12,7 @@ import de.bbht.development.connector.service.dto.tasklist.TaskListDto;
 import de.bbht.development.connector.service.mapper.CheckListItemMapper;
 import de.bbht.development.connector.service.mapper.TaskListMapper;
 import de.bbht.development.connector.service.mapper.TaskMapper;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

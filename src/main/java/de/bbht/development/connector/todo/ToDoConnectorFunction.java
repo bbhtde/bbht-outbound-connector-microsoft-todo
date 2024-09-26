@@ -120,14 +120,12 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
       if (result != null && !nullResult) {
         return ConnectorResult.withGivenResult(result);
       } else {
-        return ConnectorResult.<T>withEmptyResult();
+        return ConnectorResult.withEmptyResult();
       }
     } catch (MsGraphException graphException) {
-      graphException.printStackTrace();
-      return ConnectorResult.<T>withErrorResult(graphException.getMessage(), String.valueOf(graphException.getCode()));
+      return ConnectorResult.withErrorResult(graphException.getMessage(), String.valueOf(graphException.getCode()));
     } catch (Exception e) {
-      e.printStackTrace();
-      return ConnectorResult.<T>withErrorResult(e.getMessage(), null);
+      return ConnectorResult.withErrorResult(e.getMessage(), null);
     }
   }
 

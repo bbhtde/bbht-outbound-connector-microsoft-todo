@@ -1,16 +1,11 @@
 package de.bbht.development.connector.todo.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend.Prop;
 import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
 import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
 import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
 import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
 import io.camunda.connector.generator.java.annotation.TemplateProperty;
-import io.camunda.connector.generator.java.annotation.TemplateProperty.DropdownPropertyChoice;
-import io.camunda.connector.generator.java.annotation.TemplateProperty.Pattern;
-import io.camunda.connector.generator.java.annotation.TemplateProperty.PropertyCondition;
-import io.camunda.connector.generator.java.annotation.TemplateProperty.PropertyConstraints;
-import io.camunda.connector.generator.java.annotation.TemplateProperty.PropertyType;
+import io.camunda.connector.generator.java.annotation.TemplateProperty.*;
 
 public record TaskRecurrenceOptions(
     @TemplateProperty(
@@ -18,7 +13,6 @@ public record TaskRecurrenceOptions(
         label = "Recurring Task?",
         description = "Check if this is a recurring task",
         condition = @PropertyCondition(property = "operation.operation", oneOf = {"CREATE_TASK", "UPDATE_TASK"}),
-        optional = false,
         defaultValue = "NO_RECURRING",
         type = PropertyType.Dropdown,
         constraints = @PropertyConstraints(notEmpty = true),
@@ -558,8 +552,6 @@ public record TaskRecurrenceOptions(
         optional = true) 
     String recurrenceTimeZone
 ) {
-
     public static final String VALUE_RECURRING = "RECURRING";
     public static final String VALUE_NON_RECURRING = "NON_RECURRING";
-
 }

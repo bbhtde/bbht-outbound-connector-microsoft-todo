@@ -1,10 +1,10 @@
 package de.bbht.development.connector.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import de.bbht.development.connector.service.dto.GraphAuthenticationDto;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MsGraphServiceFactoryTest {
 

@@ -1,8 +1,5 @@
 package de.bbht.development.connector.service.mapper;
 
-import static org.assertj.core.api.Assertions.as;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.microsoft.graph.models.DayOfWeek;
 import com.microsoft.graph.models.RecurrencePattern;
 import com.microsoft.graph.models.RecurrencePatternType;
@@ -11,13 +8,14 @@ import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
 import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
 import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
 import de.bbht.development.connector.service.dto.task.RecurrencePatternDto;
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.assertj.core.api.InstanceOfAssertFactories;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.as;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class RecurrencePatternMapperTest {
 

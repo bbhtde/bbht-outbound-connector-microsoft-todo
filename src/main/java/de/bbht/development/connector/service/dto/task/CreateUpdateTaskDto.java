@@ -2,6 +2,7 @@ package de.bbht.development.connector.service.dto.task;
 
 import de.bbht.development.connector.service.dto.enums.ImportanceDto;
 import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -115,7 +116,7 @@ public class CreateUpdateTaskDto {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof CreateUpdateTaskDto that)) return false;
-      return Objects.equals(title, that.title) && Objects.equals(body, that.body) && Objects.equals(categories, that.categories) && Objects.equals(completedDateTime, that.completedDateTime) && Objects.equals(dueDateTime, that.dueDateTime) && importance == that.importance && Objects.equals(recurrence, that.recurrence) && Objects.equals(reminderOn, that.reminderOn) && Objects.equals(reminderDateTime, that.reminderDateTime) && Objects.equals(startDateTime, that.startDateTime) && status == that.status;
+    return Objects.equals(title, that.title) && Objects.equals(body, that.body) && Objects.equals(categories, that.categories) && Objects.equals(completedDateTime, that.completedDateTime) && Objects.equals(dueDateTime, that.dueDateTime) && importance == that.importance && Objects.equals(recurrence, that.recurrence) && Objects.equals(reminderOn, that.reminderOn) && Objects.equals(reminderDateTime, that.reminderDateTime) && Objects.equals(startDateTime, that.startDateTime) && status == that.status;
   }
 
   @Override

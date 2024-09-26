@@ -1,10 +1,5 @@
 package de.bbht.development.connector.todo;
 
-import static org.assertj.core.api.Assertions.as;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bbht.development.connector.service.IMsGraphServiceFactory;
 import de.bbht.development.connector.service.MsGraphException;
@@ -19,20 +14,23 @@ import de.bbht.development.connector.service.dto.tasklist.TaskListDto;
 import de.bbht.development.connector.todo.entity.*;
 import io.camunda.connector.test.outbound.OutboundConnectorContextBuilder;
 import io.camunda.connector.test.outbound.OutboundConnectorContextBuilder.TestConnectorContext;
-
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Optional;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 class ToDoConnectorFunctionTest {

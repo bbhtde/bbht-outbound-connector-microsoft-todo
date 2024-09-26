@@ -1,23 +1,19 @@
 package de.bbht.development.connector.service.mapper;
 
-import static org.assertj.core.api.Assertions.as;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.microsoft.graph.models.BodyType;
-import com.microsoft.graph.models.DateTimeTimeZone;
-import com.microsoft.graph.models.Importance;
-import com.microsoft.graph.models.ItemBody;
-import com.microsoft.graph.models.TaskStatus;
-import com.microsoft.graph.models.TodoTask;
+import com.microsoft.graph.models.*;
 import de.bbht.development.connector.service.dto.enums.ImportanceDto;
 import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
 import de.bbht.development.connector.service.dto.task.CreateUpdateTaskDto;
 import de.bbht.development.connector.service.dto.task.DateTimeTimeZoneDto;
 import de.bbht.development.connector.service.dto.task.TaskDto;
-import java.time.OffsetDateTime;
-import java.util.List;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.as;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class TaskMapperTest {
 

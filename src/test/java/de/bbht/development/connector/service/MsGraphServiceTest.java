@@ -1,20 +1,6 @@
 package de.bbht.development.connector.service;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-
-import com.microsoft.graph.models.BodyType;
-import com.microsoft.graph.models.ChecklistItem;
-import com.microsoft.graph.models.Importance;
-import com.microsoft.graph.models.ItemBody;
-import com.microsoft.graph.models.TaskStatus;
-import com.microsoft.graph.models.TodoTask;
-import com.microsoft.graph.models.TodoTaskList;
-import com.microsoft.graph.models.WellknownListName;
+import com.microsoft.graph.models.*;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import com.microsoft.graph.users.item.todo.lists.item.TodoTaskListItemRequestBuilder;
 import com.microsoft.graph.users.item.todo.lists.item.tasks.item.TodoTaskItemRequestBuilder;
@@ -28,9 +14,6 @@ import de.bbht.development.connector.service.dto.task.CreateUpdateTaskDto;
 import de.bbht.development.connector.service.dto.task.TaskDto;
 import de.bbht.development.connector.service.dto.tasklist.CreateUpdateTaskListDto;
 import de.bbht.development.connector.service.dto.tasklist.TaskListDto;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +21,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class MsGraphServiceTest {

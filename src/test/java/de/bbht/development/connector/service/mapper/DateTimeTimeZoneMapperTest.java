@@ -1,10 +1,10 @@
 package de.bbht.development.connector.service.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.microsoft.graph.models.DateTimeTimeZone;
 import de.bbht.development.connector.service.dto.task.DateTimeTimeZoneDto;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class DateTimeTimeZoneMapperTest {
 
