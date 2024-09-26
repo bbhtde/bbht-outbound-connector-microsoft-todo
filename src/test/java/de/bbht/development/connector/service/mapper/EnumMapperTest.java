@@ -1,5 +1,6 @@
 package de.bbht.development.connector.service.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.microsoft.graph.models.DayOfWeek;
@@ -16,7 +17,10 @@ import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
 import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
 import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
 import de.bbht.development.connector.service.dto.enums.WellknownListNameDto;
+
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -325,23 +329,47 @@ class EnumMapperTest {
     var result = EnumMapper.mapDaysOfWeek(listOfDayOfWeeks);
 
     // then
-    var expected = List.of(DayOfWeekDto.SUNDAY, DayOfWeekDto.FRIDAY, DayOfWeekDto.WEDNESDAY, DayOfWeekDto.MONDAY,
+    var expected = Set.of(DayOfWeekDto.SUNDAY, DayOfWeekDto.FRIDAY, DayOfWeekDto.WEDNESDAY, DayOfWeekDto.MONDAY,
         DayOfWeekDto.TUESDAY, DayOfWeekDto.THURSDAY, DayOfWeekDto.SATURDAY);
     assertEquals(expected, result);
   }
 
   @Test
+  void shouldMapNullDaysOfWeekCorrectly() {
+    // given / when
+    var result = EnumMapper.mapDaysOfWeek(null);
+
+    // then
+    assertThat(result).isNull();
+  }
+
+  @Test
   void shouldMapListOfDayOfWeekDtoCorrectly() {
     // given
-    var listOfDayOfWeekDtos = List.of(DayOfWeekDto.SUNDAY, DayOfWeekDto.FRIDAY, DayOfWeekDto.WEDNESDAY, DayOfWeekDto.MONDAY,
-        DayOfWeekDto.TUESDAY, DayOfWeekDto.THURSDAY, DayOfWeekDto.SATURDAY);
+    var setOfDayOfWeekDtos = new LinkedHashSet<DayOfWeekDto>();
+    setOfDayOfWeekDtos.add(DayOfWeekDto.SUNDAY);
+    setOfDayOfWeekDtos.add(DayOfWeekDto.FRIDAY);
+    setOfDayOfWeekDtos.add(DayOfWeekDto.WEDNESDAY);
+    setOfDayOfWeekDtos.add(DayOfWeekDto.MONDAY);
+    setOfDayOfWeekDtos.add(DayOfWeekDto.TUESDAY);
+    setOfDayOfWeekDtos.add(DayOfWeekDto.THURSDAY);
+    setOfDayOfWeekDtos.add(DayOfWeekDto.SATURDAY);
 
     // when
-    var result = EnumMapper.mapDaysOfWeekDto(listOfDayOfWeekDtos);
+    var result = EnumMapper.mapDaysOfWeekDto(setOfDayOfWeekDtos);
 
     // then
     var expected = List.of(DayOfWeek.Sunday, DayOfWeek.Friday, DayOfWeek.Wednesday, DayOfWeek.Monday,
         DayOfWeek.Tuesday, DayOfWeek.Thursday, DayOfWeek.Saturday);
     assertEquals(expected, result);
+  }
+
+  @Test
+  void shouldMapNullDaysOfWeekDtoCorrectly() {
+    // given / when
+    var result = EnumMapper.mapDaysOfWeekDto(null);
+
+    // then
+    assertThat(result).isNull();
   }
 }

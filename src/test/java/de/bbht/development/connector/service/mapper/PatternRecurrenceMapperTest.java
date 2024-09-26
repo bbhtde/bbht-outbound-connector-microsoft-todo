@@ -18,6 +18,8 @@ import de.bbht.development.connector.service.dto.task.RecurrencePatternDto;
 import de.bbht.development.connector.service.dto.task.RecurrenceRangeDto;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 public class PatternRecurrenceMapperTest {
@@ -62,7 +64,7 @@ public class PatternRecurrenceMapperTest {
     // given
     var pattern = new RecurrencePatternDto();
     pattern.setDayOfMonth(4);
-    pattern.setDaysOfWeek(List.of(DayOfWeekDto.TUESDAY, DayOfWeekDto.FRIDAY));
+    pattern.setDaysOfWeek(Set.of(DayOfWeekDto.TUESDAY, DayOfWeekDto.FRIDAY));
     pattern.setFirstDayOfWeek(DayOfWeekDto.THURSDAY);
     pattern.setIndex(WeekIndexDto.SECOND);
     pattern.setInterval(3);

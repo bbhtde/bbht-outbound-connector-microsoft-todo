@@ -14,8 +14,8 @@ import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
 import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
 import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
 import de.bbht.development.connector.service.dto.enums.WellknownListNameDto;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 
 public final class EnumMapper {
 
@@ -173,10 +173,10 @@ public final class EnumMapper {
     };
   }
 
-  public static List<DayOfWeekDto> mapDaysOfWeek(List<DayOfWeek> daysOfWeek) {
-    List<DayOfWeekDto> daysOfWeekDto = null;
+  public static Set<DayOfWeekDto> mapDaysOfWeek(List<DayOfWeek> daysOfWeek) {
+    Set<DayOfWeekDto> daysOfWeekDto = null;
     if (daysOfWeek != null) {
-      daysOfWeekDto = new ArrayList<>();
+      daysOfWeekDto = new LinkedHashSet<>();
       for (DayOfWeek dayOfWeek : daysOfWeek) {
         daysOfWeekDto.add(mapDayOfWeek(dayOfWeek));
       }
@@ -184,7 +184,7 @@ public final class EnumMapper {
     return daysOfWeekDto;
   }
 
-  public static List<DayOfWeek> mapDaysOfWeekDto(List<DayOfWeekDto> daysOfWeekDto) {
+  public static List<DayOfWeek> mapDaysOfWeekDto(Set<DayOfWeekDto> daysOfWeekDto) {
     List<DayOfWeek> daysOfWeek = null;
     if (daysOfWeekDto != null) {
       daysOfWeek = new ArrayList<>();

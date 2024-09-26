@@ -37,6 +37,7 @@ public final class TaskMapper {
       taskDto.setDueDateTime(DateTimeTimeZoneMapper.mapDateTimeTimeZone(todoTask.getDueDateTime()));
       taskDto.setImportance(EnumMapper.mapImportance(todoTask.getImportance()));
       taskDto.setLastModifiedDateTime(todoTask.getLastModifiedDateTime());
+      taskDto.setRecurrence(PatternedRecurrenceMapper.mapPatternedRecurrence(todoTask.getRecurrence()));
       taskDto.setReminderOn(todoTask.getIsReminderOn());
       taskDto.setReminderDateTime(
               DateTimeTimeZoneMapper.mapDateTimeTimeZone(todoTask.getReminderDateTime()));
@@ -63,6 +64,7 @@ public final class TaskMapper {
       todoTask.setDueDateTime(
           DateTimeTimeZoneMapper.mapDateTimeTimeZoneDto(createUpdateTaskDto.getDueDateTime()));
       todoTask.setImportance(EnumMapper.mapImportanceDto(createUpdateTaskDto.getImportance()));
+      todoTask.setRecurrence(PatternedRecurrenceMapper.mapPatternedRecurrenceDto(createUpdateTaskDto.getRecurrence()));
       todoTask.setIsReminderOn(createUpdateTaskDto.getReminderOn());
       todoTask.setReminderDateTime(
               DateTimeTimeZoneMapper.mapDateTimeTimeZoneDto(createUpdateTaskDto.getReminderDateTime()));

@@ -23,8 +23,8 @@ public record TaskRecurrenceOptions(
         type = PropertyType.Dropdown,
         constraints = @PropertyConstraints(notEmpty = true),
         choices = {
-            @DropdownPropertyChoice(label = "Task is not recurring", value = "NO_RECURRING"),
-            @DropdownPropertyChoice(label = "Recurring Task", value = "RECURRING"),
+            @DropdownPropertyChoice(label = "Task is not recurring", value = TaskRecurrenceOptions.VALUE_NON_RECURRING),
+            @DropdownPropertyChoice(label = "Recurring Task", value = TaskRecurrenceOptions.VALUE_RECURRING),
         })
     String recurring,
 
@@ -35,7 +35,7 @@ public record TaskRecurrenceOptions(
       constraints = @PropertyConstraints(notEmpty = true),
       condition = @PropertyCondition(
           property = "taskRecurrenceOptions.recurring",
-          equals = "RECURRING"
+          equals = TaskRecurrenceOptions.VALUE_RECURRING
       ),
       type = PropertyType.Dropdown,
       choices = {
@@ -62,7 +62,7 @@ public record TaskRecurrenceOptions(
         ),
         condition = @PropertyCondition(
             property = "taskRecurrenceOptions.recurring",
-            equals = "RECURRING"
+            equals = TaskRecurrenceOptions.VALUE_RECURRING
         )
     )
     Integer interval,
@@ -168,7 +168,7 @@ public record TaskRecurrenceOptions(
         constraints = @PropertyConstraints(notEmpty = true),
         condition = @PropertyCondition(
             property = "taskRecurrenceOptions.recurring",
-            equals = "RECURRING"
+            equals = TaskRecurrenceOptions.VALUE_RECURRING
         ),
         choices = {
             @DropdownPropertyChoice(label = "End Date", value = "END_DATE"),
@@ -202,11 +202,11 @@ public record TaskRecurrenceOptions(
         constraints = @PropertyConstraints(
             notEmpty = true,
             pattern = @Pattern(
-                value = ToDoConstants.REGEX_DATETIME,
-                message = "Please use the format 'YYYY-MM-DDThh:mm:ss.SSSSSS'")),
+                value = ToDoConstants.REGEX_DATE,
+                message = "Please use the format 'YYYY-MM-DD'")),
         condition = @PropertyCondition(
             property = "taskRecurrenceOptions.recurring",
-            equals = "RECURRING"
+            equals = TaskRecurrenceOptions.VALUE_RECURRING
         )
     )
     String startDate,
@@ -218,8 +218,8 @@ public record TaskRecurrenceOptions(
         constraints = @PropertyConstraints(
             notEmpty = true,
             pattern = @Pattern(
-                value = ToDoConstants.REGEX_DATETIME,
-                message = "Please use the format 'YYYY-MM-DDThh:mm:ss.SSSSSS'")),
+                value = ToDoConstants.REGEX_DATE,
+                message = "Please use the format 'YYYY-MM-DD'")),
         condition = @PropertyCondition(
             property = "taskRecurrenceOptions.rangeType",
             equals = "END_DATE"
@@ -232,7 +232,7 @@ public record TaskRecurrenceOptions(
         description = "Timezone for the Start and End Date",
         condition = @PropertyCondition(
             property = "taskRecurrenceOptions.recurring",
-            equals = "RECURRING"),
+            equals = TaskRecurrenceOptions.VALUE_RECURRING),
         choices = {
             @DropdownPropertyChoice(value = "Afghanistan Standard Time", label = "Afghanistan Standard Time"),
             @DropdownPropertyChoice(value = "Africa/Cairo", label = "Africa/Cairo"),
@@ -558,5 +558,8 @@ public record TaskRecurrenceOptions(
         optional = true) 
     String recurrenceTimeZone
 ) {
+
+    public static final String VALUE_RECURRING = "RECURRING";
+    public static final String VALUE_NON_RECURRING = "NON_RECURRING";
 
 }

@@ -4,6 +4,8 @@ class ToDoConstants {
 
   public static final String REGEX_DATETIME = "^([1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9][0-9][0-9][0-9])?$";
 
+  public static final String REGEX_DATE = "^([1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9])?$";
+
   public static final String REGEX_32_BIT_INTEGER = "^[1-9]\\d{0,9}$";
 
   public static final String REGEX_MONTHS = "^(1[0-2]|[1-9])$";

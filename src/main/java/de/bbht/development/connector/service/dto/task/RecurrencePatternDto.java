@@ -5,11 +5,12 @@ import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
 import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class RecurrencePatternDto {
 
   private Integer dayOfMonth;
-  private List<DayOfWeekDto> daysOfWeek;
+  private Set<DayOfWeekDto> daysOfWeek;
   private DayOfWeekDto firstDayOfWeek;
   private WeekIndexDto index;
   private Integer interval;
@@ -28,11 +29,11 @@ public class RecurrencePatternDto {
     this.dayOfMonth = dayOfMonth;
   }
 
-  public List<DayOfWeekDto> getDaysOfWeek() {
+  public Set<DayOfWeekDto> getDaysOfWeek() {
     return daysOfWeek;
   }
 
-  public void setDaysOfWeek(List<DayOfWeekDto> daysOfWeek) {
+  public void setDaysOfWeek(Set<DayOfWeekDto> daysOfWeek) {
     this.daysOfWeek = daysOfWeek;
   }
 

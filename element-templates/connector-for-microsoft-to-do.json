@@ -6632,6 +6632,30 @@
       "value" : "RELATIVE_YEARLY"
     } ]
   }, {
+    "id" : "taskRecurrenceOptions.interval",
+    "label" : "Interval",
+    "description" : "The number of units between occurrences (units are days, weeks, months or years depending on the pattern type)",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true,
+      "pattern" : {
+        "value" : "^[1-9]\\d{0,9}$",
+        "message" : "Please enter a positive integer (1 - 999999999)"
+      }
+    },
+    "feel" : "optional",
+    "group" : "recurrence",
+    "binding" : {
+      "name" : "taskRecurrenceOptions.interval",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "taskRecurrenceOptions.recurring",
+      "equals" : "RECURRING",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
     "id" : "taskRecurrenceOptions.dayOfMonth",
     "label" : "Day of Month",
     "description" : "The day of the month on which the Task occurs.",
@@ -6752,30 +6776,6 @@
       "value" : "LAST"
     } ]
   }, {
-    "id" : "taskRecurrenceOptions.interval",
-    "label" : "Interval",
-    "description" : "The number of units between occurrences (units are days, weeks, months or years depending on the pattern type)",
-    "optional" : false,
-    "constraints" : {
-      "notEmpty" : true,
-      "pattern" : {
-        "value" : "^[1-9]\\d{0,9}$",
-        "message" : "Please enter a positive integer (1 - 999999999)"
-      }
-    },
-    "feel" : "optional",
-    "group" : "recurrence",
-    "binding" : {
-      "name" : "taskRecurrenceOptions.interval",
-      "type" : "zeebe:input"
-    },
-    "condition" : {
-      "property" : "taskRecurrenceOptions.recurring",
-      "equals" : "RECURRING",
-      "type" : "simple"
-    },
-    "type" : "String"
-  }, {
     "id" : "taskRecurrenceOptions.month",
     "label" : "Month",
     "description" : "The month in which the task occurs.",
@@ -6829,6 +6829,30 @@
       "value" : "NUMBERED"
     } ]
   }, {
+    "id" : "taskRecurrenceOptions.numberOfOccurrences",
+    "label" : "Number of Occurrences",
+    "description" : "The number of times to repeat the task",
+    "optional" : false,
+    "constraints" : {
+      "notEmpty" : true,
+      "pattern" : {
+        "value" : "^[1-9]\\d{0,9}$",
+        "message" : "Please enter a positive integer (1 - 999999999)"
+      }
+    },
+    "feel" : "optional",
+    "group" : "recurrence",
+    "binding" : {
+      "name" : "taskRecurrenceOptions.numberOfOccurrences",
+      "type" : "zeebe:input"
+    },
+    "condition" : {
+      "property" : "taskRecurrenceOptions.rangeType",
+      "equals" : "NUMBERED",
+      "type" : "simple"
+    },
+    "type" : "String"
+  }, {
     "id" : "taskRecurrenceOptions.startDate",
     "label" : "Start Date",
     "description" : "The date to start applying the recurrence pattern.",
@@ -6873,30 +6897,6 @@
     "condition" : {
       "property" : "taskRecurrenceOptions.rangeType",
       "equals" : "END_DATE",
-      "type" : "simple"
-    },
-    "type" : "String"
-  }, {
-    "id" : "taskRecurrenceOptions.numberOfOccurrences",
-    "label" : "Number of Occurrences",
-    "description" : "The number of times to repeat the task",
-    "optional" : false,
-    "constraints" : {
-      "notEmpty" : true,
-      "pattern" : {
-        "value" : "^[1-9]\\d{0,9}$",
-        "message" : "Please enter a positive integer (1 - 999999999)"
-      }
-    },
-    "feel" : "optional",
-    "group" : "recurrence",
-    "binding" : {
-      "name" : "taskRecurrenceOptions.numberOfOccurrences",
-      "type" : "zeebe:input"
-    },
-    "condition" : {
-      "property" : "taskRecurrenceOptions.rangeType",
-      "equals" : "NUMBERED",
       "type" : "simple"
     },
     "type" : "String"

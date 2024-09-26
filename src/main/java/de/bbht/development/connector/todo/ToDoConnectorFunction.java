@@ -88,9 +88,12 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
     return graphServiceFactory.create(authInfo);
   }
 
-  private <O, T> ConnectorResult<T> executeRequestInternal(ToDoConnectorRequest connectorRequest, Function<ToDoConnectorRequest, O> optionExtractor,
-
-                                                           Predicate<T> additionalEmptyCheck, QuadFunction<GraphAuthentication, Operation, O, MsGraphService, T> serviceCall) {
+  private <O, P, T> ConnectorResult<T> executeRequestInternal(
+          ToDoConnectorRequest connectorRequest,
+          Function<ToDoConnectorRequest, O> optionExtractor,
+          Function<ToDoConnectorRequest, P> additionalOptionExtractor,
+          Predicate<T> additionalEmptyCheck,
+          QuinFunction<GraphAuthentication, Operation, O, P, MsGraphService, T> serviceCall) {
 
     final GraphAuthentication authentication = connectorRequest.authentication();
     final Operation operation = connectorRequest.operation();
@@ -100,10 +103,16 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
     } else {
       options = null;
     }
+    final P additionalOptions;
+    if (additionalOptionExtractor != null) {
+      additionalOptions = additionalOptionExtractor.apply(connectorRequest);
+    } else {
+      additionalOptions = null;
+    }
     final MsGraphService service = createGraphService(authentication);
 
     try {
-      T result = serviceCall.apply(authentication, operation, options, service);
+      T result = serviceCall.apply(authentication, operation, options, additionalOptions, service);
       boolean nullResult = false;
       if (additionalEmptyCheck != null) {
         nullResult = additionalEmptyCheck.test(result);
@@ -114,129 +123,131 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
         return ConnectorResult.<T>withEmptyResult();
       }
     } catch (MsGraphException graphException) {
+      graphException.printStackTrace();
       return ConnectorResult.<T>withErrorResult(graphException.getMessage(), String.valueOf(graphException.getCode()));
     } catch (Exception e) {
+      e.printStackTrace();
       return ConnectorResult.<T>withErrorResult(e.getMessage(), null);
     }
   }
 
   private ConnectorResult<List<TaskListDto>> getListOfTaskLists(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, TaskListOptions, MsGraphService, List<TaskListDto>> listTaskLists = (authentication, operation, options, service) -> service.getListOfTaskLists(
+    QuinFunction<GraphAuthentication, Operation, TaskListOptions, Void, MsGraphService, List<TaskListDto>> listTaskLists = (authentication, operation, additionalOptions, options, service) -> service.getListOfTaskLists(
         operation.userIdOrPrincipalName());
-    return executeRequestInternal(connectorRequest, null, List::isEmpty, listTaskLists);
+    return executeRequestInternal(connectorRequest, null, null, List::isEmpty, listTaskLists);
   }
 
   private ConnectorResult<TaskListDto> getTaskList(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, TaskListOptions, MsGraphService, TaskListDto> getTaskList = (authentication, operation, options, service) -> service.getTaskListById(
+    QuinFunction<GraphAuthentication, Operation, TaskListOptions, Void, MsGraphService, TaskListDto> getTaskList = (authentication, operation, options, additionalOptions, service) -> service.getTaskListById(
         operation.userIdOrPrincipalName(), operation.taskListId()).orElse(null);
 
-    return executeRequestInternal(connectorRequest, null, null, getTaskList);
+    return executeRequestInternal(connectorRequest, null,  null,null, getTaskList);
   }
 
   private ConnectorResult<TaskListDto> createTaskList(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, TaskListOptions, MsGraphService, TaskListDto> createTaskList = (authentication, operation, options, service) -> {
+    QuinFunction<GraphAuthentication, Operation, TaskListOptions, Void,  MsGraphService, TaskListDto> createTaskList = (authentication, operation, options, additionalOptions, service) -> {
       final CreateUpdateTaskListDto taskListToCreate = OptionMapper.mapFromTaskListOptions(options);
       return service.createTaskList(operation.userIdOrPrincipalName(), taskListToCreate).orElse(null);
     };
 
-    return executeRequestInternal(connectorRequest, ToDoConnectorRequest::taskListOptions, null, createTaskList);
+    return executeRequestInternal(connectorRequest, ToDoConnectorRequest::taskListOptions, null, null, createTaskList);
   }
 
   private ConnectorResult<TaskListDto> updateTaskList(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, UpdateTaskListOptions, MsGraphService, TaskListDto> updateTaskList = (authentication, operation, options, service) -> {
+    QuinFunction<GraphAuthentication, Operation, UpdateTaskListOptions, Void, MsGraphService, TaskListDto> updateTaskList = (authentication, operation, options, additionalOptions, service) -> {
       final CreateUpdateTaskListDto taskListToUpdate = OptionMapper.mapFromUpdateTaskListOptions(options);
       return service.updateTaskList(operation.userIdOrPrincipalName(), operation.taskListId(),
           taskListToUpdate).orElse(null);
     };
 
-    return executeRequestInternal(connectorRequest, ToDoConnectorRequest::updateTaskListOptions, null, updateTaskList);
+    return executeRequestInternal(connectorRequest, ToDoConnectorRequest::updateTaskListOptions, null, null, updateTaskList);
   }
 
   private ConnectorResult<Void> deleteTaskList(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, TaskListOptions, MsGraphService, Void> deleteTaskList = (authentication, operation, options, service) -> service.deleteTaskList(
+    QuinFunction<GraphAuthentication, Operation, TaskListOptions, Void, MsGraphService, Void> deleteTaskList = (authentication, operation, options, additionalOptions, service) -> service.deleteTaskList(
         operation.userIdOrPrincipalName(), operation.taskListId());
 
-    return executeRequestInternal(connectorRequest, null, null, deleteTaskList);
+    return executeRequestInternal(connectorRequest, null, null, null, deleteTaskList);
   }
 
   private ConnectorResult<List<TaskDto>> getListOfTasks(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, TaskOptions, MsGraphService, List<TaskDto>> listTasks = (authentication, operation, options, service) -> service.getListOfTasks(
+    QuinFunction<GraphAuthentication, Operation, TaskOptions, Void, MsGraphService, List<TaskDto>> listTasks = (authentication, operation, options, additionalOptions, service) -> service.getListOfTasks(
         operation.userIdOrPrincipalName(), operation.taskListId());
-    return executeRequestInternal(connectorRequest, null, List::isEmpty, listTasks);
+    return executeRequestInternal(connectorRequest, null, null, List::isEmpty, listTasks);
   }
 
   private ConnectorResult<TaskDto> getTask(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, TaskOptions, MsGraphService, TaskDto> getTask = (authentication, operation, options, service) -> service.getTask(
+    QuinFunction<GraphAuthentication, Operation, TaskOptions, Void, MsGraphService, TaskDto> getTask = (authentication, operation, options, additionalOptions, service) -> service.getTask(
         operation.userIdOrPrincipalName(), operation.taskListId(), operation.taskId()).orElse(null);
 
-    return executeRequestInternal(connectorRequest, null, null, getTask);
+    return executeRequestInternal(connectorRequest, null, null,null, getTask);
   }
 
   private ConnectorResult<TaskDto> createTask(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, TaskOptions, MsGraphService, TaskDto> createTask = (authentication, operation, options, service) -> {
-      final CreateUpdateTaskDto taskToCreate = OptionMapper.mapFromTaskOptions(options);
+    QuinFunction<GraphAuthentication, Operation, TaskOptions, TaskRecurrenceOptions, MsGraphService, TaskDto> createTask = (authentication, operation, options, additionalOptions, service) -> {
+      final CreateUpdateTaskDto taskToCreate = OptionMapper.mapFromTaskOptions(options, additionalOptions);
       return service.createTask(operation.userIdOrPrincipalName(), operation.taskListId(),
           taskToCreate).orElse(null);
     };
 
-    return executeRequestInternal(connectorRequest, ToDoConnectorRequest::taskOptions, null, createTask);
+    return executeRequestInternal(connectorRequest, ToDoConnectorRequest::taskOptions, ToDoConnectorRequest::taskRecurrenceOptions, null, createTask);
   }
 
   private ConnectorResult<TaskDto> updateTask(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, UpdateTaskOptions, MsGraphService, TaskDto> updateTask = (authentication, operation, options, service) -> {
-      final CreateUpdateTaskDto taskToUpdate = OptionMapper.mapFromUpdateTaskOptions(options);
+    QuinFunction<GraphAuthentication, Operation, UpdateTaskOptions, TaskRecurrenceOptions, MsGraphService, TaskDto> updateTask = (authentication, operation, options, additionalOptions, service) -> {
+      final CreateUpdateTaskDto taskToUpdate = OptionMapper.mapFromUpdateTaskOptions(options, additionalOptions);
       return service.updateTask(operation.userIdOrPrincipalName(), operation.taskListId(),
           operation.taskId(), taskToUpdate).orElse(null);
     };
 
-    return executeRequestInternal(connectorRequest, ToDoConnectorRequest::updateTaskOptions, null, updateTask);
+    return executeRequestInternal(connectorRequest, ToDoConnectorRequest::updateTaskOptions, ToDoConnectorRequest::taskRecurrenceOptions,null, updateTask);
   }
 
   private ConnectorResult<Void> deleteTask(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, TaskOptions, MsGraphService, Void> deleteTask = (authentication, operation, options, service) -> service.deleteTask(
+    QuinFunction<GraphAuthentication, Operation, TaskOptions, Void, MsGraphService, Void> deleteTask = (authentication, operation, options, additionalOptions, service) -> service.deleteTask(
         operation.userIdOrPrincipalName(), operation.taskListId(), operation.taskId());
 
-    return executeRequestInternal(connectorRequest, null, null, deleteTask);
+    return executeRequestInternal(connectorRequest, null, null, null, deleteTask);
   }
 
   private ConnectorResult<List<CheckListItemDto>> getListOfCheckListItems(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, CheckListItemOptions, MsGraphService, List<CheckListItemDto>> listCheckListItems = (authentication, operation, options, service) -> service.getListOfCheckListItems(
+    QuinFunction<GraphAuthentication, Operation, CheckListItemOptions, Void, MsGraphService, List<CheckListItemDto>> listCheckListItems = (authentication, operation, options, additionalOptions, service) -> service.getListOfCheckListItems(
         operation.userIdOrPrincipalName(), operation.taskListId(), operation.taskId());
-    return executeRequestInternal(connectorRequest, null, List::isEmpty, listCheckListItems);
+    return executeRequestInternal(connectorRequest, null, null, List::isEmpty, listCheckListItems);
   }
 
   private ConnectorResult<CheckListItemDto> getCheckListItem(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, CheckListItemOptions, MsGraphService, CheckListItemDto> getCheckListItem = (authentication, operation, options, service) -> service.getCheckListItem(
+    QuinFunction<GraphAuthentication, Operation, CheckListItemOptions, Void, MsGraphService, CheckListItemDto> getCheckListItem = (authentication, operation, options, additionalOptions, service) -> service.getCheckListItem(
         operation.userIdOrPrincipalName(), operation.taskListId(), operation.taskId(),
         operation.checkListItemId()).orElse(null);
 
-    return executeRequestInternal(connectorRequest, null, null, getCheckListItem);
+    return executeRequestInternal(connectorRequest, null, null,null, getCheckListItem);
   }
 
   private ConnectorResult<CheckListItemDto> createCheckListItem(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, CheckListItemOptions, MsGraphService, CheckListItemDto> createCheckListItem = (authentication, operation, options, service) -> {
+    QuinFunction<GraphAuthentication, Operation, CheckListItemOptions, Void, MsGraphService, CheckListItemDto> createCheckListItem = (authentication, operation, options, additionalOptions, service) -> {
       final CreateUpdateCheckListItemDto checkListItemToCreate = OptionMapper.mapFromCheckListItemOptions(
           options);
       return service.createCheckListItem(operation.userIdOrPrincipalName(), operation.taskListId(),
           operation.taskId(), checkListItemToCreate).orElse(null);
     };
-    return executeRequestInternal(connectorRequest, ToDoConnectorRequest::checkListItemOptions, null, createCheckListItem);
+    return executeRequestInternal(connectorRequest, ToDoConnectorRequest::checkListItemOptions, null, null, createCheckListItem);
   }
 
   private ConnectorResult<CheckListItemDto> updateCheckListItem(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, UpdateCheckListItemOptions, MsGraphService, CheckListItemDto> updateCheckListItem = (authentication, operation, options, service) -> {
+    QuinFunction<GraphAuthentication, Operation, UpdateCheckListItemOptions, Void, MsGraphService, CheckListItemDto> updateCheckListItem = (authentication, operation, options, additionalOptions, service) -> {
       final CreateUpdateCheckListItemDto checkListItemToUpdate = OptionMapper.mapFromUpdateCheckListItemOptions(options);
       return service.updateCheckListItem(operation.userIdOrPrincipalName(), operation.taskListId(),
           operation.taskId(), operation.checkListItemId(), checkListItemToUpdate).orElse(null);
     };
-    return executeRequestInternal(connectorRequest, ToDoConnectorRequest::updateCheckListItemOptions, null, updateCheckListItem);
+    return executeRequestInternal(connectorRequest, ToDoConnectorRequest::updateCheckListItemOptions, null,null, updateCheckListItem);
   }
 
   private ConnectorResult<Void> deleteCheckListItem(ToDoConnectorRequest connectorRequest) {
-    QuadFunction<GraphAuthentication, Operation, CheckListItemOptions, MsGraphService, Void> deleteCheckListItem = (authentication, operation, options, service) -> service.deleteCheckListItem(
+    QuinFunction<GraphAuthentication, Operation, CheckListItemOptions, Void, MsGraphService, Void> deleteCheckListItem = (authentication, operation, options, additionalOptions, service) -> service.deleteCheckListItem(
         operation.userIdOrPrincipalName(), operation.taskListId(), operation.taskId(),
         operation.checkListItemId());
 
-    return executeRequestInternal(connectorRequest, null, null, deleteCheckListItem);
+    return executeRequestInternal(connectorRequest, null, null, null, deleteCheckListItem);
   }
 }
