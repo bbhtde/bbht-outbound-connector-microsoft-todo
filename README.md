@@ -314,6 +314,9 @@ The result is an array with 0..n entries of the following type:
 | dueDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task is due. |
 | importance | enum | The importance of the task. Possible values are `HIGH`, `NORMAL` or `LOW`. |
 | lastModifiedDateTime | string | The date and time the task was last modified. Has the format `YYYY-MM-DD'T'hh:mm:ss.SSSSSS{timezone}`, where timezone can be `Z` for UTC or `+hh:mm` or `-hh:mm` |
+| recurrence | [PatternedRecurrence](#patternedrecurrence) | The recurrence pattern for the task. | 
+| reminderOn | boolean | Set to `true` to activate the reminder of the task, else set to `false`                                                                                          | 
+| reminderDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time for the task reminder. |  
 | startDateTime | [DateTimeTimeZone](#datetimetimezone) | The date and time the task was started. |
 | status | enum | The status of the task. Possible values are `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`, `WAITING_ON_OTHERS`, `DEFERRED`. |
 
@@ -336,6 +339,24 @@ The result is an array with 0..n entries of the following type:
         },
         "importance": string-with-enum,
         "lastModifiedDateTime": string,
+        "recurrence": {
+            "pattern": {
+            "type": string-with-enum,
+            "dayOfMonth": number,
+            "daysOfWeek": string-with-enum[],
+            "firstDayOfWeek": string-with-enum[],
+            "index": string-with-enum,
+            "interval": number,
+            "month": number
+          },
+          "range": {
+            "type": string-with-enum,
+            "startDate": string,
+            "end-date": string,
+            "numberOfOccurrences": number,
+            "recurrenceTimeZone": string
+          }
+        },
         "reminderDateTime": {
             "dateTime": string,
             "timeZone": string
@@ -364,6 +385,24 @@ The result is an array with 0..n entries of the following type:
         },
         "importance": string-with-enum,
         "lastModifiedDateTime": offsetDateTime,
+        "recurrence": {
+          "pattern": {
+            "type": string-with-enum,
+            "dayOfMonth": number,
+            "daysOfWeek": string-with-enum[],
+            "firstDayOfWeek": string-with-enum[],
+            "index": string-with-enum,
+            "interval": number,
+            "month": number
+          },
+          "range": {
+            "type": string-with-enum,
+            "startDate": string,
+            "end-date": string,
+            "numberOfOccurrences": number,
+            "recurrenceTimeZone": string
+          }
+        },   
         "reminderDateTime": {
             "dateTime": string,
             "timeZone": string
@@ -447,7 +486,7 @@ The result is one or none object of the following type:
           "numberOfOccurrences": number,
           "recurrenceTimeZone": string
         }
-    }   
+    },   
     "reminderDateTime": {
         "dateTime": string,
         "timeZone": string
@@ -911,7 +950,6 @@ The following restrictions currently apply:
 
 * Task Lists, Tasks and Check List Items cannot be loaded recursively (e.g. loading all check list items in all tasks of a given task list). 
 * Also, currently no additional relationships (such as `extensions`, `attachments` and `linkedResources`) are supported.
-* For Tasks, the `recurrence` property is not yet supported (c.f. [https://learn.microsoft.com/en-us/graph/api/resources/todotask](https://learn.microsoft.com/en-us/graph/api/resources/todotask?view=graph-rest-1.0))
 
 ## Disclaimer
 
