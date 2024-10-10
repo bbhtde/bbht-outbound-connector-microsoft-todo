@@ -5,7 +5,7 @@ import de.bbht.development.connector.service.dto.checklistitem.CheckListItemDto;
 import de.bbht.development.connector.service.dto.checklistitem.CreateUpdateCheckListItemDto;
 import java.util.List;
 
-public class CheckListItemMapper {
+public final class CheckListItemMapper {
 
   private CheckListItemMapper() {
     // private constructor to prevent instantiation

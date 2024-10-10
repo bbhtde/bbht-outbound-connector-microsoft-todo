@@ -3,9 +3,9 @@
 *This Connector is developed by Camunda’s partners or independent third-party developers. 
 To receive assistance or support for the Connector "Outbound Connector for To Do", contact 
 BBHT Beratungsgesellschaft mBH & Co. KG directly using the contact information. Camunda 
-disclaims any support obligation for the Connector.
+disclaims any support obligation for the Connector.*
 
-By installing this connector, you consent to Camunda sharing your contact information 
+*By installing this connector, you consent to Camunda sharing your contact information 
 with the developer of this connector so that you can receive more information about it
 directly from the developer.*
 

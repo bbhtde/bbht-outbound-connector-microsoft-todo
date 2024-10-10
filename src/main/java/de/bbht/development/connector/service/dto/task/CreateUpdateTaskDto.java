@@ -13,6 +13,7 @@ public class CreateUpdateTaskDto {
   private DateTimeTimeZoneDto completedDateTime;
   private DateTimeTimeZoneDto dueDateTime;
   private ImportanceDto importance;
+  private PatternedRecurrenceDto recurrence;
   private Boolean reminderOn;
   private DateTimeTimeZoneDto reminderDateTime;
   private DateTimeTimeZoneDto startDateTime;
@@ -70,6 +71,14 @@ public class CreateUpdateTaskDto {
     this.importance = importance;
   }
 
+  public PatternedRecurrenceDto getRecurrence() {
+    return recurrence;
+  }
+
+  public void setRecurrence(PatternedRecurrenceDto recurrence) {
+    this.recurrence = recurrence;
+  }
+
   public Boolean getReminderOn() {
     return reminderOn;
   }
@@ -104,29 +113,32 @@ public class CreateUpdateTaskDto {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof CreateUpdateTaskDto that)) return false;
-    return Objects.equals(title, that.title) && Objects.equals(body, that.body) && Objects.equals(categories, that.categories) && Objects.equals(completedDateTime, that.completedDateTime) && Objects.equals(dueDateTime, that.dueDateTime) && importance == that.importance && Objects.equals(reminderOn, that.reminderOn) && Objects.equals(reminderDateTime, that.reminderDateTime) && Objects.equals(startDateTime, that.startDateTime) && status == that.status;
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof CreateUpdateTaskDto that)) {
+      return false;
+    }
+    return Objects.equals(title, that.title) && Objects.equals(body, that.body) && Objects.equals(
+        categories, that.categories) && Objects.equals(completedDateTime, that.completedDateTime)
+        && Objects.equals(dueDateTime, that.dueDateTime) && importance == that.importance
+        && Objects.equals(recurrence, that.recurrence) && Objects.equals(reminderOn,
+        that.reminderOn) && Objects.equals(reminderDateTime, that.reminderDateTime)
+        && Objects.equals(startDateTime, that.startDateTime) && status == that.status;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title, body, categories, completedDateTime, dueDateTime, importance, reminderOn, reminderDateTime, startDateTime, status);
+    return Objects.hash(title, body, categories, completedDateTime, dueDateTime, importance,
+        recurrence, reminderOn, reminderDateTime, startDateTime, status);
   }
 
   @Override
   public String toString() {
-    return "CreateUpdateTaskDto{" +
-            "title='" + title + '\'' +
-            ", body='" + body + '\'' +
-            ", categories=" + categories +
-            ", completedDateTime=" + completedDateTime +
-            ", dueDateTime=" + dueDateTime +
-            ", importance=" + importance +
-            ", reminderOn=" + reminderOn +
-            ", reminderDateTime=" + reminderDateTime +
-            ", startDateTime=" + startDateTime +
-            ", status=" + status +
-            '}';
+    return "CreateUpdateTaskDto{" + "title='" + title + '\'' + ", body='" + body + '\''
+        + ", categories=" + categories + ", completedDateTime=" + completedDateTime
+        + ", dueDateTime=" + dueDateTime + ", importance=" + importance + ", recurrence="
+        + recurrence + ", reminderOn=" + reminderOn + ", reminderDateTime=" + reminderDateTime
+        + ", startDateTime=" + startDateTime + ", status=" + status + '}';
   }
 }

@@ -86,9 +86,11 @@ public class MsGraphService {
     });
   }
 
-  public Optional<TaskListDto> createTaskList(String userId, CreateUpdateTaskListDto createTaskListDto) {
+  public Optional<TaskListDto> createTaskList(String userId,
+      CreateUpdateTaskListDto createTaskListDto) {
     return handleException(() -> {
-      final TodoTaskList createTaskList = TaskListMapper.mapCreateUpdateTaskListDto(createTaskListDto);
+      final TodoTaskList createTaskList = TaskListMapper.mapCreateUpdateTaskListDto(
+          createTaskListDto);
 
       final TodoTaskList createdTaskList = graphServiceClient.users()
           .byUserId(userId)
@@ -102,7 +104,8 @@ public class MsGraphService {
   public Optional<TaskListDto> updateTaskList(String userId, String taskListId,
       CreateUpdateTaskListDto updateTaskListDto) {
     return handleException(() -> {
-      final TodoTaskList updateTaskList = TaskListMapper.mapCreateUpdateTaskListDto(updateTaskListDto);
+      final TodoTaskList updateTaskList = TaskListMapper.mapCreateUpdateTaskListDto(
+          updateTaskListDto);
 
       final TodoTaskList updatedTaskList = graphServiceClient.users()
           .byUserId(userId)
@@ -159,7 +162,8 @@ public class MsGraphService {
     });
   }
 
-  public Optional<TaskDto> createTask(String userId, String taskListId, CreateUpdateTaskDto createTaskDto) {
+  public Optional<TaskDto> createTask(String userId, String taskListId,
+      CreateUpdateTaskDto createTaskDto) {
     return handleException(() -> {
       final TodoTask createTask = TaskMapper.mapCreateUpdateTaskDto(createTaskDto);
 
@@ -205,7 +209,8 @@ public class MsGraphService {
     });
   }
 
-  public List<CheckListItemDto> getListOfCheckListItems(String userId, String taskListId, String taskId) {
+  public List<CheckListItemDto> getListOfCheckListItems(String userId, String taskListId,
+      String taskId) {
     return handleException(() -> {
       ChecklistItemCollectionResponse response = graphServiceClient.users()
           .byUserId(userId)
@@ -226,8 +231,8 @@ public class MsGraphService {
     });
   }
 
-  public Optional<CheckListItemDto> getCheckListItem(String userId, String taskListId, String taskId,
-      String checkListItemId) {
+  public Optional<CheckListItemDto> getCheckListItem(String userId, String taskListId,
+      String taskId, String checkListItemId) {
     return handleException(() -> {
       final ChecklistItem checkListItem = graphServiceClient.users()
           .byUserId(userId)
@@ -243,8 +248,8 @@ public class MsGraphService {
     });
   }
 
-  public Optional<CheckListItemDto> createCheckListItem(String userId, String taskListId, String taskId,
-      CreateUpdateCheckListItemDto createCheckListItemDto) {
+  public Optional<CheckListItemDto> createCheckListItem(String userId, String taskListId,
+      String taskId, CreateUpdateCheckListItemDto createCheckListItemDto) {
     return handleException(() -> {
       final ChecklistItem createCheckListItem = CheckListItemMapper.mapCreateUpdateCheckListItemDto(
           createCheckListItemDto);
@@ -262,8 +267,8 @@ public class MsGraphService {
     });
   }
 
-  public Optional<CheckListItemDto> updateCheckListItem(String userId, String taskListId, String taskId,
-      String checkListItemId, CreateUpdateCheckListItemDto updateCheckListItemDto) {
+  public Optional<CheckListItemDto> updateCheckListItem(String userId, String taskListId,
+      String taskId, String checkListItemId, CreateUpdateCheckListItemDto updateCheckListItemDto) {
     return handleException(() -> {
       final ChecklistItem updateCheckListItem = CheckListItemMapper.mapCreateUpdateCheckListItemDto(
           updateCheckListItemDto);
@@ -282,7 +287,8 @@ public class MsGraphService {
     });
   }
 
-  public Void deleteCheckListItem(String userId, String taskListId, String taskId, String checkListItemId) {
+  public Void deleteCheckListItem(String userId, String taskListId, String taskId,
+      String checkListItemId) {
     return handleException(() -> {
       graphServiceClient.users()
           .byUserId(userId)

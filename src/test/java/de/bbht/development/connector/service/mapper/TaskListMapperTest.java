@@ -97,4 +97,30 @@ class TaskListMapperTest {
                 .returns(false, TaskListDto::getShared)
                 .returns("Display Name 2", TaskListDto::getDisplayName));
   }
+
+  @Test
+  void shouldMapNullCreateUpdateTaskListDto() {
+    // given
+    var nullTaskList = (CreateUpdateTaskListDto) null;
+
+    // when
+    var result = TaskListMapper.mapCreateUpdateTaskListDto(nullTaskList);
+
+    // then
+    assertThat(result).isNull();
+
+  }
+
+  @Test
+  void shouldMapNullTaskList() {
+    // given
+    var nullTaskList = (TodoTaskList) null;
+
+    // when
+    var result = TaskListMapper.mapTaskList(nullTaskList);
+
+    // then
+    assertThat(result).isNull();
+
+  }
 }

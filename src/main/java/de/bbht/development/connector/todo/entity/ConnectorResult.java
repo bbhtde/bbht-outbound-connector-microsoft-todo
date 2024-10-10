@@ -1,6 +1,7 @@
 package de.bbht.development.connector.todo.entity;
 
 public class ConnectorResult<T> {
+
   private T result;
   private boolean empty;
   private ConnectorError error;

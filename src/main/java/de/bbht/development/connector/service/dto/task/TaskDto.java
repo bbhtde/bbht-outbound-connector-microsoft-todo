@@ -18,9 +18,11 @@ public class TaskDto {
   private DateTimeTimeZoneDto dueDateTime;
   private ImportanceDto importance;
   private OffsetDateTime lastModifiedDateTime;
+  private PatternedRecurrenceDto recurrence;
   private Boolean reminderOn;
   private DateTimeTimeZoneDto reminderDateTime;
   private DateTimeTimeZoneDto startDateTime;
+
   private TaskStatusDto status;
 
   public TaskDto() {
@@ -107,6 +109,14 @@ public class TaskDto {
     this.lastModifiedDateTime = lastModifiedDateTime;
   }
 
+  public PatternedRecurrenceDto getRecurrence() {
+    return recurrence;
+  }
+
+  public void setRecurrence(PatternedRecurrenceDto recurrence) {
+    this.recurrence = recurrence;
+  }
+
   public Boolean getReminderOn() {
     return reminderOn;
   }
@@ -141,33 +151,39 @@ public class TaskDto {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof TaskDto taskDto)) return false;
-    return Objects.equals(id, taskDto.id) && Objects.equals(title, taskDto.title) && Objects.equals(body, taskDto.body) && Objects.equals(bodyLastModifiedDateTime, taskDto.bodyLastModifiedDateTime) && Objects.equals(categories, taskDto.categories) && Objects.equals(completedDateTime, taskDto.completedDateTime) && Objects.equals(createdDateTime, taskDto.createdDateTime) && Objects.equals(dueDateTime, taskDto.dueDateTime) && importance == taskDto.importance && Objects.equals(lastModifiedDateTime, taskDto.lastModifiedDateTime) && Objects.equals(reminderOn, taskDto.reminderOn) && Objects.equals(reminderDateTime, taskDto.reminderDateTime) && Objects.equals(startDateTime, taskDto.startDateTime) && status == taskDto.status;
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof TaskDto taskDto)) {
+      return false;
+    }
+    return Objects.equals(id, taskDto.id) && Objects.equals(title, taskDto.title) && Objects.equals(
+        body, taskDto.body) && Objects.equals(bodyLastModifiedDateTime,
+        taskDto.bodyLastModifiedDateTime) && Objects.equals(categories, taskDto.categories)
+        && Objects.equals(completedDateTime, taskDto.completedDateTime) && Objects.equals(
+        createdDateTime, taskDto.createdDateTime) && Objects.equals(dueDateTime,
+        taskDto.dueDateTime) && importance == taskDto.importance && Objects.equals(
+        lastModifiedDateTime, taskDto.lastModifiedDateTime) && Objects.equals(recurrence,
+        taskDto.recurrence) && Objects.equals(reminderOn, taskDto.reminderOn) && Objects.equals(
+        reminderDateTime, taskDto.reminderDateTime) && Objects.equals(startDateTime,
+        taskDto.startDateTime) && status == taskDto.status;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, body, bodyLastModifiedDateTime, categories, completedDateTime, createdDateTime, dueDateTime, importance, lastModifiedDateTime, reminderOn, reminderDateTime, startDateTime, status);
+    return Objects.hash(id, title, body, bodyLastModifiedDateTime, categories, completedDateTime,
+        createdDateTime, dueDateTime, importance, lastModifiedDateTime, recurrence, reminderOn,
+        reminderDateTime, startDateTime, status);
   }
 
   @Override
   public String toString() {
-    return "TaskDto{" +
-            "id='" + id + '\'' +
-            ", title='" + title + '\'' +
-            ", body='" + body + '\'' +
-            ", bodyLastModifiedDateTime=" + bodyLastModifiedDateTime +
-            ", categories=" + categories +
-            ", completedDateTime=" + completedDateTime +
-            ", createdDateTime=" + createdDateTime +
-            ", dueDateTime=" + dueDateTime +
-            ", importance=" + importance +
-            ", lastModifiedDateTime=" + lastModifiedDateTime +
-            ", reminderOn=" + reminderOn +
-            ", reminderDateTime=" + reminderDateTime +
-            ", startDateTime=" + startDateTime +
-            ", status=" + status +
-            '}';
+    return "TaskDto{" + "id='" + id + '\'' + ", title='" + title + '\'' + ", body='" + body + '\''
+        + ", bodyLastModifiedDateTime=" + bodyLastModifiedDateTime + ", categories=" + categories
+        + ", completedDateTime=" + completedDateTime + ", createdDateTime=" + createdDateTime
+        + ", dueDateTime=" + dueDateTime + ", importance=" + importance + ", lastModifiedDateTime="
+        + lastModifiedDateTime + ", recurrence=" + recurrence + ", reminderOn=" + reminderOn
+        + ", reminderDateTime=" + reminderDateTime + ", startDateTime=" + startDateTime
+        + ", status=" + status + '}';
   }
 }

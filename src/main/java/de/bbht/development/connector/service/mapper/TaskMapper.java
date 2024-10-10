@@ -7,7 +7,7 @@ import de.bbht.development.connector.service.dto.task.CreateUpdateTaskDto;
 import de.bbht.development.connector.service.dto.task.TaskDto;
 import java.util.List;
 
-public class TaskMapper {
+public final class TaskMapper {
 
   private TaskMapper() {
     // private constructor to prevent instantiation
@@ -37,9 +37,11 @@ public class TaskMapper {
       taskDto.setDueDateTime(DateTimeTimeZoneMapper.mapDateTimeTimeZone(todoTask.getDueDateTime()));
       taskDto.setImportance(EnumMapper.mapImportance(todoTask.getImportance()));
       taskDto.setLastModifiedDateTime(todoTask.getLastModifiedDateTime());
+      taskDto.setRecurrence(
+          PatternedRecurrenceMapper.mapPatternedRecurrence(todoTask.getRecurrence()));
       taskDto.setReminderOn(todoTask.getIsReminderOn());
       taskDto.setReminderDateTime(
-              DateTimeTimeZoneMapper.mapDateTimeTimeZone(todoTask.getReminderDateTime()));
+          DateTimeTimeZoneMapper.mapDateTimeTimeZone(todoTask.getReminderDateTime()));
       taskDto.setStartDateTime(
           DateTimeTimeZoneMapper.mapDateTimeTimeZone(todoTask.getStartDateTime()));
       taskDto.setStatus(EnumMapper.mapTaskStatus(todoTask.getStatus()));
@@ -63,9 +65,11 @@ public class TaskMapper {
       todoTask.setDueDateTime(
           DateTimeTimeZoneMapper.mapDateTimeTimeZoneDto(createUpdateTaskDto.getDueDateTime()));
       todoTask.setImportance(EnumMapper.mapImportanceDto(createUpdateTaskDto.getImportance()));
+      todoTask.setRecurrence(
+          PatternedRecurrenceMapper.mapPatternedRecurrenceDto(createUpdateTaskDto.getRecurrence()));
       todoTask.setIsReminderOn(createUpdateTaskDto.getReminderOn());
       todoTask.setReminderDateTime(
-              DateTimeTimeZoneMapper.mapDateTimeTimeZoneDto(createUpdateTaskDto.getReminderDateTime()));
+          DateTimeTimeZoneMapper.mapDateTimeTimeZoneDto(createUpdateTaskDto.getReminderDateTime()));
       todoTask.setStartDateTime(
           DateTimeTimeZoneMapper.mapDateTimeTimeZoneDto(createUpdateTaskDto.getStartDateTime()));
       todoTask.setStatus(EnumMapper.mapTaskStatusDto(createUpdateTaskDto.getStatus()));

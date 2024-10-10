@@ -63,8 +63,9 @@ public final class TaskListDto {
     if (!(o instanceof TaskListDto that)) {
       return false;
     }
-    return Objects.equals(id, that.id) && Objects.equals(displayName, that.displayName) && Objects.equals(owner,
-        that.owner) && Objects.equals(shared, that.shared) && wellknownListName == that.wellknownListName;
+    return Objects.equals(id, that.id) && Objects.equals(displayName, that.displayName)
+        && Objects.equals(owner, that.owner) && Objects.equals(shared, that.shared)
+        && wellknownListName == that.wellknownListName;
   }
 
   @Override

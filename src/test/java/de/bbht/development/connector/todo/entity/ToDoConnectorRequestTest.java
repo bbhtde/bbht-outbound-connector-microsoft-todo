@@ -3,8 +3,12 @@ package de.bbht.development.connector.todo.entity;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
 import de.bbht.development.connector.service.dto.enums.ImportanceDto;
+import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
+import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
 import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
+import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
 import io.camunda.connector.api.error.ConnectorInputException;
 import io.camunda.connector.test.outbound.OutboundConnectorContextBuilder;
 import org.assertj.core.api.Assertions;
@@ -20,7 +24,8 @@ class ToDoConnectorRequestTest {
     var authentication = new GraphAuthentication("{{secrets.TENANT_ID}}", "{{secrets.CLIENT_ID}}",
         "{{secrets.CLIENT_SECRET}}");
     var operation = new Operation(ToDoOperation.LIST_TASK_LISTS, "test@bbht.de", null, null, null);
-    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null, null);
+    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null,
+        null, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")
@@ -46,7 +51,8 @@ class ToDoConnectorRequestTest {
     var authentication = new GraphAuthentication("{{secrets.TENANT_ID}}", "{{secrets.CLIENT_ID}}",
         "{{secrets.CLIENT_SECRET}}");
     var operation = new Operation(null, "test@bbht.de", null, null, null);
-    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null, null);
+    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null,
+        null, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")
@@ -68,7 +74,8 @@ class ToDoConnectorRequestTest {
     var authentication = new GraphAuthentication("{{secrets.TENANT_ID}}", "{{secrets.CLIENT_ID}}",
         "{{secrets.CLIENT_SECRET}}");
     var operation = new Operation(ToDoOperation.LIST_TASK_LISTS, null, null, null, null);
-    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null, null);
+    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null,
+        null, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")
@@ -90,7 +97,8 @@ class ToDoConnectorRequestTest {
     var authentication = new GraphAuthentication("{{secrets.TENANT_ID}}", "{{secrets.CLIENT_ID}}",
         "{{secrets.CLIENT_SECRET}}");
     var operation = new Operation(ToDoOperation.LIST_TASK_LISTS, "", null, null, null);
-    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null, null);
+    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null,
+        null, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")
@@ -113,7 +121,8 @@ class ToDoConnectorRequestTest {
         "{{secrets.CLIENT_SECRET}}");
     var operation = new Operation(ToDoOperation.LIST_TASK_LISTS, "test@bbht.de", null, null, null);
     var taskListOptions = new TaskListOptions("Display Name");
-    var input = new ToDoConnectorRequest(authentication, operation, taskListOptions, null, null, null, null, null);
+    var input = new ToDoConnectorRequest(authentication, operation, taskListOptions, null, null,
+        null, null, null, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")
@@ -140,7 +149,12 @@ class ToDoConnectorRequestTest {
     var taskOptions = new TaskOptions("Titel", "Body", "Category 1, Category 2", ImportanceDto.HIGH,
         TaskStatusDto.IN_PROGRESS, createDateTime(2023), "UTC", createDateTime(2024), "UTC",
         createDateTime(2025), "UTC", createDateTime(2024), "UTC", Boolean.TRUE);
-    var input = new ToDoConnectorRequest(authentication, operation, null, null, taskOptions, null, null, null);
+    var taskRecurrenceOptions = new TaskRecurrenceOptions(TaskRecurrenceOptions.VALUE_RECURRING,
+        RecurrencePatternTypeDto.DAILY, 5, 12, "Monday, Thursday", DayOfWeekDto.MONDAY,
+        WeekIndexDto.FIRST, 7, RecurrenceRangeTypeDto.NUMBERED, 10, "2024-08-01", "2024-12-01",
+        "UTC");
+    var input = new ToDoConnectorRequest(authentication, operation, null, null, taskOptions, null,
+        taskRecurrenceOptions, null, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")
@@ -168,6 +182,21 @@ class ToDoConnectorRequestTest {
         .returns("UTC", TaskOptions::completedDateTimeTimeZone)
         .returns(createDateTime(2024), TaskOptions::reminderDateTime)
         .returns("UTC", TaskOptions::reminderDateTimeTimeZone);
+    Assertions.assertThat(variables)
+        .extracting(ToDoConnectorRequest::taskRecurrenceOptions)
+        .returns(TaskRecurrenceOptions.VALUE_RECURRING, TaskRecurrenceOptions::recurring)
+        .returns(RecurrencePatternTypeDto.DAILY, TaskRecurrenceOptions::patternType)
+        .returns(5, TaskRecurrenceOptions::interval)
+        .returns(12, TaskRecurrenceOptions::dayOfMonth)
+        .returns("Monday, Thursday", TaskRecurrenceOptions::daysOfWeek)
+        .returns(DayOfWeekDto.MONDAY, TaskRecurrenceOptions::firstDayOfWeek)
+        .returns(WeekIndexDto.FIRST, TaskRecurrenceOptions::index)
+        .returns(7, TaskRecurrenceOptions::month)
+        .returns(RecurrenceRangeTypeDto.NUMBERED, TaskRecurrenceOptions::rangeType)
+        .returns(10, TaskRecurrenceOptions::numberOfOccurrences)
+        .returns("2024-08-01", TaskRecurrenceOptions::startDate)
+        .returns("2024-12-01", TaskRecurrenceOptions::endDate)
+        .returns("UTC", TaskRecurrenceOptions::recurrenceTimeZone);
   }
 
   private String createDateTime(int year) {
@@ -181,8 +210,8 @@ class ToDoConnectorRequestTest {
         "{{secrets.CLIENT_SECRET}}");
     var operation = new Operation(ToDoOperation.LIST_TASK_LISTS, "test@bbht.de", null, null, null);
     var checkListItemOptions = new CheckListItemOptions("Display Name", Boolean.TRUE);
-    var input = new ToDoConnectorRequest(authentication, operation, null, null, null,
-            null, checkListItemOptions, null);
+    var input = new ToDoConnectorRequest(authentication, operation, null, null, null, null, null,
+        checkListItemOptions, null);
 
     var context = OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", "secretTenantId")

@@ -11,18 +11,40 @@ import de.bbht.development.connector.service.MsGraphService;
 import de.bbht.development.connector.service.dto.GraphAuthenticationDto;
 import de.bbht.development.connector.service.dto.checklistitem.CheckListItemDto;
 import de.bbht.development.connector.service.dto.checklistitem.CreateUpdateCheckListItemDto;
+import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
 import de.bbht.development.connector.service.dto.enums.ImportanceDto;
+import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
+import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
 import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
+import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
 import de.bbht.development.connector.service.dto.enums.WellknownListNameDto;
 import de.bbht.development.connector.service.dto.task.CreateUpdateTaskDto;
 import de.bbht.development.connector.service.dto.task.DateTimeTimeZoneDto;
+import de.bbht.development.connector.service.dto.task.PatternedRecurrenceDto;
+import de.bbht.development.connector.service.dto.task.RecurrencePatternDto;
+import de.bbht.development.connector.service.dto.task.RecurrenceRangeDto;
 import de.bbht.development.connector.service.dto.task.TaskDto;
 import de.bbht.development.connector.service.dto.tasklist.CreateUpdateTaskListDto;
 import de.bbht.development.connector.service.dto.tasklist.TaskListDto;
-import de.bbht.development.connector.todo.entity.*;
+import de.bbht.development.connector.todo.entity.CheckListItemOptions;
+import de.bbht.development.connector.todo.entity.ConnectorError;
+import de.bbht.development.connector.todo.entity.ConnectorResult;
+import de.bbht.development.connector.todo.entity.GraphAuthentication;
+import de.bbht.development.connector.todo.entity.Operation;
+import de.bbht.development.connector.todo.entity.TaskListOptions;
+import de.bbht.development.connector.todo.entity.TaskOptions;
+import de.bbht.development.connector.todo.entity.TaskRecurrenceOptions;
+import de.bbht.development.connector.todo.entity.ToDoConnectorRequest;
+import de.bbht.development.connector.todo.entity.ToDoOperation;
+import de.bbht.development.connector.todo.entity.UpdateCheckListItemOptions;
+import de.bbht.development.connector.todo.entity.UpdateTaskListOptions;
+import de.bbht.development.connector.todo.entity.UpdateTaskOptions;
 import io.camunda.connector.test.outbound.OutboundConnectorContextBuilder;
 import io.camunda.connector.test.outbound.OutboundConnectorContextBuilder.TestConnectorContext;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.InstanceOfAssertFactories;
@@ -107,7 +129,8 @@ class ToDoConnectorFunctionTest {
   void shouldReturnListOfTaskLists() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.LIST_TASK_LISTS, testUserId, null, null, null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.LIST_TASK_LISTS, testUserId, null, null, null), null, null,
+        null, null, null, null, null);
 
     // Mock Setup
     final var listOfTaskLists = createListOfTaskLists();
@@ -122,34 +145,34 @@ class ToDoConnectorFunctionTest {
             .asInstanceOf(InstanceOfAssertFactories.list(TaskListDto.class))
             .hasSize(3)
             .satisfiesExactly(item1 -> assertThat(item1).returns("1", TaskListDto::getId)
-                .returns("Task List 1", TaskListDto::getDisplayName)
-                .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
-                .returns(true, TaskListDto::getOwner)
-                .returns(false, TaskListDto::getShared), item2 -> assertThat(item2).returns("2", TaskListDto::getId)
-                .returns("Task List 2", TaskListDto::getDisplayName)
-                .returns(WellknownListNameDto.DEFAULT_LIST, TaskListDto::getWellknownListName)
-                .returns(true, TaskListDto::getOwner)
-                .returns(true, TaskListDto::getShared), item3 -> assertThat(item3).returns("3", TaskListDto::getId)
-                .returns("Task List 3", TaskListDto::getDisplayName)
-                .returns(WellknownListNameDto.FLAGGED_EMAILS, TaskListDto::getWellknownListName)
-                .returns(true, TaskListDto::getOwner)
-                .returns(false, TaskListDto::getShared)));
+                    .returns("Task List 1", TaskListDto::getDisplayName)
+                    .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
+                    .returns(true, TaskListDto::getOwner)
+                    .returns(false, TaskListDto::getShared),
+                item2 -> assertThat(item2).returns("2", TaskListDto::getId)
+                    .returns("Task List 2", TaskListDto::getDisplayName)
+                    .returns(WellknownListNameDto.DEFAULT_LIST, TaskListDto::getWellknownListName)
+                    .returns(true, TaskListDto::getOwner)
+                    .returns(true, TaskListDto::getShared),
+                item3 -> assertThat(item3).returns("3", TaskListDto::getId)
+                    .returns("Task List 3", TaskListDto::getDisplayName)
+                    .returns(WellknownListNameDto.FLAGGED_EMAILS, TaskListDto::getWellknownListName)
+                    .returns(true, TaskListDto::getOwner)
+                    .returns(false, TaskListDto::getShared)));
   }
 
   private TestConnectorContext createDefaultOutboundConnectorContext(Operation operation,
-                                                                     TaskListOptions taskListOption,
-                                                                     UpdateTaskListOptions updateTaskListOptions,
-                                                                     TaskOptions taskOptions,
-                                                                     UpdateTaskOptions updateTaskOptions,
-                                                                     CheckListItemOptions checkListItemOptions,
-                                                                     UpdateCheckListItemOptions updateCheckListItemOptions)
-      throws Exception {
+      TaskListOptions taskListOption, UpdateTaskListOptions updateTaskListOptions,
+      TaskOptions taskOptions, UpdateTaskOptions updateTaskOptions,
+      TaskRecurrenceOptions taskRecurrenceOptions, CheckListItemOptions checkListItemOptions,
+      UpdateCheckListItemOptions updateCheckListItemOptions) throws Exception {
     var tenant = "testTenantId";
     var client = "testClientId";
     var secret = "testClientSecret";
 
-    var request = new ToDoConnectorRequest(authentication, operation, taskListOption, updateTaskListOptions, taskOptions,
-            updateTaskOptions, checkListItemOptions, updateCheckListItemOptions);
+    var request = new ToDoConnectorRequest(authentication, operation, taskListOption,
+        updateTaskListOptions, taskOptions, updateTaskOptions, taskRecurrenceOptions,
+        checkListItemOptions, updateCheckListItemOptions);
     return OutboundConnectorContextBuilder.create()
         .secret("TENANT_ID", tenant)
         .secret("CLIENT_ID", client)
@@ -162,7 +185,8 @@ class ToDoConnectorFunctionTest {
   void shouldReturnTaskListById() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "1", null, null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "1", null, null), null, null, null,
+        null, null, null, null);
 
     // Mock Setup
     final var taskList = createTaskList();
@@ -188,13 +212,15 @@ class ToDoConnectorFunctionTest {
     // Given
     var taskListOptions = new TaskListOptions("Task List 1");
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.CREATE_TASK_LIST, testUserId, "1", null, null), taskListOptions, null, null, null, null, null);
+        new Operation(ToDoOperation.CREATE_TASK_LIST, testUserId, "1", null, null), taskListOptions,
+        null, null, null, null, null, null);
 
     // Mock Setup
     final var createTaskList = new CreateUpdateTaskListDto();
     createTaskList.setDisplayName("Task List 1");
     final var taskList = createTaskList();
-    given(msGraphService.createTaskList(testUserId, createTaskList)).willReturn(Optional.of(taskList));
+    given(msGraphService.createTaskList(testUserId, createTaskList)).willReturn(
+        Optional.of(taskList));
 
     // When
     var result = connectorUnderTest.execute(context);
@@ -218,14 +244,16 @@ class ToDoConnectorFunctionTest {
     // Given
     var updateTaskListOptions = new UpdateTaskListOptions("Updated Task List 1");
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.UPDATE_TASK_LIST, testUserId, "1", null, null), null, updateTaskListOptions, null, null, null, null);
+        new Operation(ToDoOperation.UPDATE_TASK_LIST, testUserId, "1", null, null), null,
+        updateTaskListOptions, null, null, null, null, null);
 
     // Mock Setup
     final var updateTaskList = new CreateUpdateTaskListDto();
     updateTaskList.setDisplayName("Updated Task List 1");
     final var taskList = createTaskList();
     taskList.setDisplayName("Updated Task List 1");
-    given(msGraphService.updateTaskList(testUserId, "1", updateTaskList)).willReturn(Optional.of(taskList));
+    given(msGraphService.updateTaskList(testUserId, "1", updateTaskList)).willReturn(
+        Optional.of(taskList));
 
     // When
     var result = connectorUnderTest.execute(context);
@@ -247,7 +275,8 @@ class ToDoConnectorFunctionTest {
   void shouldDeleteTaskList() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.DELETE_TASK_LIST, testUserId, "1", null, null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.DELETE_TASK_LIST, testUserId, "1", null, null), null, null,
+        null, null, null, null, null);
 
     // Mock Setup
     doNothing().when(msGraphService)
@@ -306,7 +335,7 @@ class ToDoConnectorFunctionTest {
     return result;
   }
 
-  TaskDto createTask() {
+  TaskDto createTask(boolean withRecurrence) {
     var task = new TaskDto();
     task.setId("1");
     task.setTitle("Title");
@@ -318,6 +347,32 @@ class ToDoConnectorFunctionTest {
     task.setDueDateTime(createDateTime(2024));
     task.setCompletedDateTime(createDateTime(2025));
     task.setReminderDateTime(createDateTime(2024));
+
+    if (withRecurrence) {
+      var recurrencePattern = new RecurrencePatternDto();
+      recurrencePattern.setType(RecurrencePatternTypeDto.DAILY);
+      recurrencePattern.setDayOfMonth(12);
+      var daysOfWeek = new LinkedHashSet<DayOfWeekDto>();
+      daysOfWeek.add(DayOfWeekDto.MONDAY);
+      daysOfWeek.add(DayOfWeekDto.THURSDAY);
+      recurrencePattern.setDaysOfWeek(daysOfWeek);
+      recurrencePattern.setFirstDayOfWeek(DayOfWeekDto.MONDAY);
+      recurrencePattern.setIndex(WeekIndexDto.FIRST);
+      recurrencePattern.setInterval(5);
+      recurrencePattern.setMonth(7);
+
+      var recurrenceRange = new RecurrenceRangeDto();
+      recurrenceRange.setType(RecurrenceRangeTypeDto.NUMBERED);
+      recurrenceRange.setRecurrenceTimeZone("UTC");
+      recurrenceRange.setNumberOfOccurrences(10);
+      recurrenceRange.setStartDate(LocalDate.parse("2024-08-01", DateTimeFormatter.ISO_DATE));
+      recurrenceRange.setEndDate(LocalDate.parse("2024-12-01", DateTimeFormatter.ISO_DATE));
+
+      var recurrence = new PatternedRecurrenceDto();
+      recurrence.setPattern(recurrencePattern);
+      recurrence.setRange(recurrenceRange);
+      task.setRecurrence(recurrence);
+    }
     return task;
   }
 
@@ -325,7 +380,8 @@ class ToDoConnectorFunctionTest {
   void shouldReturnListOfTasks() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.LIST_TASKS, testUserId, "1", null, null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.LIST_TASKS, testUserId, "1", null, null), null, null, null,
+        null, null, null, null);
 
     // Mock Setup
     final var listOfTasks = createListOfTasks();
@@ -360,10 +416,11 @@ class ToDoConnectorFunctionTest {
   void shouldReturnTask() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_TASK, testUserId, "1", "1", null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_TASK, testUserId, "1", "1", null), null, null, null, null,
+        null, null, null);
 
     // Mock Setup
-    final var task = createTask();
+    final var task = createTask(false);
     given(msGraphService.getTask(testUserId, "1", "1")).willReturn(Optional.of(task));
 
     // When
@@ -384,10 +441,16 @@ class ToDoConnectorFunctionTest {
   @Test
   void shouldCreateNewTask() throws Exception {
     // Given
-    var taskOptions = new TaskOptions("Title", "Item Body", "Category 1, Category 2", ImportanceDto.HIGH,
-        TaskStatusDto.COMPLETED, "2023-08-13T14:38:43.104312", "UTC", null, null, null, null, "2024-08-13T14:38:43.104312", "UTC", Boolean.TRUE);
+    var taskOptions = new TaskOptions("Title", "Item Body", "Category 1, Category 2",
+        ImportanceDto.HIGH, TaskStatusDto.COMPLETED, "2023-08-13T14:38:43.104312", "UTC", null,
+        null, null, null, "2024-08-13T14:38:43.104312", "UTC", Boolean.TRUE);
+    var taskRecurrenceOptions = new TaskRecurrenceOptions(TaskRecurrenceOptions.VALUE_RECURRING,
+        RecurrencePatternTypeDto.DAILY, 5, 12, "Monday, Thursday", DayOfWeekDto.MONDAY,
+        WeekIndexDto.FIRST, 7, RecurrenceRangeTypeDto.NUMBERED, 10, "2024-08-01", "2024-12-01",
+        "UTC");
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.CREATE_TASK, testUserId, "1", null, null), null, null, taskOptions, null, null, null);
+        new Operation(ToDoOperation.CREATE_TASK, testUserId, "1", null, null), null, null,
+        taskOptions, null, taskRecurrenceOptions, null, null);
 
     // Mock Setup
     final var createTask = new CreateUpdateTaskDto();
@@ -400,12 +463,37 @@ class ToDoConnectorFunctionTest {
     startDateTime.setDateTime("2023-08-13T14:38:43.104312");
     startDateTime.setTimeZone("UTC");
     createTask.setStartDateTime(startDateTime);
+
+    var recurrencePattern = new RecurrencePatternDto();
+    recurrencePattern.setType(RecurrencePatternTypeDto.DAILY);
+    recurrencePattern.setDayOfMonth(12);
+    var daysOfWeek = new LinkedHashSet<DayOfWeekDto>();
+    daysOfWeek.add(DayOfWeekDto.MONDAY);
+    daysOfWeek.add(DayOfWeekDto.THURSDAY);
+    recurrencePattern.setDaysOfWeek(daysOfWeek);
+    recurrencePattern.setFirstDayOfWeek(DayOfWeekDto.MONDAY);
+    recurrencePattern.setIndex(WeekIndexDto.FIRST);
+    recurrencePattern.setInterval(5);
+    recurrencePattern.setMonth(7);
+
+    var recurrenceRange = new RecurrenceRangeDto();
+    recurrenceRange.setType(RecurrenceRangeTypeDto.NUMBERED);
+    recurrenceRange.setRecurrenceTimeZone("UTC");
+    recurrenceRange.setNumberOfOccurrences(10);
+    recurrenceRange.setStartDate(LocalDate.parse("2024-08-01", DateTimeFormatter.ISO_DATE));
+    recurrenceRange.setEndDate(LocalDate.parse("2024-12-01", DateTimeFormatter.ISO_DATE));
+
+    var recurrence = new PatternedRecurrenceDto();
+    recurrence.setPattern(recurrencePattern);
+    recurrence.setRange(recurrenceRange);
+    createTask.setRecurrence(recurrence);
+
+    createTask.setReminderOn(Boolean.TRUE);
     var reminderDateTime = new DateTimeTimeZoneDto();
     reminderDateTime.setDateTime("2024-08-13T14:38:43.104312");
     reminderDateTime.setTimeZone("UTC");
     createTask.setReminderDateTime(reminderDateTime);
-    createTask.setReminderOn(Boolean.TRUE);
-    final var task = createTask();
+    final var task = createTask(true);
     given(msGraphService.createTask(testUserId, "1", createTask)).willReturn(Optional.of(task));
 
     // When
@@ -422,31 +510,65 @@ class ToDoConnectorFunctionTest {
         .returns("Item Body", TaskDto::getBody)
         .returns(ImportanceDto.HIGH, TaskDto::getImportance)
         .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus)
-        .satisfies(taskDto1 -> assertThat(taskDto1.getStartDateTime())
-          .returns("2023-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
-          .returns("UTC", DateTimeTimeZoneDto::getTimeZone)
-        )
-        .satisfies(taskDto2 -> assertThat(taskDto2.getReminderDateTime())
-          .returns("2024-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
-          .returns("UTC", DateTimeTimeZoneDto::getTimeZone)
-        );
+        .satisfies(taskDto1 -> assertThat(taskDto1.getStartDateTime()).returns(
+                "2023-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
+            .returns("UTC", DateTimeTimeZoneDto::getTimeZone))
+        .satisfies(taskDto2 -> assertThat(taskDto2.getReminderDateTime()).returns(
+                "2024-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
+            .returns("UTC", DateTimeTimeZoneDto::getTimeZone))
+        .extracting(TaskDto::getRecurrence)
+        .satisfies(rec -> assertThat(rec.getPattern()).returns(RecurrencePatternTypeDto.DAILY,
+                RecurrencePatternDto::getType)
+            .returns(12, RecurrencePatternDto::getDayOfMonth)
+            .returns(5, RecurrencePatternDto::getInterval)
+            .returns(DayOfWeekDto.MONDAY, RecurrencePatternDto::getFirstDayOfWeek)
+            .returns(7, RecurrencePatternDto::getMonth)
+            .returns(WeekIndexDto.FIRST, RecurrencePatternDto::getIndex)
+            .satisfies(
+                recurrentPattern -> assertThat(recurrentPattern.getDaysOfWeek()).asInstanceOf(
+                        InstanceOfAssertFactories.ITERABLE)
+                    .hasSize(2)
+                    .containsExactly(DayOfWeekDto.MONDAY, DayOfWeekDto.THURSDAY)))
+        .satisfies(rec -> assertThat(rec.getRange()).returns(RecurrenceRangeTypeDto.NUMBERED,
+                RecurrenceRangeDto::getType)
+            .returns(10, RecurrenceRangeDto::getNumberOfOccurrences)
+            .returns(LocalDate.parse("2024-08-01", DateTimeFormatter.ISO_DATE),
+                RecurrenceRangeDto::getStartDate)
+            .returns(LocalDate.parse("2024-12-01", DateTimeFormatter.ISO_DATE),
+                RecurrenceRangeDto::getEndDate)
+            .returns("UTC", RecurrenceRangeDto::getRecurrenceTimeZone));
   }
 
   @Test
   void shouldUpdateTask() throws Exception {
     // Given
-    var updateTaskOptions = new UpdateTaskOptions("New Title", null, "", null, null, null, null, null, null, null, null, null, null, null);
+    var updateTaskOptions = new UpdateTaskOptions("New Title", null, "", null, null, null, null,
+        null, null, null, null, null, null, null);
+    var taskRecurrenceOptions = new TaskRecurrenceOptions(TaskRecurrenceOptions.VALUE_RECURRING,
+        RecurrencePatternTypeDto.WEEKLY, null, null, null, null, null, null, null, null, null, null,
+        null);
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.UPDATE_TASK, testUserId, "1", "1", null), null, null, null, updateTaskOptions, null, null);
+        new Operation(ToDoOperation.UPDATE_TASK, testUserId, "1", "1", null), null, null, null,
+        updateTaskOptions, taskRecurrenceOptions, null, null);
 
     // Mock Setup
     final var updateTask = new CreateUpdateTaskDto();
     updateTask.setTitle("New Title");
     updateTask.setCategories(new ArrayList<>());
-    final var task = createTask();
+    final var recurrencePattern = new RecurrencePatternDto();
+    recurrencePattern.setType(RecurrencePatternTypeDto.WEEKLY);
+    final var recurrence = new PatternedRecurrenceDto();
+    recurrence.setPattern(recurrencePattern);
+    updateTask.setRecurrence(recurrence);
+
+    final var task = createTask(true);
     task.setTitle("New Title");
     task.setCategories(null);
-    given(msGraphService.updateTask(testUserId, "1", "1", updateTask)).willReturn(Optional.of(task));
+    task.getRecurrence()
+        .getPattern()
+        .setType(RecurrencePatternTypeDto.WEEKLY);
+    given(msGraphService.updateTask(testUserId, "1", "1", updateTask)).willReturn(
+        Optional.of(task));
 
     // When
     var result = connectorUnderTest.execute(context);
@@ -461,14 +583,19 @@ class ToDoConnectorFunctionTest {
         .returns("New Title", TaskDto::getTitle)
         .returns("Item Body", TaskDto::getBody)
         .returns(ImportanceDto.HIGH, TaskDto::getImportance)
-        .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus);
+        .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus)
+        .extracting(TaskDto::getRecurrence)
+        .extracting(PatternedRecurrenceDto::getPattern)
+        .isNotNull()
+        .returns(RecurrencePatternTypeDto.WEEKLY, RecurrencePatternDto::getType);
   }
 
   @Test
   void shouldDeleteTask() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.DELETE_TASK, testUserId, "1", "1", null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.DELETE_TASK, testUserId, "1", "1", null), null, null, null,
+        null, null, null, null);
 
     // Mock Setup
     doNothing().when(msGraphService)
@@ -514,11 +641,13 @@ class ToDoConnectorFunctionTest {
   void shouldReturnListOfCheckListItems() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.LIST_CHECK_LIST_ITEMS, testUserId, "1", "1", null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.LIST_CHECK_LIST_ITEMS, testUserId, "1", "1", null), null, null,
+        null, null, null, null, null);
 
     // Mock Setup
     final var listOfCheckListItems = createListOfCheckListItems();
-    given(msGraphService.getListOfCheckListItems(testUserId, "1", "1")).willReturn(listOfCheckListItems);
+    given(msGraphService.getListOfCheckListItems(testUserId, "1", "1")).willReturn(
+        listOfCheckListItems);
 
     // When
     var result = connectorUnderTest.execute(context);
@@ -544,11 +673,13 @@ class ToDoConnectorFunctionTest {
   void shouldReturnCheckListItem() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null,
+        null, null, null, null, null);
 
     // Mock Setup
     final var checkListItem = createCheckListItem();
-    given(msGraphService.getCheckListItem(testUserId, "1", "1", "1")).willReturn(Optional.of(checkListItem));
+    given(msGraphService.getCheckListItem(testUserId, "1", "1", "1")).willReturn(
+        Optional.of(checkListItem));
 
     // When
     var result = connectorUnderTest.execute(context);
@@ -568,8 +699,8 @@ class ToDoConnectorFunctionTest {
     // Given
     var checkListItemOptions = new CheckListItemOptions("Display Name", Boolean.FALSE);
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.CREATE_CHECK_LIST_ITEM, testUserId, "1", "1", null), null, null, null,
-            null, checkListItemOptions, null);
+        new Operation(ToDoOperation.CREATE_CHECK_LIST_ITEM, testUserId, "1", "1", null), null, null,
+        null, null, null, checkListItemOptions, null);
 
     // Mock Setup
     final var createCheckListItem = new CreateUpdateCheckListItemDto();
@@ -596,18 +727,19 @@ class ToDoConnectorFunctionTest {
   @Test
   void shouldUpdateCheckListItem() throws Exception {
     // Given
-    var updateCheckListItemOptions = new UpdateCheckListItemOptions("Updated Check List Item", null);
+    var updateCheckListItemOptions = new UpdateCheckListItemOptions("Updated Check List Item",
+        null);
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.UPDATE_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null, null,
-            null, null, updateCheckListItemOptions);
+        new Operation(ToDoOperation.UPDATE_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null,
+        null, null, null, null, updateCheckListItemOptions);
 
     // Mock Setup
     final var updateCheckListItem = new CreateUpdateCheckListItemDto();
     updateCheckListItem.setDisplayName("Updated Check List Item");
     final var checkListItem = createCheckListItem();
     checkListItem.setDisplayName("Updated Check List Item");
-    given(msGraphService.updateCheckListItem(testUserId, "1", "1", "1", updateCheckListItem)).willReturn(
-        Optional.of(checkListItem));
+    given(msGraphService.updateCheckListItem(testUserId, "1", "1", "1",
+        updateCheckListItem)).willReturn(Optional.of(checkListItem));
 
     // When
     var result = connectorUnderTest.execute(context);
@@ -627,7 +759,8 @@ class ToDoConnectorFunctionTest {
   void shouldDeleteCheckListItem() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.DELETE_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null, null, null, null, null);
+        new Operation(ToDoOperation.DELETE_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null,
+        null, null, null, null, null);
 
     // Mock Setup
     doNothing().when(msGraphService)
@@ -646,7 +779,8 @@ class ToDoConnectorFunctionTest {
   void shouldReturnErrorResponseOnMsGraphException() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "999", null, null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "999", null, null), null, null, null,
+        null, null, null, null);
 
     // Mock Setup
     var msGraphException = new MsGraphException("Task List with ID 999 not found", "404");
@@ -669,7 +803,8 @@ class ToDoConnectorFunctionTest {
   void shouldReturnErrorResponseOnOtherException() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "999", null, null), null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "999", null, null), null, null, null,
+        null, null, null, null);
 
     // Mock Setup
     var runtimeException = new RuntimeException("Some other exception");

@@ -1,13 +1,25 @@
 package de.bbht.development.connector.service.mapper;
 
+import com.microsoft.graph.models.DayOfWeek;
 import com.microsoft.graph.models.Importance;
+import com.microsoft.graph.models.RecurrencePatternType;
+import com.microsoft.graph.models.RecurrenceRangeType;
 import com.microsoft.graph.models.TaskStatus;
+import com.microsoft.graph.models.WeekIndex;
 import com.microsoft.graph.models.WellknownListName;
+import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
 import de.bbht.development.connector.service.dto.enums.ImportanceDto;
+import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
+import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
 import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
+import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
 import de.bbht.development.connector.service.dto.enums.WellknownListNameDto;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
-public class EnumMapper {
+public final class EnumMapper {
 
   private EnumMapper() {
     // private constructor to prevent instantiation.
@@ -27,7 +39,7 @@ public class EnumMapper {
       case Low -> ImportanceDto.LOW;
       case High -> ImportanceDto.HIGH;
       case Normal -> ImportanceDto.NORMAL;
-      case null, default -> null;
+      case null -> null;
     };
   }
 
@@ -58,7 +70,7 @@ public class EnumMapper {
       case DEFERRED -> TaskStatus.Deferred;
       case NOT_STARTED -> TaskStatus.NotStarted;
       case WAITING_ON_OTHERS -> TaskStatus.WaitingOnOthers;
-      case null, default -> null;
+      case null -> null;
     };
   }
 
@@ -69,7 +81,121 @@ public class EnumMapper {
       case Deferred -> TaskStatusDto.DEFERRED;
       case NotStarted -> TaskStatusDto.NOT_STARTED;
       case WaitingOnOthers -> TaskStatusDto.WAITING_ON_OTHERS;
-      case null, default -> null;
+      case null -> null;
     };
+  }
+
+  public static RecurrencePatternType mapRecurrencePatternTypeDto(RecurrencePatternTypeDto dto) {
+    return switch (dto) {
+      case DAILY -> RecurrencePatternType.Daily;
+      case WEEKLY -> RecurrencePatternType.Weekly;
+      case RELATIVE_MONTHLY -> RecurrencePatternType.RelativeMonthly;
+      case RELATIVE_YEARLY -> RecurrencePatternType.RelativeYearly;
+      case ABSOLUTE_MONTHLY -> RecurrencePatternType.AbsoluteMonthly;
+      case ABSOLUTE_YEARLY -> RecurrencePatternType.AbsoluteYearly;
+      case null -> null;
+    };
+  }
+
+  public static RecurrencePatternTypeDto mapRecurrencePatternType(
+      RecurrencePatternType recurrencePatternType) {
+    return switch (recurrencePatternType) {
+      case Daily -> RecurrencePatternTypeDto.DAILY;
+      case Weekly -> RecurrencePatternTypeDto.WEEKLY;
+      case RelativeMonthly -> RecurrencePatternTypeDto.RELATIVE_MONTHLY;
+      case RelativeYearly -> RecurrencePatternTypeDto.RELATIVE_YEARLY;
+      case AbsoluteMonthly -> RecurrencePatternTypeDto.ABSOLUTE_MONTHLY;
+      case AbsoluteYearly -> RecurrencePatternTypeDto.ABSOLUTE_YEARLY;
+      case null -> null;
+    };
+  }
+
+  public static RecurrenceRangeType mapRecurrenceRangeTypeDto(RecurrenceRangeTypeDto dto) {
+    return switch (dto) {
+      case END_DATE -> RecurrenceRangeType.EndDate;
+      case NO_END -> RecurrenceRangeType.NoEnd;
+      case NUMBERED -> RecurrenceRangeType.Numbered;
+      case null -> null;
+    };
+  }
+
+  public static RecurrenceRangeTypeDto mapRecurrenceRangeType(
+      RecurrenceRangeType recurrenceRangeType) {
+    return switch (recurrenceRangeType) {
+      case EndDate -> RecurrenceRangeTypeDto.END_DATE;
+      case NoEnd -> RecurrenceRangeTypeDto.NO_END;
+      case Numbered -> RecurrenceRangeTypeDto.NUMBERED;
+      case null -> null;
+    };
+  }
+
+  public static DayOfWeek mapDayOfWeekDto(DayOfWeekDto dto) {
+    return switch (dto) {
+      case MONDAY -> DayOfWeek.Monday;
+      case TUESDAY -> DayOfWeek.Tuesday;
+      case WEDNESDAY -> DayOfWeek.Wednesday;
+      case THURSDAY -> DayOfWeek.Thursday;
+      case FRIDAY -> DayOfWeek.Friday;
+      case SATURDAY -> DayOfWeek.Saturday;
+      case SUNDAY -> DayOfWeek.Sunday;
+      case null -> null;
+    };
+  }
+
+  public static DayOfWeekDto mapDayOfWeek(DayOfWeek dayOfWeek) {
+    return switch (dayOfWeek) {
+      case Monday -> DayOfWeekDto.MONDAY;
+      case Tuesday -> DayOfWeekDto.TUESDAY;
+      case Wednesday -> DayOfWeekDto.WEDNESDAY;
+      case Thursday -> DayOfWeekDto.THURSDAY;
+      case Friday -> DayOfWeekDto.FRIDAY;
+      case Saturday -> DayOfWeekDto.SATURDAY;
+      case Sunday -> DayOfWeekDto.SUNDAY;
+      case null -> null;
+    };
+  }
+
+  public static WeekIndex mapWeekIndexDto(WeekIndexDto dto) {
+    return switch (dto) {
+      case FIRST -> WeekIndex.First;
+      case SECOND -> WeekIndex.Second;
+      case THIRD -> WeekIndex.Third;
+      case FOURTH -> WeekIndex.Fourth;
+      case LAST -> WeekIndex.Last;
+      case null -> null;
+    };
+  }
+
+  public static WeekIndexDto mapWeekIndex(WeekIndex weekIndex) {
+    return switch (weekIndex) {
+      case First -> WeekIndexDto.FIRST;
+      case Second -> WeekIndexDto.SECOND;
+      case Third -> WeekIndexDto.THIRD;
+      case Fourth -> WeekIndexDto.FOURTH;
+      case Last -> WeekIndexDto.LAST;
+      case null -> null;
+    };
+  }
+
+  public static Set<DayOfWeekDto> mapDaysOfWeek(List<DayOfWeek> daysOfWeek) {
+    Set<DayOfWeekDto> daysOfWeekDto = null;
+    if (daysOfWeek != null) {
+      daysOfWeekDto = new LinkedHashSet<>();
+      for (DayOfWeek dayOfWeek : daysOfWeek) {
+        daysOfWeekDto.add(mapDayOfWeek(dayOfWeek));
+      }
+    }
+    return daysOfWeekDto;
+  }
+
+  public static List<DayOfWeek> mapDaysOfWeekDto(Set<DayOfWeekDto> daysOfWeekDto) {
+    List<DayOfWeek> daysOfWeek = null;
+    if (daysOfWeekDto != null) {
+      daysOfWeek = new ArrayList<>();
+      for (DayOfWeekDto dayOfWeekDto : daysOfWeekDto) {
+        daysOfWeek.add(mapDayOfWeekDto(dayOfWeekDto));
+      }
+    }
+    return daysOfWeek;
   }
 }
