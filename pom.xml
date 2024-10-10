@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <msgraph.version>6.13.0</msgraph.version>
-        <azure-identity.version>1.13.0</azure-identity.version>
+        <azure-identity.version>1.14.0</azure-identity.version>
         <connectors.version>8.5.5</connectors.version>
         <jackson.version>2.17.2</jackson.version>
         <assertj.version>3.25.3</assertj.version>
