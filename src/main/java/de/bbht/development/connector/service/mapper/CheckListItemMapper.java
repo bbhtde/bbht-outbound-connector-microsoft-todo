@@ -13,8 +13,8 @@ public final class CheckListItemMapper {
 
   public static List<CheckListItemDto> mapCheckListItems(List<ChecklistItem> listOfCheckListItems) {
     return listOfCheckListItems.stream()
-                               .map(CheckListItemMapper::mapCheckListItem)
-                               .toList();
+        .map(CheckListItemMapper::mapCheckListItem)
+        .toList();
   }
 
   public static CheckListItemDto mapCheckListItem(ChecklistItem checkListItem) {

@@ -133,9 +133,9 @@ public final class OptionMapper {
     final List<String> result;
     if (categories != null) {
       result = Arrays.stream(categories.split(","))
-                     .map(String::trim)
-                     .filter(not(String::isEmpty))
-                     .toList();
+          .map(String::trim)
+          .filter(not(String::isEmpty))
+          .toList();
     } else {
       result = null;
     }
@@ -147,19 +147,19 @@ public final class OptionMapper {
     if (daysOfWeek != null) {
       result = new LinkedHashSet<>();
       Arrays.stream(daysOfWeek.split(","))
-            .map(String::trim)
-            .filter(not(String::isEmpty))
-            .map(String::toUpperCase)
-            .map(daysOfWeekString -> {
-              try {
-                return DayOfWeekDto.valueOf(daysOfWeekString);
-              } catch (IllegalArgumentException e) {
-                System.out.println("- " + daysOfWeekString + " ist ILLEGAL");
-                return null;
-              }
-            })
-            .filter(Objects::nonNull)
-            .forEach(result::add);
+          .map(String::trim)
+          .filter(not(String::isEmpty))
+          .map(String::toUpperCase)
+          .map(daysOfWeekString -> {
+            try {
+              return DayOfWeekDto.valueOf(daysOfWeekString);
+            } catch (IllegalArgumentException e) {
+              System.out.println("- " + daysOfWeekString + " ist ILLEGAL");
+              return null;
+            }
+          })
+          .filter(Objects::nonNull)
+          .forEach(result::add);
     } else {
       result = null;
     }

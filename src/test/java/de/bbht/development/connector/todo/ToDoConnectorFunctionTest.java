@@ -142,46 +142,23 @@ class ToDoConnectorFunctionTest {
     // Then
     assertThat(result).isInstanceOfSatisfying(ConnectorResult.class,
         connectorResult -> assertThat(connectorResult).extracting(ConnectorResult::getResult)
-                                                      .asInstanceOf(InstanceOfAssertFactories.list(
-                                                          TaskListDto.class))
-                                                      .hasSize(3)
-                                                      .satisfiesExactly(
-                                                          item1 -> assertThat(item1).returns("1",
-                                                                                        TaskListDto::getId)
-                                                                                    .returns(
-                                                                                        "Task List 1",
-                                                                                        TaskListDto::getDisplayName)
-                                                                                    .returns(
-                                                                                        WellknownListNameDto.NONE,
-                                                                                        TaskListDto::getWellknownListName)
-                                                                                    .returns(true,
-                                                                                        TaskListDto::getOwner)
-                                                                                    .returns(false,
-                                                                                        TaskListDto::getShared),
-                                                          item2 -> assertThat(item2).returns("2",
-                                                                                        TaskListDto::getId)
-                                                                                    .returns(
-                                                                                        "Task List 2",
-                                                                                        TaskListDto::getDisplayName)
-                                                                                    .returns(
-                                                                                        WellknownListNameDto.DEFAULT_LIST,
-                                                                                        TaskListDto::getWellknownListName)
-                                                                                    .returns(true,
-                                                                                        TaskListDto::getOwner)
-                                                                                    .returns(true,
-                                                                                        TaskListDto::getShared),
-                                                          item3 -> assertThat(item3).returns("3",
-                                                                                        TaskListDto::getId)
-                                                                                    .returns(
-                                                                                        "Task List 3",
-                                                                                        TaskListDto::getDisplayName)
-                                                                                    .returns(
-                                                                                        WellknownListNameDto.FLAGGED_EMAILS,
-                                                                                        TaskListDto::getWellknownListName)
-                                                                                    .returns(true,
-                                                                                        TaskListDto::getOwner)
-                                                                                    .returns(false,
-                                                                                        TaskListDto::getShared)));
+            .asInstanceOf(InstanceOfAssertFactories.list(TaskListDto.class))
+            .hasSize(3)
+            .satisfiesExactly(item1 -> assertThat(item1).returns("1", TaskListDto::getId)
+                    .returns("Task List 1", TaskListDto::getDisplayName)
+                    .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
+                    .returns(true, TaskListDto::getOwner)
+                    .returns(false, TaskListDto::getShared),
+                item2 -> assertThat(item2).returns("2", TaskListDto::getId)
+                    .returns("Task List 2", TaskListDto::getDisplayName)
+                    .returns(WellknownListNameDto.DEFAULT_LIST, TaskListDto::getWellknownListName)
+                    .returns(true, TaskListDto::getOwner)
+                    .returns(true, TaskListDto::getShared),
+                item3 -> assertThat(item3).returns("3", TaskListDto::getId)
+                    .returns("Task List 3", TaskListDto::getDisplayName)
+                    .returns(WellknownListNameDto.FLAGGED_EMAILS, TaskListDto::getWellknownListName)
+                    .returns(true, TaskListDto::getOwner)
+                    .returns(false, TaskListDto::getShared)));
   }
 
   private TestConnectorContext createDefaultOutboundConnectorContext(Operation operation,
@@ -197,11 +174,11 @@ class ToDoConnectorFunctionTest {
         updateTaskListOptions, taskOptions, updateTaskOptions, taskRecurrenceOptions,
         checkListItemOptions, updateCheckListItemOptions);
     return OutboundConnectorContextBuilder.create()
-                                          .secret("TENANT_ID", tenant)
-                                          .secret("CLIENT_ID", client)
-                                          .secret("CLIENT_SECRET", secret)
-                                          .variables(objectMapper.writeValueAsString(request))
-                                          .build();
+        .secret("TENANT_ID", tenant)
+        .secret("CLIENT_ID", client)
+        .secret("CLIENT_SECRET", secret)
+        .variables(objectMapper.writeValueAsString(request))
+        .build();
   }
 
   @Test
@@ -219,15 +196,15 @@ class ToDoConnectorFunctionTest {
     var result = connectorUnderTest.execute(context);
 
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .extracting(ConnectorResult::getResult)
-                      .isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(TaskListDto.class))
-                      .returns("1", TaskListDto::getId)
-                      .returns("Task List 1", TaskListDto::getDisplayName)
-                      .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
-                      .returns(true, TaskListDto::getOwner)
-                      .returns(false, TaskListDto::getShared);
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .extracting(ConnectorResult::getResult)
+        .isNotNull()
+        .asInstanceOf(InstanceOfAssertFactories.type(TaskListDto.class))
+        .returns("1", TaskListDto::getId)
+        .returns("Task List 1", TaskListDto::getDisplayName)
+        .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
+        .returns(true, TaskListDto::getOwner)
+        .returns(false, TaskListDto::getShared);
   }
 
   @Test
@@ -250,15 +227,15 @@ class ToDoConnectorFunctionTest {
 
     // Then
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .extracting(ConnectorResult::getResult)
-                      .isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(TaskListDto.class))
-                      .returns("1", TaskListDto::getId)
-                      .returns("Task List 1", TaskListDto::getDisplayName)
-                      .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
-                      .returns(true, TaskListDto::getOwner)
-                      .returns(false, TaskListDto::getShared);
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .extracting(ConnectorResult::getResult)
+        .isNotNull()
+        .asInstanceOf(InstanceOfAssertFactories.type(TaskListDto.class))
+        .returns("1", TaskListDto::getId)
+        .returns("Task List 1", TaskListDto::getDisplayName)
+        .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
+        .returns(true, TaskListDto::getOwner)
+        .returns(false, TaskListDto::getShared);
 
   }
 
@@ -283,15 +260,15 @@ class ToDoConnectorFunctionTest {
 
     // Then
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .extracting(ConnectorResult::getResult)
-                      .isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(TaskListDto.class))
-                      .returns("1", TaskListDto::getId)
-                      .returns("Updated Task List 1", TaskListDto::getDisplayName)
-                      .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
-                      .returns(true, TaskListDto::getOwner)
-                      .returns(false, TaskListDto::getShared);
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .extracting(ConnectorResult::getResult)
+        .isNotNull()
+        .asInstanceOf(InstanceOfAssertFactories.type(TaskListDto.class))
+        .returns("1", TaskListDto::getId)
+        .returns("Updated Task List 1", TaskListDto::getDisplayName)
+        .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
+        .returns(true, TaskListDto::getOwner)
+        .returns(false, TaskListDto::getShared);
   }
 
   @Test
@@ -303,15 +280,15 @@ class ToDoConnectorFunctionTest {
 
     // Mock Setup
     doNothing().when(msGraphService)
-               .deleteTaskList(testUserId, "1");
+        .deleteTaskList(testUserId, "1");
 
     // When
     var result = connectorUnderTest.execute(context);
 
     // Then
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .returns(true, ConnectorResult::isEmpty);
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .returns(true, ConnectorResult::isEmpty);
   }
 
   List<TaskDto> createListOfTasks() {
@@ -416,52 +393,23 @@ class ToDoConnectorFunctionTest {
     // Then
     assertThat(result).isInstanceOfSatisfying(ConnectorResult.class,
         connectorResult -> assertThat(connectorResult).extracting(ConnectorResult::getResult)
-                                                      .asInstanceOf(InstanceOfAssertFactories.list(
-                                                          TaskDto.class))
-                                                      .hasSize(3)
-                                                      .satisfiesExactly(
-                                                          item1 -> assertThat(item1).returns("1",
-                                                                                        TaskDto::getId)
-                                                                                    .returns(
-                                                                                        "Title 1",
-                                                                                        TaskDto::getTitle)
-                                                                                    .returns(
-                                                                                        "Item Body 1",
-                                                                                        TaskDto::getBody)
-                                                                                    .returns(
-                                                                                        ImportanceDto.HIGH,
-                                                                                        TaskDto::getImportance)
-                                                                                    .returns(
-                                                                                        TaskStatusDto.IN_PROGRESS,
-                                                                                        TaskDto::getStatus),
-                                                          item2 -> assertThat(item2).returns("2",
-                                                                                        TaskDto::getId)
-                                                                                    .returns(
-                                                                                        "Title 2",
-                                                                                        TaskDto::getTitle)
-                                                                                    .returns(
-                                                                                        "Item Body 2",
-                                                                                        TaskDto::getBody)
-                                                                                    .returns(
-                                                                                        ImportanceDto.LOW,
-                                                                                        TaskDto::getImportance)
-                                                                                    .returns(
-                                                                                        TaskStatusDto.DEFERRED,
-                                                                                        TaskDto::getStatus),
-                                                          item3 -> assertThat(item3).returns("3",
-                                                                                        TaskDto::getId)
-                                                                                    .returns(
-                                                                                        "Title 3",
-                                                                                        TaskDto::getTitle)
-                                                                                    .returns(
-                                                                                        "Item Body 3",
-                                                                                        TaskDto::getBody)
-                                                                                    .returns(
-                                                                                        ImportanceDto.NORMAL,
-                                                                                        TaskDto::getImportance)
-                                                                                    .returns(
-                                                                                        TaskStatusDto.COMPLETED,
-                                                                                        TaskDto::getStatus)));
+            .asInstanceOf(InstanceOfAssertFactories.list(TaskDto.class))
+            .hasSize(3)
+            .satisfiesExactly(item1 -> assertThat(item1).returns("1", TaskDto::getId)
+                    .returns("Title 1", TaskDto::getTitle)
+                    .returns("Item Body 1", TaskDto::getBody)
+                    .returns(ImportanceDto.HIGH, TaskDto::getImportance)
+                    .returns(TaskStatusDto.IN_PROGRESS, TaskDto::getStatus),
+                item2 -> assertThat(item2).returns("2", TaskDto::getId)
+                    .returns("Title 2", TaskDto::getTitle)
+                    .returns("Item Body 2", TaskDto::getBody)
+                    .returns(ImportanceDto.LOW, TaskDto::getImportance)
+                    .returns(TaskStatusDto.DEFERRED, TaskDto::getStatus),
+                item3 -> assertThat(item3).returns("3", TaskDto::getId)
+                    .returns("Title 3", TaskDto::getTitle)
+                    .returns("Item Body 3", TaskDto::getBody)
+                    .returns(ImportanceDto.NORMAL, TaskDto::getImportance)
+                    .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus)));
   }
 
   @Test
@@ -479,15 +427,15 @@ class ToDoConnectorFunctionTest {
     var result = connectorUnderTest.execute(context);
 
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .extracting(ConnectorResult::getResult)
-                      .isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(TaskDto.class))
-                      .returns("1", TaskDto::getId)
-                      .returns("Title", TaskDto::getTitle)
-                      .returns("Item Body", TaskDto::getBody)
-                      .returns(ImportanceDto.HIGH, TaskDto::getImportance)
-                      .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus);
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .extracting(ConnectorResult::getResult)
+        .isNotNull()
+        .asInstanceOf(InstanceOfAssertFactories.type(TaskDto.class))
+        .returns("1", TaskDto::getId)
+        .returns("Title", TaskDto::getTitle)
+        .returns("Item Body", TaskDto::getBody)
+        .returns(ImportanceDto.HIGH, TaskDto::getImportance)
+        .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus);
   }
 
   @Test
@@ -553,59 +501,42 @@ class ToDoConnectorFunctionTest {
 
     // Then
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .extracting(ConnectorResult::getResult)
-                      .isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(TaskDto.class))
-                      .returns("1", TaskDto::getId)
-                      .returns("Title", TaskDto::getTitle)
-                      .returns("Item Body", TaskDto::getBody)
-                      .returns(ImportanceDto.HIGH, TaskDto::getImportance)
-                      .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus)
-                      .satisfies(taskDto1 -> assertThat(taskDto1.getStartDateTime()).returns(
-                                                                                        "2023-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
-                                                                                    .returns("UTC",
-                                                                                        DateTimeTimeZoneDto::getTimeZone))
-                      .satisfies(taskDto2 -> assertThat(taskDto2.getReminderDateTime()).returns(
-                                                                                           "2024-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
-                                                                                       .returns(
-                                                                                           "UTC",
-                                                                                           DateTimeTimeZoneDto::getTimeZone))
-                      .extracting(TaskDto::getRecurrence)
-                      .satisfies(rec -> assertThat(rec.getPattern()).returns(
-                                                                        RecurrencePatternTypeDto.DAILY, RecurrencePatternDto::getType)
-                                                                    .returns(12,
-                                                                        RecurrencePatternDto::getDayOfMonth)
-                                                                    .returns(5,
-                                                                        RecurrencePatternDto::getInterval)
-                                                                    .returns(DayOfWeekDto.MONDAY,
-                                                                        RecurrencePatternDto::getFirstDayOfWeek)
-                                                                    .returns(7,
-                                                                        RecurrencePatternDto::getMonth)
-                                                                    .returns(WeekIndexDto.FIRST,
-                                                                        RecurrencePatternDto::getIndex)
-                                                                    .satisfies(
-                                                                        recurrentPattern -> assertThat(
-                                                                            recurrentPattern.getDaysOfWeek()).asInstanceOf(
-                                                                                                                 InstanceOfAssertFactories.ITERABLE)
-                                                                                                             .hasSize(
-                                                                                                                 2)
-                                                                                                             .containsExactly(
-                                                                                                                 DayOfWeekDto.MONDAY,
-                                                                                                                 DayOfWeekDto.THURSDAY)))
-                      .satisfies(
-                          rec -> assertThat(rec.getRange()).returns(RecurrenceRangeTypeDto.NUMBERED,
-                                                               RecurrenceRangeDto::getType)
-                                                           .returns(10,
-                                                               RecurrenceRangeDto::getNumberOfOccurrences)
-                                                           .returns(LocalDate.parse("2024-08-01",
-                                                                   DateTimeFormatter.ISO_DATE),
-                                                               RecurrenceRangeDto::getStartDate)
-                                                           .returns(LocalDate.parse("2024-12-01",
-                                                                   DateTimeFormatter.ISO_DATE),
-                                                               RecurrenceRangeDto::getEndDate)
-                                                           .returns("UTC",
-                                                               RecurrenceRangeDto::getRecurrenceTimeZone));
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .extracting(ConnectorResult::getResult)
+        .isNotNull()
+        .asInstanceOf(InstanceOfAssertFactories.type(TaskDto.class))
+        .returns("1", TaskDto::getId)
+        .returns("Title", TaskDto::getTitle)
+        .returns("Item Body", TaskDto::getBody)
+        .returns(ImportanceDto.HIGH, TaskDto::getImportance)
+        .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus)
+        .satisfies(taskDto1 -> assertThat(taskDto1.getStartDateTime()).returns(
+                "2023-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
+            .returns("UTC", DateTimeTimeZoneDto::getTimeZone))
+        .satisfies(taskDto2 -> assertThat(taskDto2.getReminderDateTime()).returns(
+                "2024-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
+            .returns("UTC", DateTimeTimeZoneDto::getTimeZone))
+        .extracting(TaskDto::getRecurrence)
+        .satisfies(rec -> assertThat(rec.getPattern()).returns(RecurrencePatternTypeDto.DAILY,
+                RecurrencePatternDto::getType)
+            .returns(12, RecurrencePatternDto::getDayOfMonth)
+            .returns(5, RecurrencePatternDto::getInterval)
+            .returns(DayOfWeekDto.MONDAY, RecurrencePatternDto::getFirstDayOfWeek)
+            .returns(7, RecurrencePatternDto::getMonth)
+            .returns(WeekIndexDto.FIRST, RecurrencePatternDto::getIndex)
+            .satisfies(
+                recurrentPattern -> assertThat(recurrentPattern.getDaysOfWeek()).asInstanceOf(
+                        InstanceOfAssertFactories.ITERABLE)
+                    .hasSize(2)
+                    .containsExactly(DayOfWeekDto.MONDAY, DayOfWeekDto.THURSDAY)))
+        .satisfies(rec -> assertThat(rec.getRange()).returns(RecurrenceRangeTypeDto.NUMBERED,
+                RecurrenceRangeDto::getType)
+            .returns(10, RecurrenceRangeDto::getNumberOfOccurrences)
+            .returns(LocalDate.parse("2024-08-01", DateTimeFormatter.ISO_DATE),
+                RecurrenceRangeDto::getStartDate)
+            .returns(LocalDate.parse("2024-12-01", DateTimeFormatter.ISO_DATE),
+                RecurrenceRangeDto::getEndDate)
+            .returns("UTC", RecurrenceRangeDto::getRecurrenceTimeZone));
   }
 
   @Test
@@ -644,19 +575,19 @@ class ToDoConnectorFunctionTest {
 
     // Then
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .extracting(ConnectorResult::getResult)
-                      .isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(TaskDto.class))
-                      .returns("1", TaskDto::getId)
-                      .returns("New Title", TaskDto::getTitle)
-                      .returns("Item Body", TaskDto::getBody)
-                      .returns(ImportanceDto.HIGH, TaskDto::getImportance)
-                      .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus)
-                      .extracting(TaskDto::getRecurrence)
-                      .extracting(PatternedRecurrenceDto::getPattern)
-                      .isNotNull()
-                      .returns(RecurrencePatternTypeDto.WEEKLY, RecurrencePatternDto::getType);
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .extracting(ConnectorResult::getResult)
+        .isNotNull()
+        .asInstanceOf(InstanceOfAssertFactories.type(TaskDto.class))
+        .returns("1", TaskDto::getId)
+        .returns("New Title", TaskDto::getTitle)
+        .returns("Item Body", TaskDto::getBody)
+        .returns(ImportanceDto.HIGH, TaskDto::getImportance)
+        .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus)
+        .extracting(TaskDto::getRecurrence)
+        .extracting(PatternedRecurrenceDto::getPattern)
+        .isNotNull()
+        .returns(RecurrencePatternTypeDto.WEEKLY, RecurrencePatternDto::getType);
   }
 
   @Test
@@ -668,15 +599,15 @@ class ToDoConnectorFunctionTest {
 
     // Mock Setup
     doNothing().when(msGraphService)
-               .deleteTask(testUserId, "1", "1");
+        .deleteTask(testUserId, "1", "1");
 
     // When
     var result = connectorUnderTest.execute(context);
 
     // Then
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .returns(true, ConnectorResult::isEmpty);
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .returns(true, ConnectorResult::isEmpty);
   }
 
   List<CheckListItemDto> createListOfCheckListItems() {
@@ -724,29 +655,17 @@ class ToDoConnectorFunctionTest {
     // Then
     assertThat(result).isInstanceOfSatisfying(ConnectorResult.class,
         taskList -> assertThat(taskList).extracting(ConnectorResult::getResult)
-                                        .asInstanceOf(
-                                            InstanceOfAssertFactories.list(CheckListItemDto.class))
-                                        .hasSize(3)
-                                        .satisfiesExactly(item1 -> assertThat(item1).returns("1",
-                                                                                        CheckListItemDto::getId)
-                                                                                    .returns(
-                                                                                        "Check List Item 1",
-                                                                                        CheckListItemDto::getDisplayName)
-                                                                                    .returns(
-                                                                                        Boolean.FALSE,
-                                                                                        CheckListItemDto::getChecked),
-                                            item2 -> assertThat(item2).returns("2",
-                                                                          CheckListItemDto::getId)
-                                                                      .returns("Check List Item 2",
-                                                                          CheckListItemDto::getDisplayName)
-                                                                      .returns(Boolean.TRUE,
-                                                                          CheckListItemDto::getChecked),
-                                            item3 -> assertThat(item3).returns("3",
-                                                                          CheckListItemDto::getId)
-                                                                      .returns("Check List Item 3",
-                                                                          CheckListItemDto::getDisplayName)
-                                                                      .returns(Boolean.FALSE,
-                                                                          CheckListItemDto::getChecked)));
+            .asInstanceOf(InstanceOfAssertFactories.list(CheckListItemDto.class))
+            .hasSize(3)
+            .satisfiesExactly(item1 -> assertThat(item1).returns("1", CheckListItemDto::getId)
+                    .returns("Check List Item 1", CheckListItemDto::getDisplayName)
+                    .returns(Boolean.FALSE, CheckListItemDto::getChecked),
+                item2 -> assertThat(item2).returns("2", CheckListItemDto::getId)
+                    .returns("Check List Item 2", CheckListItemDto::getDisplayName)
+                    .returns(Boolean.TRUE, CheckListItemDto::getChecked),
+                item3 -> assertThat(item3).returns("3", CheckListItemDto::getId)
+                    .returns("Check List Item 3", CheckListItemDto::getDisplayName)
+                    .returns(Boolean.FALSE, CheckListItemDto::getChecked)));
 
   }
 
@@ -766,13 +685,13 @@ class ToDoConnectorFunctionTest {
     var result = connectorUnderTest.execute(context);
 
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .extracting(ConnectorResult::getResult)
-                      .isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(CheckListItemDto.class))
-                      .returns("1", CheckListItemDto::getId)
-                      .returns("Check List Item", CheckListItemDto::getDisplayName)
-                      .returns(Boolean.FALSE, CheckListItemDto::getChecked);
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .extracting(ConnectorResult::getResult)
+        .isNotNull()
+        .asInstanceOf(InstanceOfAssertFactories.type(CheckListItemDto.class))
+        .returns("1", CheckListItemDto::getId)
+        .returns("Check List Item", CheckListItemDto::getDisplayName)
+        .returns(Boolean.FALSE, CheckListItemDto::getChecked);
   }
 
   @Test
@@ -796,13 +715,13 @@ class ToDoConnectorFunctionTest {
 
     // Then
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .extracting(ConnectorResult::getResult)
-                      .isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(CheckListItemDto.class))
-                      .returns("1", CheckListItemDto::getId)
-                      .returns("Check List Item", CheckListItemDto::getDisplayName)
-                      .returns(Boolean.FALSE, CheckListItemDto::getChecked);
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .extracting(ConnectorResult::getResult)
+        .isNotNull()
+        .asInstanceOf(InstanceOfAssertFactories.type(CheckListItemDto.class))
+        .returns("1", CheckListItemDto::getId)
+        .returns("Check List Item", CheckListItemDto::getDisplayName)
+        .returns(Boolean.FALSE, CheckListItemDto::getChecked);
   }
 
   @Test
@@ -827,13 +746,13 @@ class ToDoConnectorFunctionTest {
 
     // Then
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .extracting(ConnectorResult::getResult)
-                      .isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(CheckListItemDto.class))
-                      .returns("1", CheckListItemDto::getId)
-                      .returns("Updated Check List Item", CheckListItemDto::getDisplayName)
-                      .returns(Boolean.FALSE, CheckListItemDto::getChecked);
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .extracting(ConnectorResult::getResult)
+        .isNotNull()
+        .asInstanceOf(InstanceOfAssertFactories.type(CheckListItemDto.class))
+        .returns("1", CheckListItemDto::getId)
+        .returns("Updated Check List Item", CheckListItemDto::getDisplayName)
+        .returns(Boolean.FALSE, CheckListItemDto::getChecked);
   }
 
   @Test
@@ -845,15 +764,15 @@ class ToDoConnectorFunctionTest {
 
     // Mock Setup
     doNothing().when(msGraphService)
-               .deleteCheckListItem(testUserId, "1", "1", "1");
+        .deleteCheckListItem(testUserId, "1", "1", "1");
 
     // When
     var result = connectorUnderTest.execute(context);
 
     // Then
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .returns(true, ConnectorResult::isEmpty);
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .returns(true, ConnectorResult::isEmpty);
   }
 
   @Test
@@ -872,12 +791,12 @@ class ToDoConnectorFunctionTest {
 
     // then
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .returns(null, ConnectorResult::getResult)
-                      .returns(true, ConnectorResult::isEmpty)
-                      .extracting(ConnectorResult::getError)
-                      .returns("Task List with ID 999 not found", ConnectorError::getErrorMessage)
-                      .returns("404", ConnectorError::getErrorCode);
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .returns(null, ConnectorResult::getResult)
+        .returns(true, ConnectorResult::isEmpty)
+        .extracting(ConnectorResult::getError)
+        .returns("Task List with ID 999 not found", ConnectorError::getErrorMessage)
+        .returns("404", ConnectorError::getErrorCode);
   }
 
   @Test
@@ -896,11 +815,11 @@ class ToDoConnectorFunctionTest {
 
     // then
     assertThat(result).isNotNull()
-                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-                      .returns(null, ConnectorResult::getResult)
-                      .returns(true, ConnectorResult::isEmpty)
-                      .extracting(ConnectorResult::getError)
-                      .returns("Some other exception", ConnectorError::getErrorMessage)
-                      .returns(null, ConnectorError::getErrorCode);
+        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+        .returns(null, ConnectorResult::getResult)
+        .returns(true, ConnectorResult::isEmpty)
+        .extracting(ConnectorResult::getError)
+        .returns("Some other exception", ConnectorError::getErrorMessage)
+        .returns(null, ConnectorError::getErrorCode);
   }
 }

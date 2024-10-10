@@ -32,28 +32,23 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 @OutboundConnector(name = "BBHT_TODO_CONNECTOR",
-                   inputVariables = {},
-                   type = "bbht.connector:mstodo:1")
+    inputVariables = {},
+    type = "bbht.connector:mstodo:1")
 @ElementTemplate(id = "bbht.connector.MsToDo.v1",
-                 name = "Connector for Microsoft To Do",
-                 version = 1,
-                 description = "Outbound Connector to manage items in Microsoft To Do",
-                 documentationRef = "https://www.bbht.de/",
-                 icon = "icon.svg",
-                 // in resources Folder
-                 inputDataClass = ToDoConnectorRequest.class,
-                 propertyGroups = {@ElementTemplate.PropertyGroup(id = "authentication",
-                                                                  label = "Graph Authentication"),
-                     @ElementTemplate.PropertyGroup(id = "operation",
-                                                    label = "Operations"),
-                     @ElementTemplate.PropertyGroup(id = "tasklist",
-                                                    label = "Task List Parameters"),
-                     @ElementTemplate.PropertyGroup(id = "task",
-                                                    label = "Task Parameters"),
-                     @ElementTemplate.PropertyGroup(id = "recurrence",
-                                                    label = "Task Recurrence Parameters"),
-                     @ElementTemplate.PropertyGroup(id = "checklistitem",
-                                                    label = "Check List Item Parameters")})
+    name = "Connector for Microsoft To Do",
+    version = 1,
+    description = "Outbound Connector to manage items in Microsoft To Do",
+    documentationRef = "https://www.bbht.de/",
+    icon = "icon.svg",
+    // in resources Folder
+    inputDataClass = ToDoConnectorRequest.class,
+    propertyGroups = {@ElementTemplate.PropertyGroup(id = "authentication",
+        label = "Graph Authentication"), @ElementTemplate.PropertyGroup(id = "operation",
+        label = "Operations"), @ElementTemplate.PropertyGroup(id = "tasklist",
+        label = "Task List Parameters"), @ElementTemplate.PropertyGroup(id = "task",
+        label = "Task Parameters"), @ElementTemplate.PropertyGroup(id = "recurrence",
+        label = "Task Recurrence Parameters"), @ElementTemplate.PropertyGroup(id = "checklistitem",
+        label = "Check List Item Parameters")})
 public class ToDoConnectorFunction implements OutboundConnectorFunction {
 
   private IMsGraphServiceFactory graphServiceFactory;
@@ -71,7 +66,7 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
     final ToDoConnectorRequest connectorRequest = outboundConnectorContext.bindVariables(
         ToDoConnectorRequest.class);
     return switch (connectorRequest.operation()
-                                   .operation()) {
+        .operation()) {
       // execute task list operations
       case LIST_TASK_LISTS -> getListOfTaskLists(connectorRequest);
       case GET_TASK_LIST -> getTaskList(connectorRequest);
@@ -157,9 +152,8 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
 
   private ConnectorResult<TaskListDto> getTaskList(ToDoConnectorRequest connectorRequest) {
     QuinFunction<GraphAuthentication, Operation, TaskListOptions, Void, MsGraphService, TaskListDto> getTaskList = (authentication, operation, options, additionalOptions, service) -> service.getTaskListById(
-                                                                                                                                                                                                  operation.userIdOrPrincipalName(), operation.taskListId())
-                                                                                                                                                                                              .orElse(
-                                                                                                                                                                                                  null);
+            operation.userIdOrPrincipalName(), operation.taskListId())
+        .orElse(null);
 
     return executeRequestInternal(connectorRequest, null, null, null, getTaskList);
   }
@@ -168,7 +162,7 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
     QuinFunction<GraphAuthentication, Operation, TaskListOptions, Void, MsGraphService, TaskListDto> createTaskList = (authentication, operation, options, additionalOptions, service) -> {
       final CreateUpdateTaskListDto taskListToCreate = OptionMapper.mapFromTaskListOptions(options);
       return service.createTaskList(operation.userIdOrPrincipalName(), taskListToCreate)
-                    .orElse(null);
+          .orElse(null);
     };
 
     return executeRequestInternal(connectorRequest, ToDoConnectorRequest::taskListOptions, null,
@@ -180,8 +174,8 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
       final CreateUpdateTaskListDto taskListToUpdate = OptionMapper.mapFromUpdateTaskListOptions(
           options);
       return service.updateTaskList(operation.userIdOrPrincipalName(), operation.taskListId(),
-                        taskListToUpdate)
-                    .orElse(null);
+              taskListToUpdate)
+          .orElse(null);
     };
 
     return executeRequestInternal(connectorRequest, ToDoConnectorRequest::updateTaskListOptions,
@@ -203,9 +197,8 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
 
   private ConnectorResult<TaskDto> getTask(ToDoConnectorRequest connectorRequest) {
     QuinFunction<GraphAuthentication, Operation, TaskOptions, Void, MsGraphService, TaskDto> getTask = (authentication, operation, options, additionalOptions, service) -> service.getTask(
-                                                                                                                                                                                      operation.userIdOrPrincipalName(), operation.taskListId(), operation.taskId())
-                                                                                                                                                                                  .orElse(
-                                                                                                                                                                                      null);
+            operation.userIdOrPrincipalName(), operation.taskListId(), operation.taskId())
+        .orElse(null);
 
     return executeRequestInternal(connectorRequest, null, null, null, getTask);
   }
@@ -215,8 +208,8 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
       final CreateUpdateTaskDto taskToCreate = OptionMapper.mapFromTaskOptions(options,
           additionalOptions);
       return service.createTask(operation.userIdOrPrincipalName(), operation.taskListId(),
-                        taskToCreate)
-                    .orElse(null);
+              taskToCreate)
+          .orElse(null);
     };
 
     return executeRequestInternal(connectorRequest, ToDoConnectorRequest::taskOptions,
@@ -228,8 +221,8 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
       final CreateUpdateTaskDto taskToUpdate = OptionMapper.mapFromUpdateTaskOptions(options,
           additionalOptions);
       return service.updateTask(operation.userIdOrPrincipalName(), operation.taskListId(),
-                        operation.taskId(), taskToUpdate)
-                    .orElse(null);
+              operation.taskId(), taskToUpdate)
+          .orElse(null);
     };
 
     return executeRequestInternal(connectorRequest, ToDoConnectorRequest::updateTaskOptions,
@@ -253,10 +246,9 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
   private ConnectorResult<CheckListItemDto> getCheckListItem(
       ToDoConnectorRequest connectorRequest) {
     QuinFunction<GraphAuthentication, Operation, CheckListItemOptions, Void, MsGraphService, CheckListItemDto> getCheckListItem = (authentication, operation, options, additionalOptions, service) -> service.getCheckListItem(
-                                                                                                                                                                                                                 operation.userIdOrPrincipalName(), operation.taskListId(), operation.taskId(),
-                                                                                                                                                                                                                 operation.checkListItemId())
-                                                                                                                                                                                                             .orElse(
-                                                                                                                                                                                                                 null);
+            operation.userIdOrPrincipalName(), operation.taskListId(), operation.taskId(),
+            operation.checkListItemId())
+        .orElse(null);
 
     return executeRequestInternal(connectorRequest, null, null, null, getCheckListItem);
   }
@@ -267,8 +259,8 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
       final CreateUpdateCheckListItemDto checkListItemToCreate = OptionMapper.mapFromCheckListItemOptions(
           options);
       return service.createCheckListItem(operation.userIdOrPrincipalName(), operation.taskListId(),
-                        operation.taskId(), checkListItemToCreate)
-                    .orElse(null);
+              operation.taskId(), checkListItemToCreate)
+          .orElse(null);
     };
     return executeRequestInternal(connectorRequest, ToDoConnectorRequest::checkListItemOptions,
         null, null, createCheckListItem);
@@ -280,8 +272,8 @@ public class ToDoConnectorFunction implements OutboundConnectorFunction {
       final CreateUpdateCheckListItemDto checkListItemToUpdate = OptionMapper.mapFromUpdateCheckListItemOptions(
           options);
       return service.updateCheckListItem(operation.userIdOrPrincipalName(), operation.taskListId(),
-                        operation.taskId(), operation.checkListItemId(), checkListItemToUpdate)
-                    .orElse(null);
+              operation.taskId(), operation.checkListItemId(), checkListItemToUpdate)
+          .orElse(null);
     };
     return executeRequestInternal(connectorRequest,
         ToDoConnectorRequest::updateCheckListItemOptions, null, null, updateCheckListItem);

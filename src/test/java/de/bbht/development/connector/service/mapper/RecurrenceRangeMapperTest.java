@@ -28,11 +28,11 @@ public class RecurrenceRangeMapperTest {
 
     // then
     assertThat(result).isNotNull()
-                      .returns(RecurrenceRangeTypeDto.END_DATE, RecurrenceRangeDto::getType)
-                      .returns("UTC", RecurrenceRangeDto::getRecurrenceTimeZone)
-                      .returns(NOW.plusDays(5), RecurrenceRangeDto::getEndDate)
-                      .returns(NOW.minusDays(5), RecurrenceRangeDto::getStartDate)
-                      .returns(5, RecurrenceRangeDto::getNumberOfOccurrences);
+        .returns(RecurrenceRangeTypeDto.END_DATE, RecurrenceRangeDto::getType)
+        .returns("UTC", RecurrenceRangeDto::getRecurrenceTimeZone)
+        .returns(NOW.plusDays(5), RecurrenceRangeDto::getEndDate)
+        .returns(NOW.minusDays(5), RecurrenceRangeDto::getStartDate)
+        .returns(5, RecurrenceRangeDto::getNumberOfOccurrences);
   }
 
   @Test
@@ -62,11 +62,11 @@ public class RecurrenceRangeMapperTest {
 
     // then
     assertThat(result).isNotNull()
-                      .returns(RecurrenceRangeType.Numbered, RecurrenceRange::getType)
-                      .returns("UTC", RecurrenceRange::getRecurrenceTimeZone)
-                      .returns(NOW.plusDays(4), RecurrenceRange::getEndDate)
-                      .returns(NOW.minusDays(4), RecurrenceRange::getStartDate)
-                      .returns(3, RecurrenceRange::getNumberOfOccurrences);
+        .returns(RecurrenceRangeType.Numbered, RecurrenceRange::getType)
+        .returns("UTC", RecurrenceRange::getRecurrenceTimeZone)
+        .returns(NOW.plusDays(4), RecurrenceRange::getEndDate)
+        .returns(NOW.minusDays(4), RecurrenceRange::getStartDate)
+        .returns(3, RecurrenceRange::getNumberOfOccurrences);
   }
 
   @Test

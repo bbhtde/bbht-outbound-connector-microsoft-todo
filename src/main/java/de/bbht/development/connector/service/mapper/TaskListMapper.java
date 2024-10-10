@@ -13,8 +13,8 @@ public final class TaskListMapper {
 
   public static List<TaskListDto> mapTaskLists(List<TodoTaskList> listOfTaskLists) {
     return listOfTaskLists.stream()
-                          .map(TaskListMapper::mapTaskList)
-                          .toList();
+        .map(TaskListMapper::mapTaskList)
+        .toList();
   }
 
   public static TaskListDto mapTaskList(TodoTaskList todoTaskList) {

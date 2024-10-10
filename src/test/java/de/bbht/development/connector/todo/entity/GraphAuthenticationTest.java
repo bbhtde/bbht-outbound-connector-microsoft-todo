@@ -19,26 +19,25 @@ class GraphAuthenticationTest {
         "{{secrets.CLIENT_SECRET}}");
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(
-                                                     authentication))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(authentication))
+        .build();
 
     // when
     var variables = context.bindVariables(GraphAuthentication.class);
 
     // then
     Assertions.assertThat(variables)
-              .extracting("tenantId")
-              .isEqualTo("secretTenantId");
+        .extracting("tenantId")
+        .isEqualTo("secretTenantId");
     Assertions.assertThat(variables)
-              .extracting("clientId")
-              .isEqualTo("secretClientId");
+        .extracting("clientId")
+        .isEqualTo("secretClientId");
     Assertions.assertThat(variables)
-              .extracting("clientSecret")
-              .isEqualTo("secretClientSecret");
+        .extracting("clientSecret")
+        .isEqualTo("secretClientSecret");
   }
 
   @Test
@@ -48,12 +47,11 @@ class GraphAuthenticationTest {
         "{{secrets.CLIENT_SECRET}}");
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(
-                                                     authentication))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(authentication))
+        .build();
 
     // when
     assertThatThrownBy(() -> context.bindVariables(GraphAuthentication.class))
@@ -70,12 +68,11 @@ class GraphAuthenticationTest {
         "{{secrets.CLIENT_SECRET}}");
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(
-                                                     authentication))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(authentication))
+        .build();
 
     // when
     assertThatThrownBy(() -> context.bindVariables(GraphAuthentication.class))
@@ -92,12 +89,11 @@ class GraphAuthenticationTest {
         "{{secrets.CLIENT_SECRET}}");
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(
-                                                     authentication))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(authentication))
+        .build();
 
     // when
     assertThatThrownBy(() -> context.bindVariables(GraphAuthentication.class))
@@ -114,12 +110,11 @@ class GraphAuthenticationTest {
         "{{secrets.CLIENT_SECRET}}");
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(
-                                                     authentication))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(authentication))
+        .build();
 
     // when
     assertThatThrownBy(() -> context.bindVariables(GraphAuthentication.class))
@@ -136,12 +131,11 @@ class GraphAuthenticationTest {
         null);
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(
-                                                     authentication))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(authentication))
+        .build();
 
     // when
     assertThatThrownBy(() -> context.bindVariables(GraphAuthentication.class))
@@ -158,12 +152,11 @@ class GraphAuthenticationTest {
         "");
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(
-                                                     authentication))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(authentication))
+        .build();
 
     // when
     assertThatThrownBy(() -> context.bindVariables(GraphAuthentication.class))

@@ -22,8 +22,8 @@ class DateTimeTimeZoneMapperTest {
 
     // then
     assertThat(result).isNotNull()
-                      .returns(DATE_TIME, DateTimeTimeZoneDto::getDateTime)
-                      .returns("UTC", DateTimeTimeZoneDto::getTimeZone);
+        .returns(DATE_TIME, DateTimeTimeZoneDto::getDateTime)
+        .returns("UTC", DateTimeTimeZoneDto::getTimeZone);
   }
 
   @Test
@@ -50,8 +50,8 @@ class DateTimeTimeZoneMapperTest {
 
     // then
     assertThat(result).isNotNull()
-                      .returns(DATE_TIME, DateTimeTimeZone::getDateTime)
-                      .returns("UTC", DateTimeTimeZone::getTimeZone);
+        .returns(DATE_TIME, DateTimeTimeZone::getDateTime)
+        .returns("UTC", DateTimeTimeZone::getTimeZone);
   }
 
   @Test

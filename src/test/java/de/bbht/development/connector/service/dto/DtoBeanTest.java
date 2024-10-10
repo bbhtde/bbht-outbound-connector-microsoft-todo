@@ -33,11 +33,9 @@ class DtoBeanTest {
   static void setUp() {
     final Random random = new Random();
     BeanMatchers.registerValueGenerator(() -> OffsetDateTime.now()
-                                                            .plusDays(random.nextInt(1, 125)),
-        OffsetDateTime.class);
+        .plusDays(random.nextInt(1, 125)), OffsetDateTime.class);
     BeanMatchers.registerValueGenerator(() -> LocalDate.now()
-                                                       .plusDays(random.nextInt(0, 365)),
-        LocalDate.class);
+        .plusDays(random.nextInt(0, 365)), LocalDate.class);
   }
 
   // We can use HamCrest and Bean Matchers in a parameterized test to ensure that our beans adhere to the standard
@@ -49,7 +47,7 @@ class DtoBeanTest {
       RecurrenceRangeDto.class})
   void shouldEnsureThatDtosAreValidBeans(Class<?> classUnderTest) throws Exception {
     var objectUnderTest = classUnderTest.getConstructor()
-                                        .newInstance();
+        .newInstance();
 
     assertThat(objectUnderTest, notNullValue());
 

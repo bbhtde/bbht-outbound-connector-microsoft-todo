@@ -53,8 +53,8 @@ public class PatternRecurrenceMapperTest {
 
     // then
     assertThat(result).isNotNull()
-                      .satisfies(pr -> assertThat(result.getPattern()).isNotNull())
-                      .satisfies(pr -> assertThat(result.getRange()).isNotNull());
+        .satisfies(pr -> assertThat(result.getPattern()).isNotNull())
+        .satisfies(pr -> assertThat(result.getRange()).isNotNull());
   }
 
   @Test
@@ -85,7 +85,7 @@ public class PatternRecurrenceMapperTest {
 
     // then
     assertThat(result).isNotNull()
-                      .satisfies(pr -> assertThat(result.getPattern()).isNotNull())
-                      .satisfies(pr -> assertThat(result.getRange()).isNotNull());
+        .satisfies(pr -> assertThat(result.getPattern()).isNotNull())
+        .satisfies(pr -> assertThat(result.getRange()).isNotNull());
   }
 }

@@ -15,8 +15,8 @@ public final class TaskMapper {
 
   public static List<TaskDto> mapTasks(List<TodoTask> listOfTasks) {
     return listOfTasks.stream()
-                      .map(TaskMapper::mapTask)
-                      .toList();
+        .map(TaskMapper::mapTask)
+        .toList();
   }
 
   public static TaskDto mapTask(TodoTask todoTask) {
@@ -27,7 +27,7 @@ public final class TaskMapper {
       taskDto.setTitle(todoTask.getTitle());
       if (todoTask.getBody() != null) {
         taskDto.setBody(todoTask.getBody()
-                                .getContent());
+            .getContent());
       }
       taskDto.setBodyLastModifiedDateTime(todoTask.getBodyLastModifiedDateTime());
       taskDto.setCategories(todoTask.getCategories());

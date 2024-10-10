@@ -34,8 +34,8 @@ class GraphAuthenticationDtoTest {
     var hashCode4 = auth4.hashCode();
 
     assertThat(hashCode1).isNotEqualTo(hashCode2)
-                         .isNotEqualTo(hashCode3)
-                         .isNotEqualTo(hashCode4);
+        .isNotEqualTo(hashCode3)
+        .isNotEqualTo(hashCode4);
   }
 
   @Test

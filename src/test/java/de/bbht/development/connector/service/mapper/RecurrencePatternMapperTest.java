@@ -35,15 +35,14 @@ public class RecurrencePatternMapperTest {
 
     // then
     assertThat(result).returns(20, RecurrencePatternDto::getDayOfMonth)
-                      .returns(DayOfWeekDto.THURSDAY, RecurrencePatternDto::getFirstDayOfWeek)
-                      .returns(WeekIndexDto.SECOND, RecurrencePatternDto::getIndex)
-                      .returns(3, RecurrencePatternDto::getInterval)
-                      .returns(3, RecurrencePatternDto::getMonth)
-                      .returns(RecurrencePatternTypeDto.DAILY, RecurrencePatternDto::getType)
-                      .extracting(RecurrencePatternDto::getDaysOfWeek,
-                          as(InstanceOfAssertFactories.ITERABLE))
-                      .hasSize(2)
-                      .containsExactly(DayOfWeekDto.TUESDAY, DayOfWeekDto.FRIDAY);
+        .returns(DayOfWeekDto.THURSDAY, RecurrencePatternDto::getFirstDayOfWeek)
+        .returns(WeekIndexDto.SECOND, RecurrencePatternDto::getIndex)
+        .returns(3, RecurrencePatternDto::getInterval)
+        .returns(3, RecurrencePatternDto::getMonth)
+        .returns(RecurrencePatternTypeDto.DAILY, RecurrencePatternDto::getType)
+        .extracting(RecurrencePatternDto::getDaysOfWeek, as(InstanceOfAssertFactories.ITERABLE))
+        .hasSize(2)
+        .containsExactly(DayOfWeekDto.TUESDAY, DayOfWeekDto.FRIDAY);
     //        .extracting(RecurrencePatternDto::getDaysOfWeek,  as(InstanceOfAssertFactories.LIST))
     //        .hasSize(2)
     //            .containsExactly(DayOfWeekDto.TUESDAY, DayOfWeekDto.FRIDAY);
@@ -84,15 +83,14 @@ public class RecurrencePatternMapperTest {
 
     // then
     assertThat(result).returns(21, RecurrencePattern::getDayOfMonth)
-                      .returns(DayOfWeek.Wednesday, RecurrencePattern::getFirstDayOfWeek)
-                      .returns(WeekIndex.Third, RecurrencePattern::getIndex)
-                      .returns(1, RecurrencePattern::getInterval)
-                      .returns(5, RecurrencePattern::getMonth)
-                      .returns(RecurrencePatternType.Weekly, RecurrencePattern::getType)
-                      .extracting(RecurrencePattern::getDaysOfWeek,
-                          as(InstanceOfAssertFactories.LIST))
-                      .hasSize(2)
-                      .containsExactly(DayOfWeek.Monday, DayOfWeek.Thursday);
+        .returns(DayOfWeek.Wednesday, RecurrencePattern::getFirstDayOfWeek)
+        .returns(WeekIndex.Third, RecurrencePattern::getIndex)
+        .returns(1, RecurrencePattern::getInterval)
+        .returns(5, RecurrencePattern::getMonth)
+        .returns(RecurrencePatternType.Weekly, RecurrencePattern::getType)
+        .extracting(RecurrencePattern::getDaysOfWeek, as(InstanceOfAssertFactories.LIST))
+        .hasSize(2)
+        .containsExactly(DayOfWeek.Monday, DayOfWeek.Thursday);
   }
 
   @Test

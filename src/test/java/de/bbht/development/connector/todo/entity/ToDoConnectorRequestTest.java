@@ -28,21 +28,21 @@ class ToDoConnectorRequestTest {
         null, null);
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(input))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(input))
+        .build();
 
     // when
     var variables = context.bindVariables(ToDoConnectorRequest.class);
 
     // then
     Assertions.assertThat(variables)
-              .extracting(ToDoConnectorRequest::authentication)
-              .returns("secretTenantId", GraphAuthentication::tenantId)
-              .returns("secretClientId", GraphAuthentication::clientId)
-              .returns("secretClientSecret", GraphAuthentication::clientSecret);
+        .extracting(ToDoConnectorRequest::authentication)
+        .returns("secretTenantId", GraphAuthentication::tenantId)
+        .returns("secretClientId", GraphAuthentication::clientId)
+        .returns("secretClientSecret", GraphAuthentication::clientSecret);
   }
 
   @Test
@@ -55,11 +55,11 @@ class ToDoConnectorRequestTest {
         null, null);
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(input))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(input))
+        .build();
 
     // when
     assertThatThrownBy(() -> context.bindVariables(ToDoConnectorRequest.class))
@@ -78,11 +78,11 @@ class ToDoConnectorRequestTest {
         null, null);
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(input))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(input))
+        .build();
 
     // when
     assertThatThrownBy(() -> context.bindVariables(ToDoConnectorRequest.class))
@@ -101,11 +101,11 @@ class ToDoConnectorRequestTest {
         null, null);
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(input))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(input))
+        .build();
 
     // when
     assertThatThrownBy(() -> context.bindVariables(ToDoConnectorRequest.class))
@@ -125,19 +125,19 @@ class ToDoConnectorRequestTest {
         null, null, null, null);
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(input))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(input))
+        .build();
 
     // when
     var variables = context.bindVariables(ToDoConnectorRequest.class);
 
     // then
     Assertions.assertThat(variables)
-              .extracting(ToDoConnectorRequest::taskListOptions)
-              .returns("Display Name", TaskListOptions::displayName);
+        .extracting(ToDoConnectorRequest::taskListOptions)
+        .returns("Display Name", TaskListOptions::displayName);
   }
 
   @Test
@@ -157,46 +157,46 @@ class ToDoConnectorRequestTest {
         taskRecurrenceOptions, null, null);
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(input))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(input))
+        .build();
 
     // when
     var variables = context.bindVariables(ToDoConnectorRequest.class);
 
     // then
     Assertions.assertThat(variables)
-              .extracting(ToDoConnectorRequest::taskOptions)
-              .returns("Titel", TaskOptions::title)
-              .returns("Body", TaskOptions::body)
-              .returns("Category 1, Category 2", TaskOptions::categories)
-              .returns(ImportanceDto.HIGH, TaskOptions::importance)
-              .returns(TaskStatusDto.IN_PROGRESS, TaskOptions::status)
-              .returns(createDateTime(2023), TaskOptions::startDateTime)
-              .returns("UTC", TaskOptions::startDateTimeTimeZone)
-              .returns(createDateTime(2024), TaskOptions::dueDateTime)
-              .returns("UTC", TaskOptions::dueDateTimeTimeZone)
-              .returns(createDateTime(2025), TaskOptions::completedDateTime)
-              .returns("UTC", TaskOptions::completedDateTimeTimeZone)
-              .returns(createDateTime(2024), TaskOptions::reminderDateTime)
-              .returns("UTC", TaskOptions::reminderDateTimeTimeZone);
+        .extracting(ToDoConnectorRequest::taskOptions)
+        .returns("Titel", TaskOptions::title)
+        .returns("Body", TaskOptions::body)
+        .returns("Category 1, Category 2", TaskOptions::categories)
+        .returns(ImportanceDto.HIGH, TaskOptions::importance)
+        .returns(TaskStatusDto.IN_PROGRESS, TaskOptions::status)
+        .returns(createDateTime(2023), TaskOptions::startDateTime)
+        .returns("UTC", TaskOptions::startDateTimeTimeZone)
+        .returns(createDateTime(2024), TaskOptions::dueDateTime)
+        .returns("UTC", TaskOptions::dueDateTimeTimeZone)
+        .returns(createDateTime(2025), TaskOptions::completedDateTime)
+        .returns("UTC", TaskOptions::completedDateTimeTimeZone)
+        .returns(createDateTime(2024), TaskOptions::reminderDateTime)
+        .returns("UTC", TaskOptions::reminderDateTimeTimeZone);
     Assertions.assertThat(variables)
-              .extracting(ToDoConnectorRequest::taskRecurrenceOptions)
-              .returns(TaskRecurrenceOptions.VALUE_RECURRING, TaskRecurrenceOptions::recurring)
-              .returns(RecurrencePatternTypeDto.DAILY, TaskRecurrenceOptions::patternType)
-              .returns(5, TaskRecurrenceOptions::interval)
-              .returns(12, TaskRecurrenceOptions::dayOfMonth)
-              .returns("Monday, Thursday", TaskRecurrenceOptions::daysOfWeek)
-              .returns(DayOfWeekDto.MONDAY, TaskRecurrenceOptions::firstDayOfWeek)
-              .returns(WeekIndexDto.FIRST, TaskRecurrenceOptions::index)
-              .returns(7, TaskRecurrenceOptions::month)
-              .returns(RecurrenceRangeTypeDto.NUMBERED, TaskRecurrenceOptions::rangeType)
-              .returns(10, TaskRecurrenceOptions::numberOfOccurrences)
-              .returns("2024-08-01", TaskRecurrenceOptions::startDate)
-              .returns("2024-12-01", TaskRecurrenceOptions::endDate)
-              .returns("UTC", TaskRecurrenceOptions::recurrenceTimeZone);
+        .extracting(ToDoConnectorRequest::taskRecurrenceOptions)
+        .returns(TaskRecurrenceOptions.VALUE_RECURRING, TaskRecurrenceOptions::recurring)
+        .returns(RecurrencePatternTypeDto.DAILY, TaskRecurrenceOptions::patternType)
+        .returns(5, TaskRecurrenceOptions::interval)
+        .returns(12, TaskRecurrenceOptions::dayOfMonth)
+        .returns("Monday, Thursday", TaskRecurrenceOptions::daysOfWeek)
+        .returns(DayOfWeekDto.MONDAY, TaskRecurrenceOptions::firstDayOfWeek)
+        .returns(WeekIndexDto.FIRST, TaskRecurrenceOptions::index)
+        .returns(7, TaskRecurrenceOptions::month)
+        .returns(RecurrenceRangeTypeDto.NUMBERED, TaskRecurrenceOptions::rangeType)
+        .returns(10, TaskRecurrenceOptions::numberOfOccurrences)
+        .returns("2024-08-01", TaskRecurrenceOptions::startDate)
+        .returns("2024-12-01", TaskRecurrenceOptions::endDate)
+        .returns("UTC", TaskRecurrenceOptions::recurrenceTimeZone);
   }
 
   private String createDateTime(int year) {
@@ -214,19 +214,19 @@ class ToDoConnectorRequestTest {
         checkListItemOptions, null);
 
     var context = OutboundConnectorContextBuilder.create()
-                                                 .secret("TENANT_ID", "secretTenantId")
-                                                 .secret("CLIENT_ID", "secretClientId")
-                                                 .secret("CLIENT_SECRET", "secretClientSecret")
-                                                 .variables(objectMapper.writeValueAsString(input))
-                                                 .build();
+        .secret("TENANT_ID", "secretTenantId")
+        .secret("CLIENT_ID", "secretClientId")
+        .secret("CLIENT_SECRET", "secretClientSecret")
+        .variables(objectMapper.writeValueAsString(input))
+        .build();
 
     // when
     var variables = context.bindVariables(ToDoConnectorRequest.class);
 
     // then
     Assertions.assertThat(variables)
-              .extracting(ToDoConnectorRequest::checkListItemOptions)
-              .returns("Display Name", CheckListItemOptions::displayName)
-              .returns(Boolean.TRUE, CheckListItemOptions::checked);
+        .extracting(ToDoConnectorRequest::checkListItemOptions)
+        .returns("Display Name", CheckListItemOptions::displayName)
+        .returns(Boolean.TRUE, CheckListItemOptions::checked);
   }
 }

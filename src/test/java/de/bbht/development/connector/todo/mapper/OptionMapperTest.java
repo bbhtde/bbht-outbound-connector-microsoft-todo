@@ -36,9 +36,9 @@ public class OptionMapperTest {
 
     // then
     assertThat(result).asInstanceOf(InstanceOfAssertFactories.LIST)
-                      .isNotNull()
-                      .hasSize(4)
-                      .containsExactly("Kategorie 1", "Kategorie 2", "Kategorie 3", "Kategorie 4");
+        .isNotNull()
+        .hasSize(4)
+        .containsExactly("Kategorie 1", "Kategorie 2", "Kategorie 3", "Kategorie 4");
   }
 
   @Test
@@ -59,9 +59,9 @@ public class OptionMapperTest {
 
     // then
     assertThat(result).asInstanceOf(InstanceOfAssertFactories.ITERABLE)
-                      .isNotNull()
-                      .hasSize(7)
-                      .containsExactlyElementsOf(expected);
+        .isNotNull()
+        .hasSize(7)
+        .containsExactlyElementsOf(expected);
   }
 
   @Test
