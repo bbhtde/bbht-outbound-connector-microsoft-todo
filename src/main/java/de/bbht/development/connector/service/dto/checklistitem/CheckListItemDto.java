@@ -63,9 +63,9 @@ public class CheckListItemDto {
     if (!(o instanceof CheckListItemDto that)) {
       return false;
     }
-    return Objects.equals(id, that.id) && Objects.equals(checked, that.checked) && Objects.equals(displayName,
-        that.displayName) && Objects.equals(checkedDateTime, that.checkedDateTime) && Objects.equals(createdDateTime,
-        that.createdDateTime);
+    return Objects.equals(id, that.id) && Objects.equals(checked, that.checked) && Objects.equals(
+        displayName, that.displayName) && Objects.equals(checkedDateTime, that.checkedDateTime)
+        && Objects.equals(createdDateTime, that.createdDateTime);
   }
 
   @Override

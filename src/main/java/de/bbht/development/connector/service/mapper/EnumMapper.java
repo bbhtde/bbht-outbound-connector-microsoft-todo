@@ -1,8 +1,19 @@
 package de.bbht.development.connector.service.mapper;
 
-import com.microsoft.graph.models.*;
-import de.bbht.development.connector.service.dto.enums.*;
-
+import com.microsoft.graph.models.DayOfWeek;
+import com.microsoft.graph.models.Importance;
+import com.microsoft.graph.models.RecurrencePatternType;
+import com.microsoft.graph.models.RecurrenceRangeType;
+import com.microsoft.graph.models.TaskStatus;
+import com.microsoft.graph.models.WeekIndex;
+import com.microsoft.graph.models.WellknownListName;
+import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
+import de.bbht.development.connector.service.dto.enums.ImportanceDto;
+import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
+import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
+import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
+import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
+import de.bbht.development.connector.service.dto.enums.WellknownListNameDto;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -75,7 +86,7 @@ public final class EnumMapper {
   }
 
   public static RecurrencePatternType mapRecurrencePatternTypeDto(RecurrencePatternTypeDto dto) {
-    return switch(dto) {
+    return switch (dto) {
       case DAILY -> RecurrencePatternType.Daily;
       case WEEKLY -> RecurrencePatternType.Weekly;
       case RELATIVE_MONTHLY -> RecurrencePatternType.RelativeMonthly;
@@ -86,7 +97,8 @@ public final class EnumMapper {
     };
   }
 
-  public static RecurrencePatternTypeDto mapRecurrencePatternType(RecurrencePatternType recurrencePatternType) {
+  public static RecurrencePatternTypeDto mapRecurrencePatternType(
+      RecurrencePatternType recurrencePatternType) {
     return switch (recurrencePatternType) {
       case Daily -> RecurrencePatternTypeDto.DAILY;
       case Weekly -> RecurrencePatternTypeDto.WEEKLY;
@@ -107,8 +119,9 @@ public final class EnumMapper {
     };
   }
 
-  public static RecurrenceRangeTypeDto mapRecurrenceRangeType(RecurrenceRangeType recurrenceRangeType) {
-    return switch(recurrenceRangeType) {
+  public static RecurrenceRangeTypeDto mapRecurrenceRangeType(
+      RecurrenceRangeType recurrenceRangeType) {
+    return switch (recurrenceRangeType) {
       case EndDate -> RecurrenceRangeTypeDto.END_DATE;
       case NoEnd -> RecurrenceRangeTypeDto.NO_END;
       case Numbered -> RecurrenceRangeTypeDto.NUMBERED;

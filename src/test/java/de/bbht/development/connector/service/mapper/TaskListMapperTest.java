@@ -1,15 +1,14 @@
 package de.bbht.development.connector.service.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.microsoft.graph.models.TodoTaskList;
 import com.microsoft.graph.models.WellknownListName;
 import de.bbht.development.connector.service.dto.enums.WellknownListNameDto;
 import de.bbht.development.connector.service.dto.tasklist.CreateUpdateTaskListDto;
 import de.bbht.development.connector.service.dto.tasklist.TaskListDto;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
 class TaskListMapperTest {
 
@@ -28,10 +27,10 @@ class TaskListMapperTest {
 
     // then
     assertThat(taskListDto).returns("ID", TaskListDto::getId)
-        .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
-        .returns(true, TaskListDto::getOwner)
-        .returns(true, TaskListDto::getShared)
-        .returns("Display Name", TaskListDto::getDisplayName);
+                           .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
+                           .returns(true, TaskListDto::getOwner)
+                           .returns(true, TaskListDto::getShared)
+                           .returns("Display Name", TaskListDto::getDisplayName);
   }
 
   @Test
@@ -45,8 +44,8 @@ class TaskListMapperTest {
 
     // then
     assertThat(todoTaskList).returns("Display Name", TodoTaskList::getDisplayName)
-        .returns(null, TodoTaskList::getId)
-        .returns(null, TodoTaskList::getWellknownListName);
+                            .returns(null, TodoTaskList::getId)
+                            .returns(null, TodoTaskList::getWellknownListName);
   }
 
   @Test
@@ -59,8 +58,8 @@ class TaskListMapperTest {
 
     // then
     assertThat(todoTaskList).returns(null, TodoTaskList::getDisplayName)
-        .returns(null, TodoTaskList::getId)
-        .returns(null, TodoTaskList::getWellknownListName);
+                            .returns(null, TodoTaskList::getId)
+                            .returns(null, TodoTaskList::getWellknownListName);
   }
 
   @Test
@@ -87,16 +86,29 @@ class TaskListMapperTest {
 
     // then
     assertThat(listOfTaskListDto).hasSize(2)
-        .satisfiesExactly(taskList1 -> assertThat(taskList1).returns("ID1", TaskListDto::getId)
-                .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
-                .returns(true, TaskListDto::getOwner)
-                .returns(true, TaskListDto::getShared)
-                .returns("Display Name 1", TaskListDto::getDisplayName),
-            taskList2 -> assertThat(taskList2).returns("ID2", TaskListDto::getId)
-                .returns(WellknownListNameDto.DEFAULT_LIST, TaskListDto::getWellknownListName)
-                .returns(false, TaskListDto::getOwner)
-                .returns(false, TaskListDto::getShared)
-                .returns("Display Name 2", TaskListDto::getDisplayName));
+                                 .satisfiesExactly(taskList1 -> assertThat(taskList1).returns("ID1",
+                                                                                         TaskListDto::getId)
+                                                                                     .returns(
+                                                                                         WellknownListNameDto.NONE,
+                                                                                         TaskListDto::getWellknownListName)
+                                                                                     .returns(true,
+                                                                                         TaskListDto::getOwner)
+                                                                                     .returns(true,
+                                                                                         TaskListDto::getShared)
+                                                                                     .returns(
+                                                                                         "Display Name 1",
+                                                                                         TaskListDto::getDisplayName),
+                                     taskList2 -> assertThat(taskList2).returns("ID2",
+                                                                           TaskListDto::getId)
+                                                                       .returns(
+                                                                           WellknownListNameDto.DEFAULT_LIST,
+                                                                           TaskListDto::getWellknownListName)
+                                                                       .returns(false,
+                                                                           TaskListDto::getOwner)
+                                                                       .returns(false,
+                                                                           TaskListDto::getShared)
+                                                                       .returns("Display Name 2",
+                                                                           TaskListDto::getDisplayName));
   }
 
   @Test

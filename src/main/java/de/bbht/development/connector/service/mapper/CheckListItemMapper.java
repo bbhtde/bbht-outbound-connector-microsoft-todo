@@ -3,7 +3,6 @@ package de.bbht.development.connector.service.mapper;
 import com.microsoft.graph.models.ChecklistItem;
 import de.bbht.development.connector.service.dto.checklistitem.CheckListItemDto;
 import de.bbht.development.connector.service.dto.checklistitem.CreateUpdateCheckListItemDto;
-
 import java.util.List;
 
 public final class CheckListItemMapper {
@@ -14,8 +13,8 @@ public final class CheckListItemMapper {
 
   public static List<CheckListItemDto> mapCheckListItems(List<ChecklistItem> listOfCheckListItems) {
     return listOfCheckListItems.stream()
-        .map(CheckListItemMapper::mapCheckListItem)
-        .toList();
+                               .map(CheckListItemMapper::mapCheckListItem)
+                               .toList();
   }
 
   public static CheckListItemDto mapCheckListItem(ChecklistItem checkListItem) {

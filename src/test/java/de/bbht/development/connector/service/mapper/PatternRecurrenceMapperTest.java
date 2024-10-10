@@ -1,6 +1,14 @@
 package de.bbht.development.connector.service.mapper;
 
-import com.microsoft.graph.models.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.microsoft.graph.models.DayOfWeek;
+import com.microsoft.graph.models.PatternedRecurrence;
+import com.microsoft.graph.models.RecurrencePattern;
+import com.microsoft.graph.models.RecurrencePatternType;
+import com.microsoft.graph.models.RecurrenceRange;
+import com.microsoft.graph.models.RecurrenceRangeType;
+import com.microsoft.graph.models.WeekIndex;
 import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
 import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
 import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
@@ -8,13 +16,10 @@ import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
 import de.bbht.development.connector.service.dto.task.PatternedRecurrenceDto;
 import de.bbht.development.connector.service.dto.task.RecurrencePatternDto;
 import de.bbht.development.connector.service.dto.task.RecurrenceRangeDto;
-import org.junit.jupiter.api.Test;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
 public class PatternRecurrenceMapperTest {
 
@@ -47,10 +52,9 @@ public class PatternRecurrenceMapperTest {
     var result = PatternedRecurrenceMapper.mapPatternedRecurrence(patternRecurrence);
 
     // then
-    assertThat(result)
-        .isNotNull()
-        .satisfies(pr -> assertThat(result.getPattern()).isNotNull())
-        .satisfies(pr -> assertThat(result.getRange()).isNotNull());
+    assertThat(result).isNotNull()
+                      .satisfies(pr -> assertThat(result.getPattern()).isNotNull())
+                      .satisfies(pr -> assertThat(result.getRange()).isNotNull());
   }
 
   @Test
@@ -80,9 +84,8 @@ public class PatternRecurrenceMapperTest {
     var result = PatternedRecurrenceMapper.mapPatternedRecurrenceDto(patternRecurrence);
 
     // then
-    assertThat(result)
-        .isNotNull()
-        .satisfies(pr -> assertThat(result.getPattern()).isNotNull())
-        .satisfies(pr -> assertThat(result.getRange()).isNotNull());
+    assertThat(result).isNotNull()
+                      .satisfies(pr -> assertThat(result.getPattern()).isNotNull())
+                      .satisfies(pr -> assertThat(result.getRange()).isNotNull());
   }
 }

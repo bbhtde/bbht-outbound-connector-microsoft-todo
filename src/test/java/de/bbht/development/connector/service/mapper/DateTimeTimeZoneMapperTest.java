@@ -1,10 +1,10 @@
 package de.bbht.development.connector.service.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.microsoft.graph.models.DateTimeTimeZone;
 import de.bbht.development.connector.service.dto.task.DateTimeTimeZoneDto;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class DateTimeTimeZoneMapperTest {
 
@@ -22,8 +22,8 @@ class DateTimeTimeZoneMapperTest {
 
     // then
     assertThat(result).isNotNull()
-        .returns(DATE_TIME, DateTimeTimeZoneDto::getDateTime)
-        .returns("UTC", DateTimeTimeZoneDto::getTimeZone);
+                      .returns(DATE_TIME, DateTimeTimeZoneDto::getDateTime)
+                      .returns("UTC", DateTimeTimeZoneDto::getTimeZone);
   }
 
   @Test
@@ -50,8 +50,8 @@ class DateTimeTimeZoneMapperTest {
 
     // then
     assertThat(result).isNotNull()
-        .returns(DATE_TIME, DateTimeTimeZone::getDateTime)
-        .returns("UTC", DateTimeTimeZone::getTimeZone);
+                      .returns(DATE_TIME, DateTimeTimeZone::getDateTime)
+                      .returns("UTC", DateTimeTimeZone::getTimeZone);
   }
 
   @Test

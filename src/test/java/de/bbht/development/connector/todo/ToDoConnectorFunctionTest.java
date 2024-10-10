@@ -1,5 +1,9 @@
 package de.bbht.development.connector.todo;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bbht.development.connector.service.IMsGraphServiceFactory;
 import de.bbht.development.connector.service.MsGraphException;
@@ -7,30 +11,48 @@ import de.bbht.development.connector.service.MsGraphService;
 import de.bbht.development.connector.service.dto.GraphAuthenticationDto;
 import de.bbht.development.connector.service.dto.checklistitem.CheckListItemDto;
 import de.bbht.development.connector.service.dto.checklistitem.CreateUpdateCheckListItemDto;
-import de.bbht.development.connector.service.dto.enums.*;
-import de.bbht.development.connector.service.dto.task.*;
+import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
+import de.bbht.development.connector.service.dto.enums.ImportanceDto;
+import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
+import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
+import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
+import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
+import de.bbht.development.connector.service.dto.enums.WellknownListNameDto;
+import de.bbht.development.connector.service.dto.task.CreateUpdateTaskDto;
+import de.bbht.development.connector.service.dto.task.DateTimeTimeZoneDto;
+import de.bbht.development.connector.service.dto.task.PatternedRecurrenceDto;
+import de.bbht.development.connector.service.dto.task.RecurrencePatternDto;
+import de.bbht.development.connector.service.dto.task.RecurrenceRangeDto;
+import de.bbht.development.connector.service.dto.task.TaskDto;
 import de.bbht.development.connector.service.dto.tasklist.CreateUpdateTaskListDto;
 import de.bbht.development.connector.service.dto.tasklist.TaskListDto;
-import de.bbht.development.connector.todo.entity.*;
+import de.bbht.development.connector.todo.entity.CheckListItemOptions;
+import de.bbht.development.connector.todo.entity.ConnectorError;
+import de.bbht.development.connector.todo.entity.ConnectorResult;
+import de.bbht.development.connector.todo.entity.GraphAuthentication;
+import de.bbht.development.connector.todo.entity.Operation;
+import de.bbht.development.connector.todo.entity.TaskListOptions;
+import de.bbht.development.connector.todo.entity.TaskOptions;
+import de.bbht.development.connector.todo.entity.TaskRecurrenceOptions;
+import de.bbht.development.connector.todo.entity.ToDoConnectorRequest;
+import de.bbht.development.connector.todo.entity.ToDoOperation;
+import de.bbht.development.connector.todo.entity.UpdateCheckListItemOptions;
+import de.bbht.development.connector.todo.entity.UpdateTaskListOptions;
+import de.bbht.development.connector.todo.entity.UpdateTaskOptions;
 import io.camunda.connector.test.outbound.OutboundConnectorContextBuilder;
 import io.camunda.connector.test.outbound.OutboundConnectorContextBuilder.TestConnectorContext;
-import org.assertj.core.api.InstanceOfAssertFactories;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class ToDoConnectorFunctionTest {
@@ -107,7 +129,8 @@ class ToDoConnectorFunctionTest {
   void shouldReturnListOfTaskLists() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.LIST_TASK_LISTS, testUserId, null, null, null), null, null, null, null, null, null, null);
+        new Operation(ToDoOperation.LIST_TASK_LISTS, testUserId, null, null, null), null, null,
+        null, null, null, null, null);
 
     // Mock Setup
     final var listOfTaskLists = createListOfTaskLists();
@@ -119,50 +142,74 @@ class ToDoConnectorFunctionTest {
     // Then
     assertThat(result).isInstanceOfSatisfying(ConnectorResult.class,
         connectorResult -> assertThat(connectorResult).extracting(ConnectorResult::getResult)
-            .asInstanceOf(InstanceOfAssertFactories.list(TaskListDto.class))
-            .hasSize(3)
-            .satisfiesExactly(item1 -> assertThat(item1).returns("1", TaskListDto::getId)
-                .returns("Task List 1", TaskListDto::getDisplayName)
-                .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
-                .returns(true, TaskListDto::getOwner)
-                .returns(false, TaskListDto::getShared), item2 -> assertThat(item2).returns("2", TaskListDto::getId)
-                .returns("Task List 2", TaskListDto::getDisplayName)
-                .returns(WellknownListNameDto.DEFAULT_LIST, TaskListDto::getWellknownListName)
-                .returns(true, TaskListDto::getOwner)
-                .returns(true, TaskListDto::getShared), item3 -> assertThat(item3).returns("3", TaskListDto::getId)
-                .returns("Task List 3", TaskListDto::getDisplayName)
-                .returns(WellknownListNameDto.FLAGGED_EMAILS, TaskListDto::getWellknownListName)
-                .returns(true, TaskListDto::getOwner)
-                .returns(false, TaskListDto::getShared)));
+                                                      .asInstanceOf(InstanceOfAssertFactories.list(
+                                                          TaskListDto.class))
+                                                      .hasSize(3)
+                                                      .satisfiesExactly(
+                                                          item1 -> assertThat(item1).returns("1",
+                                                                                        TaskListDto::getId)
+                                                                                    .returns(
+                                                                                        "Task List 1",
+                                                                                        TaskListDto::getDisplayName)
+                                                                                    .returns(
+                                                                                        WellknownListNameDto.NONE,
+                                                                                        TaskListDto::getWellknownListName)
+                                                                                    .returns(true,
+                                                                                        TaskListDto::getOwner)
+                                                                                    .returns(false,
+                                                                                        TaskListDto::getShared),
+                                                          item2 -> assertThat(item2).returns("2",
+                                                                                        TaskListDto::getId)
+                                                                                    .returns(
+                                                                                        "Task List 2",
+                                                                                        TaskListDto::getDisplayName)
+                                                                                    .returns(
+                                                                                        WellknownListNameDto.DEFAULT_LIST,
+                                                                                        TaskListDto::getWellknownListName)
+                                                                                    .returns(true,
+                                                                                        TaskListDto::getOwner)
+                                                                                    .returns(true,
+                                                                                        TaskListDto::getShared),
+                                                          item3 -> assertThat(item3).returns("3",
+                                                                                        TaskListDto::getId)
+                                                                                    .returns(
+                                                                                        "Task List 3",
+                                                                                        TaskListDto::getDisplayName)
+                                                                                    .returns(
+                                                                                        WellknownListNameDto.FLAGGED_EMAILS,
+                                                                                        TaskListDto::getWellknownListName)
+                                                                                    .returns(true,
+                                                                                        TaskListDto::getOwner)
+                                                                                    .returns(false,
+                                                                                        TaskListDto::getShared)));
   }
 
   private TestConnectorContext createDefaultOutboundConnectorContext(Operation operation,
-                                                                     TaskListOptions taskListOption,
-                                                                     UpdateTaskListOptions updateTaskListOptions,
-                                                                     TaskOptions taskOptions,
-                                                                     UpdateTaskOptions updateTaskOptions,
-                                                                     TaskRecurrenceOptions taskRecurrenceOptions, CheckListItemOptions checkListItemOptions,
-                                                                     UpdateCheckListItemOptions updateCheckListItemOptions)
-      throws Exception {
+      TaskListOptions taskListOption, UpdateTaskListOptions updateTaskListOptions,
+      TaskOptions taskOptions, UpdateTaskOptions updateTaskOptions,
+      TaskRecurrenceOptions taskRecurrenceOptions, CheckListItemOptions checkListItemOptions,
+      UpdateCheckListItemOptions updateCheckListItemOptions) throws Exception {
     var tenant = "testTenantId";
     var client = "testClientId";
     var secret = "testClientSecret";
 
-    var request = new ToDoConnectorRequest(authentication, operation, taskListOption, updateTaskListOptions, taskOptions,
-            updateTaskOptions, taskRecurrenceOptions, checkListItemOptions, updateCheckListItemOptions);
+    var request = new ToDoConnectorRequest(authentication, operation, taskListOption,
+        updateTaskListOptions, taskOptions, updateTaskOptions, taskRecurrenceOptions,
+        checkListItemOptions, updateCheckListItemOptions);
     return OutboundConnectorContextBuilder.create()
-        .secret("TENANT_ID", tenant)
-        .secret("CLIENT_ID", client)
-        .secret("CLIENT_SECRET", secret)
-        .variables(objectMapper.writeValueAsString(request))
-        .build();
+                                          .secret("TENANT_ID", tenant)
+                                          .secret("CLIENT_ID", client)
+                                          .secret("CLIENT_SECRET", secret)
+                                          .variables(objectMapper.writeValueAsString(request))
+                                          .build();
   }
 
   @Test
   void shouldReturnTaskListById() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "1", null, null), null, null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "1", null, null), null, null, null,
+        null, null, null, null);
 
     // Mock Setup
     final var taskList = createTaskList();
@@ -172,15 +219,15 @@ class ToDoConnectorFunctionTest {
     var result = connectorUnderTest.execute(context);
 
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .extracting(ConnectorResult::getResult)
-        .isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(TaskListDto.class))
-        .returns("1", TaskListDto::getId)
-        .returns("Task List 1", TaskListDto::getDisplayName)
-        .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
-        .returns(true, TaskListDto::getOwner)
-        .returns(false, TaskListDto::getShared);
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .extracting(ConnectorResult::getResult)
+                      .isNotNull()
+                      .asInstanceOf(InstanceOfAssertFactories.type(TaskListDto.class))
+                      .returns("1", TaskListDto::getId)
+                      .returns("Task List 1", TaskListDto::getDisplayName)
+                      .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
+                      .returns(true, TaskListDto::getOwner)
+                      .returns(false, TaskListDto::getShared);
   }
 
   @Test
@@ -188,28 +235,30 @@ class ToDoConnectorFunctionTest {
     // Given
     var taskListOptions = new TaskListOptions("Task List 1");
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.CREATE_TASK_LIST, testUserId, "1", null, null), taskListOptions, null, null, null, null, null,null);
+        new Operation(ToDoOperation.CREATE_TASK_LIST, testUserId, "1", null, null), taskListOptions,
+        null, null, null, null, null, null);
 
     // Mock Setup
     final var createTaskList = new CreateUpdateTaskListDto();
     createTaskList.setDisplayName("Task List 1");
     final var taskList = createTaskList();
-    given(msGraphService.createTaskList(testUserId, createTaskList)).willReturn(Optional.of(taskList));
+    given(msGraphService.createTaskList(testUserId, createTaskList)).willReturn(
+        Optional.of(taskList));
 
     // When
     var result = connectorUnderTest.execute(context);
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .extracting(ConnectorResult::getResult)
-        .isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(TaskListDto.class))
-        .returns("1", TaskListDto::getId)
-        .returns("Task List 1", TaskListDto::getDisplayName)
-        .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
-        .returns(true, TaskListDto::getOwner)
-        .returns(false, TaskListDto::getShared);
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .extracting(ConnectorResult::getResult)
+                      .isNotNull()
+                      .asInstanceOf(InstanceOfAssertFactories.type(TaskListDto.class))
+                      .returns("1", TaskListDto::getId)
+                      .returns("Task List 1", TaskListDto::getDisplayName)
+                      .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
+                      .returns(true, TaskListDto::getOwner)
+                      .returns(false, TaskListDto::getShared);
 
   }
 
@@ -218,48 +267,51 @@ class ToDoConnectorFunctionTest {
     // Given
     var updateTaskListOptions = new UpdateTaskListOptions("Updated Task List 1");
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.UPDATE_TASK_LIST, testUserId, "1", null, null), null, updateTaskListOptions, null, null, null, null, null);
+        new Operation(ToDoOperation.UPDATE_TASK_LIST, testUserId, "1", null, null), null,
+        updateTaskListOptions, null, null, null, null, null);
 
     // Mock Setup
     final var updateTaskList = new CreateUpdateTaskListDto();
     updateTaskList.setDisplayName("Updated Task List 1");
     final var taskList = createTaskList();
     taskList.setDisplayName("Updated Task List 1");
-    given(msGraphService.updateTaskList(testUserId, "1", updateTaskList)).willReturn(Optional.of(taskList));
+    given(msGraphService.updateTaskList(testUserId, "1", updateTaskList)).willReturn(
+        Optional.of(taskList));
 
     // When
     var result = connectorUnderTest.execute(context);
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .extracting(ConnectorResult::getResult)
-        .isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(TaskListDto.class))
-        .returns("1", TaskListDto::getId)
-        .returns("Updated Task List 1", TaskListDto::getDisplayName)
-        .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
-        .returns(true, TaskListDto::getOwner)
-        .returns(false, TaskListDto::getShared);
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .extracting(ConnectorResult::getResult)
+                      .isNotNull()
+                      .asInstanceOf(InstanceOfAssertFactories.type(TaskListDto.class))
+                      .returns("1", TaskListDto::getId)
+                      .returns("Updated Task List 1", TaskListDto::getDisplayName)
+                      .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
+                      .returns(true, TaskListDto::getOwner)
+                      .returns(false, TaskListDto::getShared);
   }
 
   @Test
   void shouldDeleteTaskList() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.DELETE_TASK_LIST, testUserId, "1", null, null), null, null, null, null, null, null, null);
+        new Operation(ToDoOperation.DELETE_TASK_LIST, testUserId, "1", null, null), null, null,
+        null, null, null, null, null);
 
     // Mock Setup
     doNothing().when(msGraphService)
-        .deleteTaskList(testUserId, "1");
+               .deleteTaskList(testUserId, "1");
 
     // When
     var result = connectorUnderTest.execute(context);
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .returns(true, ConnectorResult::isEmpty);
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .returns(true, ConnectorResult::isEmpty);
   }
 
   List<TaskDto> createListOfTasks() {
@@ -351,7 +403,8 @@ class ToDoConnectorFunctionTest {
   void shouldReturnListOfTasks() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.LIST_TASKS, testUserId, "1", null, null), null, null, null, null, null, null, null);
+        new Operation(ToDoOperation.LIST_TASKS, testUserId, "1", null, null), null, null, null,
+        null, null, null, null);
 
     // Mock Setup
     final var listOfTasks = createListOfTasks();
@@ -363,30 +416,60 @@ class ToDoConnectorFunctionTest {
     // Then
     assertThat(result).isInstanceOfSatisfying(ConnectorResult.class,
         connectorResult -> assertThat(connectorResult).extracting(ConnectorResult::getResult)
-            .asInstanceOf(InstanceOfAssertFactories.list(TaskDto.class))
-            .hasSize(3)
-            .satisfiesExactly(item1 -> assertThat(item1).returns("1", TaskDto::getId)
-                    .returns("Title 1", TaskDto::getTitle)
-                    .returns("Item Body 1", TaskDto::getBody)
-                    .returns(ImportanceDto.HIGH, TaskDto::getImportance)
-                    .returns(TaskStatusDto.IN_PROGRESS, TaskDto::getStatus),
-                item2 -> assertThat(item2).returns("2", TaskDto::getId)
-                    .returns("Title 2", TaskDto::getTitle)
-                    .returns("Item Body 2", TaskDto::getBody)
-                    .returns(ImportanceDto.LOW, TaskDto::getImportance)
-                    .returns(TaskStatusDto.DEFERRED, TaskDto::getStatus),
-                item3 -> assertThat(item3).returns("3", TaskDto::getId)
-                    .returns("Title 3", TaskDto::getTitle)
-                    .returns("Item Body 3", TaskDto::getBody)
-                    .returns(ImportanceDto.NORMAL, TaskDto::getImportance)
-                    .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus)));
+                                                      .asInstanceOf(InstanceOfAssertFactories.list(
+                                                          TaskDto.class))
+                                                      .hasSize(3)
+                                                      .satisfiesExactly(
+                                                          item1 -> assertThat(item1).returns("1",
+                                                                                        TaskDto::getId)
+                                                                                    .returns(
+                                                                                        "Title 1",
+                                                                                        TaskDto::getTitle)
+                                                                                    .returns(
+                                                                                        "Item Body 1",
+                                                                                        TaskDto::getBody)
+                                                                                    .returns(
+                                                                                        ImportanceDto.HIGH,
+                                                                                        TaskDto::getImportance)
+                                                                                    .returns(
+                                                                                        TaskStatusDto.IN_PROGRESS,
+                                                                                        TaskDto::getStatus),
+                                                          item2 -> assertThat(item2).returns("2",
+                                                                                        TaskDto::getId)
+                                                                                    .returns(
+                                                                                        "Title 2",
+                                                                                        TaskDto::getTitle)
+                                                                                    .returns(
+                                                                                        "Item Body 2",
+                                                                                        TaskDto::getBody)
+                                                                                    .returns(
+                                                                                        ImportanceDto.LOW,
+                                                                                        TaskDto::getImportance)
+                                                                                    .returns(
+                                                                                        TaskStatusDto.DEFERRED,
+                                                                                        TaskDto::getStatus),
+                                                          item3 -> assertThat(item3).returns("3",
+                                                                                        TaskDto::getId)
+                                                                                    .returns(
+                                                                                        "Title 3",
+                                                                                        TaskDto::getTitle)
+                                                                                    .returns(
+                                                                                        "Item Body 3",
+                                                                                        TaskDto::getBody)
+                                                                                    .returns(
+                                                                                        ImportanceDto.NORMAL,
+                                                                                        TaskDto::getImportance)
+                                                                                    .returns(
+                                                                                        TaskStatusDto.COMPLETED,
+                                                                                        TaskDto::getStatus)));
   }
 
   @Test
   void shouldReturnTask() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_TASK, testUserId, "1", "1", null), null, null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_TASK, testUserId, "1", "1", null), null, null, null, null,
+        null, null, null);
 
     // Mock Setup
     final var task = createTask(false);
@@ -396,28 +479,30 @@ class ToDoConnectorFunctionTest {
     var result = connectorUnderTest.execute(context);
 
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .extracting(ConnectorResult::getResult)
-        .isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(TaskDto.class))
-        .returns("1", TaskDto::getId)
-        .returns("Title", TaskDto::getTitle)
-        .returns("Item Body", TaskDto::getBody)
-        .returns(ImportanceDto.HIGH, TaskDto::getImportance)
-        .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus);
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .extracting(ConnectorResult::getResult)
+                      .isNotNull()
+                      .asInstanceOf(InstanceOfAssertFactories.type(TaskDto.class))
+                      .returns("1", TaskDto::getId)
+                      .returns("Title", TaskDto::getTitle)
+                      .returns("Item Body", TaskDto::getBody)
+                      .returns(ImportanceDto.HIGH, TaskDto::getImportance)
+                      .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus);
   }
 
   @Test
   void shouldCreateNewTask() throws Exception {
     // Given
-    var taskOptions = new TaskOptions("Title", "Item Body", "Category 1, Category 2", ImportanceDto.HIGH,
-        TaskStatusDto.COMPLETED, "2023-08-13T14:38:43.104312", "UTC", null, null, null, null, "2024-08-13T14:38:43.104312", "UTC", Boolean.TRUE);
-    var taskRecurrenceOptions = new TaskRecurrenceOptions(TaskRecurrenceOptions.VALUE_RECURRING, RecurrencePatternTypeDto.DAILY,
-            5, 12, "Monday, Thursday", DayOfWeekDto.MONDAY, WeekIndexDto.FIRST, 7,
-            RecurrenceRangeTypeDto.NUMBERED, 10, "2024-08-01",
-            "2024-12-01", "UTC");
+    var taskOptions = new TaskOptions("Title", "Item Body", "Category 1, Category 2",
+        ImportanceDto.HIGH, TaskStatusDto.COMPLETED, "2023-08-13T14:38:43.104312", "UTC", null,
+        null, null, null, "2024-08-13T14:38:43.104312", "UTC", Boolean.TRUE);
+    var taskRecurrenceOptions = new TaskRecurrenceOptions(TaskRecurrenceOptions.VALUE_RECURRING,
+        RecurrencePatternTypeDto.DAILY, 5, 12, "Monday, Thursday", DayOfWeekDto.MONDAY,
+        WeekIndexDto.FIRST, 7, RecurrenceRangeTypeDto.NUMBERED, 10, "2024-08-01", "2024-12-01",
+        "UTC");
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.CREATE_TASK, testUserId, "1", null, null), null, null, taskOptions, null, taskRecurrenceOptions, null, null);
+        new Operation(ToDoOperation.CREATE_TASK, testUserId, "1", null, null), null, null,
+        taskOptions, null, taskRecurrenceOptions, null, null);
 
     // Mock Setup
     final var createTask = new CreateUpdateTaskDto();
@@ -468,52 +553,72 @@ class ToDoConnectorFunctionTest {
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .extracting(ConnectorResult::getResult)
-        .isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(TaskDto.class))
-        .returns("1", TaskDto::getId)
-        .returns("Title", TaskDto::getTitle)
-        .returns("Item Body", TaskDto::getBody)
-        .returns(ImportanceDto.HIGH, TaskDto::getImportance)
-        .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus)
-        .satisfies(taskDto1 -> assertThat(taskDto1.getStartDateTime())
-          .returns("2023-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
-          .returns("UTC", DateTimeTimeZoneDto::getTimeZone)
-        )
-        .satisfies(taskDto2 -> assertThat(taskDto2.getReminderDateTime())
-          .returns("2024-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
-          .returns("UTC", DateTimeTimeZoneDto::getTimeZone)
-        )
-        .extracting(TaskDto::getRecurrence)
-        .satisfies(rec -> assertThat(rec.getPattern())
-                .returns(RecurrencePatternTypeDto.DAILY, RecurrencePatternDto::getType)
-                .returns(12, RecurrencePatternDto::getDayOfMonth)
-                .returns(5, RecurrencePatternDto::getInterval)
-                .returns(DayOfWeekDto.MONDAY, RecurrencePatternDto::getFirstDayOfWeek)
-                .returns(7, RecurrencePatternDto::getMonth)
-                .returns(WeekIndexDto.FIRST, RecurrencePatternDto::getIndex)
-                .satisfies(recurrentPattern -> assertThat(recurrentPattern.getDaysOfWeek())
-                                .asInstanceOf(InstanceOfAssertFactories.ITERABLE)
-                                .hasSize(2)
-                                .containsExactly(DayOfWeekDto.MONDAY, DayOfWeekDto.THURSDAY)))
-        .satisfies(rec -> assertThat(rec.getRange())
-                .returns(RecurrenceRangeTypeDto.NUMBERED, RecurrenceRangeDto::getType)
-                .returns(10, RecurrenceRangeDto::getNumberOfOccurrences)
-                .returns(LocalDate.parse("2024-08-01", DateTimeFormatter.ISO_DATE), RecurrenceRangeDto::getStartDate)
-                .returns(LocalDate.parse("2024-12-01", DateTimeFormatter.ISO_DATE), RecurrenceRangeDto::getEndDate)
-                .returns("UTC", RecurrenceRangeDto::getRecurrenceTimeZone)
-        );
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .extracting(ConnectorResult::getResult)
+                      .isNotNull()
+                      .asInstanceOf(InstanceOfAssertFactories.type(TaskDto.class))
+                      .returns("1", TaskDto::getId)
+                      .returns("Title", TaskDto::getTitle)
+                      .returns("Item Body", TaskDto::getBody)
+                      .returns(ImportanceDto.HIGH, TaskDto::getImportance)
+                      .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus)
+                      .satisfies(taskDto1 -> assertThat(taskDto1.getStartDateTime()).returns(
+                                                                                        "2023-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
+                                                                                    .returns("UTC",
+                                                                                        DateTimeTimeZoneDto::getTimeZone))
+                      .satisfies(taskDto2 -> assertThat(taskDto2.getReminderDateTime()).returns(
+                                                                                           "2024-08-13T14:38:43.104312", DateTimeTimeZoneDto::getDateTime)
+                                                                                       .returns(
+                                                                                           "UTC",
+                                                                                           DateTimeTimeZoneDto::getTimeZone))
+                      .extracting(TaskDto::getRecurrence)
+                      .satisfies(rec -> assertThat(rec.getPattern()).returns(
+                                                                        RecurrencePatternTypeDto.DAILY, RecurrencePatternDto::getType)
+                                                                    .returns(12,
+                                                                        RecurrencePatternDto::getDayOfMonth)
+                                                                    .returns(5,
+                                                                        RecurrencePatternDto::getInterval)
+                                                                    .returns(DayOfWeekDto.MONDAY,
+                                                                        RecurrencePatternDto::getFirstDayOfWeek)
+                                                                    .returns(7,
+                                                                        RecurrencePatternDto::getMonth)
+                                                                    .returns(WeekIndexDto.FIRST,
+                                                                        RecurrencePatternDto::getIndex)
+                                                                    .satisfies(
+                                                                        recurrentPattern -> assertThat(
+                                                                            recurrentPattern.getDaysOfWeek()).asInstanceOf(
+                                                                                                                 InstanceOfAssertFactories.ITERABLE)
+                                                                                                             .hasSize(
+                                                                                                                 2)
+                                                                                                             .containsExactly(
+                                                                                                                 DayOfWeekDto.MONDAY,
+                                                                                                                 DayOfWeekDto.THURSDAY)))
+                      .satisfies(
+                          rec -> assertThat(rec.getRange()).returns(RecurrenceRangeTypeDto.NUMBERED,
+                                                               RecurrenceRangeDto::getType)
+                                                           .returns(10,
+                                                               RecurrenceRangeDto::getNumberOfOccurrences)
+                                                           .returns(LocalDate.parse("2024-08-01",
+                                                                   DateTimeFormatter.ISO_DATE),
+                                                               RecurrenceRangeDto::getStartDate)
+                                                           .returns(LocalDate.parse("2024-12-01",
+                                                                   DateTimeFormatter.ISO_DATE),
+                                                               RecurrenceRangeDto::getEndDate)
+                                                           .returns("UTC",
+                                                               RecurrenceRangeDto::getRecurrenceTimeZone));
   }
 
   @Test
   void shouldUpdateTask() throws Exception {
     // Given
-    var updateTaskOptions = new UpdateTaskOptions("New Title", null, "", null, null, null, null, null, null, null, null, null, null, null);
-    var taskRecurrenceOptions = new TaskRecurrenceOptions(TaskRecurrenceOptions.VALUE_RECURRING, RecurrencePatternTypeDto.WEEKLY,
-            null, null, null, null, null, null, null, null, null, null, null);
+    var updateTaskOptions = new UpdateTaskOptions("New Title", null, "", null, null, null, null,
+        null, null, null, null, null, null, null);
+    var taskRecurrenceOptions = new TaskRecurrenceOptions(TaskRecurrenceOptions.VALUE_RECURRING,
+        RecurrencePatternTypeDto.WEEKLY, null, null, null, null, null, null, null, null, null, null,
+        null);
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.UPDATE_TASK, testUserId, "1", "1", null), null, null, null, updateTaskOptions, taskRecurrenceOptions, null, null);
+        new Operation(ToDoOperation.UPDATE_TASK, testUserId, "1", "1", null), null, null, null,
+        updateTaskOptions, taskRecurrenceOptions, null, null);
 
     // Mock Setup
     final var updateTask = new CreateUpdateTaskDto();
@@ -528,46 +633,50 @@ class ToDoConnectorFunctionTest {
     final var task = createTask(true);
     task.setTitle("New Title");
     task.setCategories(null);
-    task.getRecurrence().getPattern().setType(RecurrencePatternTypeDto.WEEKLY);
-    given(msGraphService.updateTask(testUserId, "1", "1", updateTask)).willReturn(Optional.of(task));
+    task.getRecurrence()
+        .getPattern()
+        .setType(RecurrencePatternTypeDto.WEEKLY);
+    given(msGraphService.updateTask(testUserId, "1", "1", updateTask)).willReturn(
+        Optional.of(task));
 
     // When
     var result = connectorUnderTest.execute(context);
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .extracting(ConnectorResult::getResult)
-        .isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(TaskDto.class))
-        .returns("1", TaskDto::getId)
-        .returns("New Title", TaskDto::getTitle)
-        .returns("Item Body", TaskDto::getBody)
-        .returns(ImportanceDto.HIGH, TaskDto::getImportance)
-        .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus)
-        .extracting(TaskDto::getRecurrence)
-        .extracting(PatternedRecurrenceDto::getPattern)
-        .isNotNull()
-        .returns(RecurrencePatternTypeDto.WEEKLY, RecurrencePatternDto::getType);
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .extracting(ConnectorResult::getResult)
+                      .isNotNull()
+                      .asInstanceOf(InstanceOfAssertFactories.type(TaskDto.class))
+                      .returns("1", TaskDto::getId)
+                      .returns("New Title", TaskDto::getTitle)
+                      .returns("Item Body", TaskDto::getBody)
+                      .returns(ImportanceDto.HIGH, TaskDto::getImportance)
+                      .returns(TaskStatusDto.COMPLETED, TaskDto::getStatus)
+                      .extracting(TaskDto::getRecurrence)
+                      .extracting(PatternedRecurrenceDto::getPattern)
+                      .isNotNull()
+                      .returns(RecurrencePatternTypeDto.WEEKLY, RecurrencePatternDto::getType);
   }
 
   @Test
   void shouldDeleteTask() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.DELETE_TASK, testUserId, "1", "1", null), null, null, null, null, null, null, null);
+        new Operation(ToDoOperation.DELETE_TASK, testUserId, "1", "1", null), null, null, null,
+        null, null, null, null);
 
     // Mock Setup
     doNothing().when(msGraphService)
-        .deleteTask(testUserId, "1", "1");
+               .deleteTask(testUserId, "1", "1");
 
     // When
     var result = connectorUnderTest.execute(context);
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .returns(true, ConnectorResult::isEmpty);
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .returns(true, ConnectorResult::isEmpty);
   }
 
   List<CheckListItemDto> createListOfCheckListItems() {
@@ -601,11 +710,13 @@ class ToDoConnectorFunctionTest {
   void shouldReturnListOfCheckListItems() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.LIST_CHECK_LIST_ITEMS, testUserId, "1", "1", null), null, null, null, null, null, null, null);
+        new Operation(ToDoOperation.LIST_CHECK_LIST_ITEMS, testUserId, "1", "1", null), null, null,
+        null, null, null, null, null);
 
     // Mock Setup
     final var listOfCheckListItems = createListOfCheckListItems();
-    given(msGraphService.getListOfCheckListItems(testUserId, "1", "1")).willReturn(listOfCheckListItems);
+    given(msGraphService.getListOfCheckListItems(testUserId, "1", "1")).willReturn(
+        listOfCheckListItems);
 
     // When
     var result = connectorUnderTest.execute(context);
@@ -613,17 +724,29 @@ class ToDoConnectorFunctionTest {
     // Then
     assertThat(result).isInstanceOfSatisfying(ConnectorResult.class,
         taskList -> assertThat(taskList).extracting(ConnectorResult::getResult)
-            .asInstanceOf(InstanceOfAssertFactories.list(CheckListItemDto.class))
-            .hasSize(3)
-            .satisfiesExactly(item1 -> assertThat(item1).returns("1", CheckListItemDto::getId)
-                    .returns("Check List Item 1", CheckListItemDto::getDisplayName)
-                    .returns(Boolean.FALSE, CheckListItemDto::getChecked),
-                item2 -> assertThat(item2).returns("2", CheckListItemDto::getId)
-                    .returns("Check List Item 2", CheckListItemDto::getDisplayName)
-                    .returns(Boolean.TRUE, CheckListItemDto::getChecked),
-                item3 -> assertThat(item3).returns("3", CheckListItemDto::getId)
-                    .returns("Check List Item 3", CheckListItemDto::getDisplayName)
-                    .returns(Boolean.FALSE, CheckListItemDto::getChecked)));
+                                        .asInstanceOf(
+                                            InstanceOfAssertFactories.list(CheckListItemDto.class))
+                                        .hasSize(3)
+                                        .satisfiesExactly(item1 -> assertThat(item1).returns("1",
+                                                                                        CheckListItemDto::getId)
+                                                                                    .returns(
+                                                                                        "Check List Item 1",
+                                                                                        CheckListItemDto::getDisplayName)
+                                                                                    .returns(
+                                                                                        Boolean.FALSE,
+                                                                                        CheckListItemDto::getChecked),
+                                            item2 -> assertThat(item2).returns("2",
+                                                                          CheckListItemDto::getId)
+                                                                      .returns("Check List Item 2",
+                                                                          CheckListItemDto::getDisplayName)
+                                                                      .returns(Boolean.TRUE,
+                                                                          CheckListItemDto::getChecked),
+                                            item3 -> assertThat(item3).returns("3",
+                                                                          CheckListItemDto::getId)
+                                                                      .returns("Check List Item 3",
+                                                                          CheckListItemDto::getDisplayName)
+                                                                      .returns(Boolean.FALSE,
+                                                                          CheckListItemDto::getChecked)));
 
   }
 
@@ -631,23 +754,25 @@ class ToDoConnectorFunctionTest {
   void shouldReturnCheckListItem() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null,
+        null, null, null, null, null);
 
     // Mock Setup
     final var checkListItem = createCheckListItem();
-    given(msGraphService.getCheckListItem(testUserId, "1", "1", "1")).willReturn(Optional.of(checkListItem));
+    given(msGraphService.getCheckListItem(testUserId, "1", "1", "1")).willReturn(
+        Optional.of(checkListItem));
 
     // When
     var result = connectorUnderTest.execute(context);
 
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .extracting(ConnectorResult::getResult)
-        .isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(CheckListItemDto.class))
-        .returns("1", CheckListItemDto::getId)
-        .returns("Check List Item", CheckListItemDto::getDisplayName)
-        .returns(Boolean.FALSE, CheckListItemDto::getChecked);
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .extracting(ConnectorResult::getResult)
+                      .isNotNull()
+                      .asInstanceOf(InstanceOfAssertFactories.type(CheckListItemDto.class))
+                      .returns("1", CheckListItemDto::getId)
+                      .returns("Check List Item", CheckListItemDto::getDisplayName)
+                      .returns(Boolean.FALSE, CheckListItemDto::getChecked);
   }
 
   @Test
@@ -655,8 +780,8 @@ class ToDoConnectorFunctionTest {
     // Given
     var checkListItemOptions = new CheckListItemOptions("Display Name", Boolean.FALSE);
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.CREATE_CHECK_LIST_ITEM, testUserId, "1", "1", null), null, null, null,
-            null, null, checkListItemOptions, null);
+        new Operation(ToDoOperation.CREATE_CHECK_LIST_ITEM, testUserId, "1", "1", null), null, null,
+        null, null, null, checkListItemOptions, null);
 
     // Mock Setup
     final var createCheckListItem = new CreateUpdateCheckListItemDto();
@@ -671,69 +796,72 @@ class ToDoConnectorFunctionTest {
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .extracting(ConnectorResult::getResult)
-        .isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(CheckListItemDto.class))
-        .returns("1", CheckListItemDto::getId)
-        .returns("Check List Item", CheckListItemDto::getDisplayName)
-        .returns(Boolean.FALSE, CheckListItemDto::getChecked);
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .extracting(ConnectorResult::getResult)
+                      .isNotNull()
+                      .asInstanceOf(InstanceOfAssertFactories.type(CheckListItemDto.class))
+                      .returns("1", CheckListItemDto::getId)
+                      .returns("Check List Item", CheckListItemDto::getDisplayName)
+                      .returns(Boolean.FALSE, CheckListItemDto::getChecked);
   }
 
   @Test
   void shouldUpdateCheckListItem() throws Exception {
     // Given
-    var updateCheckListItemOptions = new UpdateCheckListItemOptions("Updated Check List Item", null);
+    var updateCheckListItemOptions = new UpdateCheckListItemOptions("Updated Check List Item",
+        null);
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.UPDATE_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null, null,
-            null, null, null, updateCheckListItemOptions);
+        new Operation(ToDoOperation.UPDATE_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null,
+        null, null, null, null, updateCheckListItemOptions);
 
     // Mock Setup
     final var updateCheckListItem = new CreateUpdateCheckListItemDto();
     updateCheckListItem.setDisplayName("Updated Check List Item");
     final var checkListItem = createCheckListItem();
     checkListItem.setDisplayName("Updated Check List Item");
-    given(msGraphService.updateCheckListItem(testUserId, "1", "1", "1", updateCheckListItem)).willReturn(
-        Optional.of(checkListItem));
+    given(msGraphService.updateCheckListItem(testUserId, "1", "1", "1",
+        updateCheckListItem)).willReturn(Optional.of(checkListItem));
 
     // When
     var result = connectorUnderTest.execute(context);
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .extracting(ConnectorResult::getResult)
-        .isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(CheckListItemDto.class))
-        .returns("1", CheckListItemDto::getId)
-        .returns("Updated Check List Item", CheckListItemDto::getDisplayName)
-        .returns(Boolean.FALSE, CheckListItemDto::getChecked);
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .extracting(ConnectorResult::getResult)
+                      .isNotNull()
+                      .asInstanceOf(InstanceOfAssertFactories.type(CheckListItemDto.class))
+                      .returns("1", CheckListItemDto::getId)
+                      .returns("Updated Check List Item", CheckListItemDto::getDisplayName)
+                      .returns(Boolean.FALSE, CheckListItemDto::getChecked);
   }
 
   @Test
   void shouldDeleteCheckListItem() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.DELETE_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null, null, null, null, null, null);
+        new Operation(ToDoOperation.DELETE_CHECK_LIST_ITEM, testUserId, "1", "1", "1"), null, null,
+        null, null, null, null, null);
 
     // Mock Setup
     doNothing().when(msGraphService)
-        .deleteCheckListItem(testUserId, "1", "1", "1");
+               .deleteCheckListItem(testUserId, "1", "1", "1");
 
     // When
     var result = connectorUnderTest.execute(context);
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .returns(true, ConnectorResult::isEmpty);
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .returns(true, ConnectorResult::isEmpty);
   }
 
   @Test
   void shouldReturnErrorResponseOnMsGraphException() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "999", null, null), null, null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "999", null, null), null, null, null,
+        null, null, null, null);
 
     // Mock Setup
     var msGraphException = new MsGraphException("Task List with ID 999 not found", "404");
@@ -744,19 +872,20 @@ class ToDoConnectorFunctionTest {
 
     // then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .returns(null, ConnectorResult::getResult)
-        .returns(true, ConnectorResult::isEmpty)
-        .extracting(ConnectorResult::getError)
-        .returns("Task List with ID 999 not found", ConnectorError::getErrorMessage)
-        .returns("404", ConnectorError::getErrorCode);
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .returns(null, ConnectorResult::getResult)
+                      .returns(true, ConnectorResult::isEmpty)
+                      .extracting(ConnectorResult::getError)
+                      .returns("Task List with ID 999 not found", ConnectorError::getErrorMessage)
+                      .returns("404", ConnectorError::getErrorCode);
   }
 
   @Test
   void shouldReturnErrorResponseOnOtherException() throws Exception {
     // Given
     var context = createDefaultOutboundConnectorContext(
-        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "999", null, null), null, null, null, null, null, null, null);
+        new Operation(ToDoOperation.GET_TASK_LIST, testUserId, "999", null, null), null, null, null,
+        null, null, null, null);
 
     // Mock Setup
     var runtimeException = new RuntimeException("Some other exception");
@@ -767,11 +896,11 @@ class ToDoConnectorFunctionTest {
 
     // then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
-        .returns(null, ConnectorResult::getResult)
-        .returns(true, ConnectorResult::isEmpty)
-        .extracting(ConnectorResult::getError)
-        .returns("Some other exception", ConnectorError::getErrorMessage)
-        .returns(null, ConnectorError::getErrorCode);
+                      .asInstanceOf(InstanceOfAssertFactories.type(ConnectorResult.class))
+                      .returns(null, ConnectorResult::getResult)
+                      .returns(true, ConnectorResult::isEmpty)
+                      .extracting(ConnectorResult::getError)
+                      .returns("Some other exception", ConnectorError::getErrorMessage)
+                      .returns(null, ConnectorError::getErrorCode);
   }
 }

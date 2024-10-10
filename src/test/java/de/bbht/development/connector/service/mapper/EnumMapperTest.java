@@ -1,19 +1,30 @@
 package de.bbht.development.connector.service.mapper;
 
-import com.microsoft.graph.models.*;
-import de.bbht.development.connector.service.dto.enums.*;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.microsoft.graph.models.DayOfWeek;
+import com.microsoft.graph.models.Importance;
+import com.microsoft.graph.models.RecurrencePatternType;
+import com.microsoft.graph.models.RecurrenceRangeType;
+import com.microsoft.graph.models.TaskStatus;
+import com.microsoft.graph.models.WeekIndex;
+import com.microsoft.graph.models.WellknownListName;
+import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
+import de.bbht.development.connector.service.dto.enums.ImportanceDto;
+import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
+import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
+import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
+import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
+import de.bbht.development.connector.service.dto.enums.WellknownListNameDto;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class EnumMapperTest {
 
@@ -139,7 +150,8 @@ class EnumMapperTest {
 
   @ParameterizedTest
   @MethodSource("provideRecurrencePatternTypeCorrectly")
-  void shouldMapRecurrencePatternTypeCorrectly(RecurrencePatternType recurrencePatternType, RecurrencePatternTypeDto expected) {
+  void shouldMapRecurrencePatternTypeCorrectly(RecurrencePatternType recurrencePatternType,
+      RecurrencePatternTypeDto expected) {
     // given: from method parameter
 
     // when
@@ -152,16 +164,20 @@ class EnumMapperTest {
   private static Stream<Arguments> provideRecurrencePatternTypeCorrectly() {
     return Stream.of(Arguments.of(RecurrencePatternType.Daily, RecurrencePatternTypeDto.DAILY),
         Arguments.of(RecurrencePatternType.Weekly, RecurrencePatternTypeDto.WEEKLY),
-        Arguments.of(RecurrencePatternType.AbsoluteMonthly, RecurrencePatternTypeDto.ABSOLUTE_MONTHLY),
-        Arguments.of(RecurrencePatternType.AbsoluteYearly, RecurrencePatternTypeDto.ABSOLUTE_YEARLY),
-        Arguments.of(RecurrencePatternType.RelativeMonthly, RecurrencePatternTypeDto.RELATIVE_MONTHLY),
-        Arguments.of(RecurrencePatternType.RelativeYearly, RecurrencePatternTypeDto.RELATIVE_YEARLY),
-        Arguments.of(null, null));
+        Arguments.of(RecurrencePatternType.AbsoluteMonthly,
+            RecurrencePatternTypeDto.ABSOLUTE_MONTHLY),
+        Arguments.of(RecurrencePatternType.AbsoluteYearly,
+            RecurrencePatternTypeDto.ABSOLUTE_YEARLY),
+        Arguments.of(RecurrencePatternType.RelativeMonthly,
+            RecurrencePatternTypeDto.RELATIVE_MONTHLY),
+        Arguments.of(RecurrencePatternType.RelativeYearly,
+            RecurrencePatternTypeDto.RELATIVE_YEARLY), Arguments.of(null, null));
   }
 
   @ParameterizedTest
   @MethodSource("provideRecurrencePatternTypeDtoCorrectly")
-  void shouldMapRecurrencePatternTypeDtoCorrectly(RecurrencePatternTypeDto recurrencePatternTypeDto, RecurrencePatternType expected) {
+  void shouldMapRecurrencePatternTypeDtoCorrectly(RecurrencePatternTypeDto recurrencePatternTypeDto,
+      RecurrencePatternType expected) {
     // given: from method parameter
 
     // when
@@ -174,16 +190,20 @@ class EnumMapperTest {
   private static Stream<Arguments> provideRecurrencePatternTypeDtoCorrectly() {
     return Stream.of(Arguments.of(RecurrencePatternTypeDto.DAILY, RecurrencePatternType.Daily),
         Arguments.of(RecurrencePatternTypeDto.WEEKLY, RecurrencePatternType.Weekly),
-        Arguments.of(RecurrencePatternTypeDto.ABSOLUTE_MONTHLY, RecurrencePatternType.AbsoluteMonthly),
-        Arguments.of(RecurrencePatternTypeDto.ABSOLUTE_YEARLY, RecurrencePatternType.AbsoluteYearly),
-        Arguments.of(RecurrencePatternTypeDto.RELATIVE_MONTHLY, RecurrencePatternType.RelativeMonthly),
-        Arguments.of(RecurrencePatternTypeDto.RELATIVE_YEARLY, RecurrencePatternType.RelativeYearly),
-        Arguments.of(null, null));
+        Arguments.of(RecurrencePatternTypeDto.ABSOLUTE_MONTHLY,
+            RecurrencePatternType.AbsoluteMonthly),
+        Arguments.of(RecurrencePatternTypeDto.ABSOLUTE_YEARLY,
+            RecurrencePatternType.AbsoluteYearly),
+        Arguments.of(RecurrencePatternTypeDto.RELATIVE_MONTHLY,
+            RecurrencePatternType.RelativeMonthly),
+        Arguments.of(RecurrencePatternTypeDto.RELATIVE_YEARLY,
+            RecurrencePatternType.RelativeYearly), Arguments.of(null, null));
   }
 
   @ParameterizedTest
   @MethodSource("provideRecurrenceRangeTypeCorrectly")
-  void shouldMapRecurrenceRangeTypeCorrectly(RecurrenceRangeType recurrenceRangeType, RecurrenceRangeTypeDto expected) {
+  void shouldMapRecurrenceRangeTypeCorrectly(RecurrenceRangeType recurrenceRangeType,
+      RecurrenceRangeTypeDto expected) {
     // given: from method parameter
 
     // when
@@ -202,7 +222,8 @@ class EnumMapperTest {
 
   @ParameterizedTest
   @MethodSource("provideRecurrenceRangeTypeDtoCorrectly")
-  void shouldMapRecurrenceRangeTypeDtoCorrectly(RecurrenceRangeTypeDto recurrenceRangeTypeDto, RecurrenceRangeType expected) {
+  void shouldMapRecurrenceRangeTypeDtoCorrectly(RecurrenceRangeTypeDto recurrenceRangeTypeDto,
+      RecurrenceRangeType expected) {
     // given: from method parameter
 
     // when
@@ -238,8 +259,7 @@ class EnumMapperTest {
         Arguments.of(DayOfWeek.Thursday, DayOfWeekDto.THURSDAY),
         Arguments.of(DayOfWeek.Friday, DayOfWeekDto.FRIDAY),
         Arguments.of(DayOfWeek.Saturday, DayOfWeekDto.SATURDAY),
-        Arguments.of(DayOfWeek.Sunday, DayOfWeekDto.SUNDAY),
-        Arguments.of(null, null));
+        Arguments.of(DayOfWeek.Sunday, DayOfWeekDto.SUNDAY), Arguments.of(null, null));
   }
 
   @ParameterizedTest
@@ -261,8 +281,7 @@ class EnumMapperTest {
         Arguments.of(DayOfWeekDto.THURSDAY, DayOfWeek.Thursday),
         Arguments.of(DayOfWeekDto.FRIDAY, DayOfWeek.Friday),
         Arguments.of(DayOfWeekDto.SATURDAY, DayOfWeek.Saturday),
-        Arguments.of(DayOfWeekDto.SUNDAY, DayOfWeek.Sunday),
-        Arguments.of(null, null));
+        Arguments.of(DayOfWeekDto.SUNDAY, DayOfWeek.Sunday), Arguments.of(null, null));
   }
 
   @ParameterizedTest
@@ -282,8 +301,7 @@ class EnumMapperTest {
         Arguments.of(WeekIndex.Second, WeekIndexDto.SECOND),
         Arguments.of(WeekIndex.Third, WeekIndexDto.THIRD),
         Arguments.of(WeekIndex.Fourth, WeekIndexDto.FOURTH),
-        Arguments.of(WeekIndex.Last, WeekIndexDto.LAST),
-        Arguments.of(null, null));
+        Arguments.of(WeekIndex.Last, WeekIndexDto.LAST), Arguments.of(null, null));
   }
 
   @ParameterizedTest
@@ -303,22 +321,21 @@ class EnumMapperTest {
         Arguments.of(WeekIndexDto.SECOND, WeekIndex.Second),
         Arguments.of(WeekIndexDto.THIRD, WeekIndex.Third),
         Arguments.of(WeekIndexDto.FOURTH, WeekIndex.Fourth),
-        Arguments.of(WeekIndexDto.LAST, WeekIndex.Last),
-        Arguments.of(null, null));
+        Arguments.of(WeekIndexDto.LAST, WeekIndex.Last), Arguments.of(null, null));
   }
 
   @Test
   void shouldMapListOfDayOfWeekCorrectly() {
     // given
-    var listOfDayOfWeeks = List.of(DayOfWeek.Sunday, DayOfWeek.Friday, DayOfWeek.Wednesday, DayOfWeek.Monday,
-        DayOfWeek.Tuesday, DayOfWeek.Thursday, DayOfWeek.Saturday);
+    var listOfDayOfWeeks = List.of(DayOfWeek.Sunday, DayOfWeek.Friday, DayOfWeek.Wednesday,
+        DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Thursday, DayOfWeek.Saturday);
 
     // when
     var result = EnumMapper.mapDaysOfWeek(listOfDayOfWeeks);
 
     // then
-    var expected = Set.of(DayOfWeekDto.SUNDAY, DayOfWeekDto.FRIDAY, DayOfWeekDto.WEDNESDAY, DayOfWeekDto.MONDAY,
-        DayOfWeekDto.TUESDAY, DayOfWeekDto.THURSDAY, DayOfWeekDto.SATURDAY);
+    var expected = Set.of(DayOfWeekDto.SUNDAY, DayOfWeekDto.FRIDAY, DayOfWeekDto.WEDNESDAY,
+        DayOfWeekDto.MONDAY, DayOfWeekDto.TUESDAY, DayOfWeekDto.THURSDAY, DayOfWeekDto.SATURDAY);
     assertEquals(expected, result);
   }
 
@@ -347,8 +364,8 @@ class EnumMapperTest {
     var result = EnumMapper.mapDaysOfWeekDto(setOfDayOfWeekDtos);
 
     // then
-    var expected = List.of(DayOfWeek.Sunday, DayOfWeek.Friday, DayOfWeek.Wednesday, DayOfWeek.Monday,
-        DayOfWeek.Tuesday, DayOfWeek.Thursday, DayOfWeek.Saturday);
+    var expected = List.of(DayOfWeek.Sunday, DayOfWeek.Friday, DayOfWeek.Wednesday,
+        DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Thursday, DayOfWeek.Saturday);
     assertEquals(expected, result);
   }
 

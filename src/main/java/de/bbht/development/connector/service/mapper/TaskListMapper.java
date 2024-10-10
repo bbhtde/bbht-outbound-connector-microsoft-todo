@@ -3,7 +3,6 @@ package de.bbht.development.connector.service.mapper;
 import com.microsoft.graph.models.TodoTaskList;
 import de.bbht.development.connector.service.dto.tasklist.CreateUpdateTaskListDto;
 import de.bbht.development.connector.service.dto.tasklist.TaskListDto;
-
 import java.util.List;
 
 public final class TaskListMapper {
@@ -14,8 +13,8 @@ public final class TaskListMapper {
 
   public static List<TaskListDto> mapTaskLists(List<TodoTaskList> listOfTaskLists) {
     return listOfTaskLists.stream()
-        .map(TaskListMapper::mapTaskList)
-        .toList();
+                          .map(TaskListMapper::mapTaskList)
+                          .toList();
   }
 
   public static TaskListDto mapTaskList(TodoTaskList todoTaskList) {

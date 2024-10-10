@@ -2,9 +2,7 @@ package de.bbht.development.connector.service.dto;
 
 import java.util.Objects;
 
-public record GraphAuthenticationDto(String tenantId,
-                                     String clientId,
-                                     String clientSecret) {
+public record GraphAuthenticationDto(String tenantId, String clientId, String clientSecret) {
 
   private static final String NULL = "null";
   private static final String SECRET = "<secret>";
@@ -17,8 +15,8 @@ public record GraphAuthenticationDto(String tenantId,
     if (!(o instanceof GraphAuthenticationDto that)) {
       return false;
     }
-    return Objects.equals(tenantId, that.tenantId) && Objects.equals(clientId, that.clientId) && Objects.equals(
-        clientSecret, that.clientSecret);
+    return Objects.equals(tenantId, that.tenantId) && Objects.equals(clientId, that.clientId)
+        && Objects.equals(clientSecret, that.clientSecret);
   }
 
   @Override

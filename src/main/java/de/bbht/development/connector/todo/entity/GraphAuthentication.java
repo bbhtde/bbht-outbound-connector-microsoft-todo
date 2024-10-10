@@ -22,4 +22,5 @@ public record GraphAuthentication(@NotEmpty @TemplateProperty(group = "authentic
                                                               defaultValue = "{{secrets.CLIENT_SECRET}}"
                                                               // Mark as secret
                                                               ) String clientSecret) {
+
 }

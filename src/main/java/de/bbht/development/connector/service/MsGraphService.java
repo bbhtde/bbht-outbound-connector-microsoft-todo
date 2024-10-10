@@ -1,6 +1,11 @@
 package de.bbht.development.connector.service;
 
-import com.microsoft.graph.models.*;
+import com.microsoft.graph.models.ChecklistItem;
+import com.microsoft.graph.models.ChecklistItemCollectionResponse;
+import com.microsoft.graph.models.TodoTask;
+import com.microsoft.graph.models.TodoTaskCollectionResponse;
+import com.microsoft.graph.models.TodoTaskList;
+import com.microsoft.graph.models.TodoTaskListCollectionResponse;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import com.microsoft.kiota.ApiException;
 import de.bbht.development.connector.service.dto.checklistitem.CheckListItemDto;
@@ -12,7 +17,6 @@ import de.bbht.development.connector.service.dto.tasklist.TaskListDto;
 import de.bbht.development.connector.service.mapper.CheckListItemMapper;
 import de.bbht.development.connector.service.mapper.TaskListMapper;
 import de.bbht.development.connector.service.mapper.TaskMapper;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,10 +33,10 @@ public class MsGraphService {
   public List<TaskListDto> getListOfTaskLists(final String userId) {
     return handleException(() -> {
       TodoTaskListCollectionResponse response = graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .get();
+                                                                  .byUserId(userId)
+                                                                  .todo()
+                                                                  .lists()
+                                                                  .get();
       final List<TodoTaskList> listOfTaskLists;
       if (response != null) {
         listOfTaskLists = response.getValue();
@@ -57,11 +61,11 @@ public class MsGraphService {
   public Optional<TaskListDto> getTaskListById(String userId, String taskListId) {
     return handleException(() -> {
       final TodoTaskList taskList = graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .byTodoTaskListId(taskListId)
-          .get();
+                                                      .byUserId(userId)
+                                                      .todo()
+                                                      .lists()
+                                                      .byTodoTaskListId(taskListId)
+                                                      .get();
       return Optional.ofNullable(TaskListMapper.mapTaskList(taskList));
     });
   }
@@ -69,28 +73,31 @@ public class MsGraphService {
   public Optional<TaskListDto> getTaskListByDisplayName(String userId, String displayName) {
     return handleException(() -> {
       TodoTaskList taskList = graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .get()
-          .getValue()
-          .stream()
-          .filter(ftl -> displayName.equals(ftl.getDisplayName()))
-          .findFirst()
-          .orElse(null);
+                                                .byUserId(userId)
+                                                .todo()
+                                                .lists()
+                                                .get()
+                                                .getValue()
+                                                .stream()
+                                                .filter(
+                                                    ftl -> displayName.equals(ftl.getDisplayName()))
+                                                .findFirst()
+                                                .orElse(null);
       return Optional.ofNullable(TaskListMapper.mapTaskList(taskList));
     });
   }
 
-  public Optional<TaskListDto> createTaskList(String userId, CreateUpdateTaskListDto createTaskListDto) {
+  public Optional<TaskListDto> createTaskList(String userId,
+      CreateUpdateTaskListDto createTaskListDto) {
     return handleException(() -> {
-      final TodoTaskList createTaskList = TaskListMapper.mapCreateUpdateTaskListDto(createTaskListDto);
+      final TodoTaskList createTaskList = TaskListMapper.mapCreateUpdateTaskListDto(
+          createTaskListDto);
 
       final TodoTaskList createdTaskList = graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .post(createTaskList);
+                                                             .byUserId(userId)
+                                                             .todo()
+                                                             .lists()
+                                                             .post(createTaskList);
       return Optional.ofNullable(TaskListMapper.mapTaskList(createdTaskList));
     });
   }
@@ -98,14 +105,15 @@ public class MsGraphService {
   public Optional<TaskListDto> updateTaskList(String userId, String taskListId,
       CreateUpdateTaskListDto updateTaskListDto) {
     return handleException(() -> {
-      final TodoTaskList updateTaskList = TaskListMapper.mapCreateUpdateTaskListDto(updateTaskListDto);
+      final TodoTaskList updateTaskList = TaskListMapper.mapCreateUpdateTaskListDto(
+          updateTaskListDto);
 
       final TodoTaskList updatedTaskList = graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .byTodoTaskListId(taskListId)
-          .patch(updateTaskList);
+                                                             .byUserId(userId)
+                                                             .todo()
+                                                             .lists()
+                                                             .byTodoTaskListId(taskListId)
+                                                             .patch(updateTaskList);
       return Optional.ofNullable(TaskListMapper.mapTaskList(updatedTaskList));
     });
   }
@@ -113,11 +121,11 @@ public class MsGraphService {
   public Void deleteTaskList(String userId, String taskListId) {
     return handleException(() -> {
       graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .byTodoTaskListId(taskListId)
-          .delete();
+                        .byUserId(userId)
+                        .todo()
+                        .lists()
+                        .byTodoTaskListId(taskListId)
+                        .delete();
       return null;
     });
   }
@@ -125,12 +133,12 @@ public class MsGraphService {
   public List<TaskDto> getListOfTasks(String userId, String taskListId) {
     return handleException(() -> {
       TodoTaskCollectionResponse response = graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .byTodoTaskListId(taskListId)
-          .tasks()
-          .get();
+                                                              .byUserId(userId)
+                                                              .todo()
+                                                              .lists()
+                                                              .byTodoTaskListId(taskListId)
+                                                              .tasks()
+                                                              .get();
       final List<TodoTask> listOfTasks;
       if (response != null) {
         listOfTasks = response.getValue();
@@ -144,28 +152,29 @@ public class MsGraphService {
   public Optional<TaskDto> getTask(String userId, String taskListId, String taskId) {
     return handleException(() -> {
       final TodoTask task = graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .byTodoTaskListId(taskListId)
-          .tasks()
-          .byTodoTaskId(taskId)
-          .get();
+                                              .byUserId(userId)
+                                              .todo()
+                                              .lists()
+                                              .byTodoTaskListId(taskListId)
+                                              .tasks()
+                                              .byTodoTaskId(taskId)
+                                              .get();
       return Optional.ofNullable(TaskMapper.mapTask(task));
     });
   }
 
-  public Optional<TaskDto> createTask(String userId, String taskListId, CreateUpdateTaskDto createTaskDto) {
+  public Optional<TaskDto> createTask(String userId, String taskListId,
+      CreateUpdateTaskDto createTaskDto) {
     return handleException(() -> {
       final TodoTask createTask = TaskMapper.mapCreateUpdateTaskDto(createTaskDto);
 
       final TodoTask createdTask = graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .byTodoTaskListId(taskListId)
-          .tasks()
-          .post(createTask);
+                                                     .byUserId(userId)
+                                                     .todo()
+                                                     .lists()
+                                                     .byTodoTaskListId(taskListId)
+                                                     .tasks()
+                                                     .post(createTask);
       return Optional.ofNullable(TaskMapper.mapTask(createdTask));
     });
   }
@@ -176,13 +185,13 @@ public class MsGraphService {
       final TodoTask updateTask = TaskMapper.mapCreateUpdateTaskDto(updateTaskDto);
 
       final TodoTask updatedTask = graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .byTodoTaskListId(taskListId)
-          .tasks()
-          .byTodoTaskId(taskId)
-          .patch(updateTask);
+                                                     .byUserId(userId)
+                                                     .todo()
+                                                     .lists()
+                                                     .byTodoTaskListId(taskListId)
+                                                     .tasks()
+                                                     .byTodoTaskId(taskId)
+                                                     .patch(updateTask);
       return Optional.ofNullable(TaskMapper.mapTask(updatedTask));
     });
   }
@@ -190,28 +199,29 @@ public class MsGraphService {
   public Void deleteTask(String userId, String taskListId, String taskId) {
     return handleException(() -> {
       graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .byTodoTaskListId(taskListId)
-          .tasks()
-          .byTodoTaskId(taskId)
-          .delete();
+                        .byUserId(userId)
+                        .todo()
+                        .lists()
+                        .byTodoTaskListId(taskListId)
+                        .tasks()
+                        .byTodoTaskId(taskId)
+                        .delete();
       return null;
     });
   }
 
-  public List<CheckListItemDto> getListOfCheckListItems(String userId, String taskListId, String taskId) {
+  public List<CheckListItemDto> getListOfCheckListItems(String userId, String taskListId,
+      String taskId) {
     return handleException(() -> {
       ChecklistItemCollectionResponse response = graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .byTodoTaskListId(taskListId)
-          .tasks()
-          .byTodoTaskId(taskId)
-          .checklistItems()
-          .get();
+                                                                   .byUserId(userId)
+                                                                   .todo()
+                                                                   .lists()
+                                                                   .byTodoTaskListId(taskListId)
+                                                                   .tasks()
+                                                                   .byTodoTaskId(taskId)
+                                                                   .checklistItems()
+                                                                   .get();
       final List<ChecklistItem> listOfCheckListItems;
       if (response != null) {
         listOfCheckListItems = response.getValue();
@@ -222,74 +232,76 @@ public class MsGraphService {
     });
   }
 
-  public Optional<CheckListItemDto> getCheckListItem(String userId, String taskListId, String taskId,
-      String checkListItemId) {
+  public Optional<CheckListItemDto> getCheckListItem(String userId, String taskListId,
+      String taskId, String checkListItemId) {
     return handleException(() -> {
       final ChecklistItem checkListItem = graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .byTodoTaskListId(taskListId)
-          .tasks()
-          .byTodoTaskId(taskId)
-          .checklistItems()
-          .byChecklistItemId(checkListItemId)
-          .get();
+                                                            .byUserId(userId)
+                                                            .todo()
+                                                            .lists()
+                                                            .byTodoTaskListId(taskListId)
+                                                            .tasks()
+                                                            .byTodoTaskId(taskId)
+                                                            .checklistItems()
+                                                            .byChecklistItemId(checkListItemId)
+                                                            .get();
       return Optional.ofNullable(CheckListItemMapper.mapCheckListItem(checkListItem));
     });
   }
 
-  public Optional<CheckListItemDto> createCheckListItem(String userId, String taskListId, String taskId,
-      CreateUpdateCheckListItemDto createCheckListItemDto) {
+  public Optional<CheckListItemDto> createCheckListItem(String userId, String taskListId,
+      String taskId, CreateUpdateCheckListItemDto createCheckListItemDto) {
     return handleException(() -> {
       final ChecklistItem createCheckListItem = CheckListItemMapper.mapCreateUpdateCheckListItemDto(
           createCheckListItemDto);
 
       final ChecklistItem createdCheckListItem = graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .byTodoTaskListId(taskListId)
-          .tasks()
-          .byTodoTaskId(taskId)
-          .checklistItems()
-          .post(createCheckListItem);
+                                                                   .byUserId(userId)
+                                                                   .todo()
+                                                                   .lists()
+                                                                   .byTodoTaskListId(taskListId)
+                                                                   .tasks()
+                                                                   .byTodoTaskId(taskId)
+                                                                   .checklistItems()
+                                                                   .post(createCheckListItem);
       return Optional.ofNullable(CheckListItemMapper.mapCheckListItem(createdCheckListItem));
     });
   }
 
-  public Optional<CheckListItemDto> updateCheckListItem(String userId, String taskListId, String taskId,
-      String checkListItemId, CreateUpdateCheckListItemDto updateCheckListItemDto) {
+  public Optional<CheckListItemDto> updateCheckListItem(String userId, String taskListId,
+      String taskId, String checkListItemId, CreateUpdateCheckListItemDto updateCheckListItemDto) {
     return handleException(() -> {
       final ChecklistItem updateCheckListItem = CheckListItemMapper.mapCreateUpdateCheckListItemDto(
           updateCheckListItemDto);
 
       final ChecklistItem updatedCheckListItem = graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .byTodoTaskListId(taskListId)
-          .tasks()
-          .byTodoTaskId(taskId)
-          .checklistItems()
-          .byChecklistItemId(checkListItemId)
-          .patch(updateCheckListItem);
+                                                                   .byUserId(userId)
+                                                                   .todo()
+                                                                   .lists()
+                                                                   .byTodoTaskListId(taskListId)
+                                                                   .tasks()
+                                                                   .byTodoTaskId(taskId)
+                                                                   .checklistItems()
+                                                                   .byChecklistItemId(
+                                                                       checkListItemId)
+                                                                   .patch(updateCheckListItem);
       return Optional.ofNullable(CheckListItemMapper.mapCheckListItem(updatedCheckListItem));
     });
   }
 
-  public Void deleteCheckListItem(String userId, String taskListId, String taskId, String checkListItemId) {
+  public Void deleteCheckListItem(String userId, String taskListId, String taskId,
+      String checkListItemId) {
     return handleException(() -> {
       graphServiceClient.users()
-          .byUserId(userId)
-          .todo()
-          .lists()
-          .byTodoTaskListId(taskListId)
-          .tasks()
-          .byTodoTaskId(taskId)
-          .checklistItems()
-          .byChecklistItemId(checkListItemId)
-          .delete();
+                        .byUserId(userId)
+                        .todo()
+                        .lists()
+                        .byTodoTaskListId(taskListId)
+                        .tasks()
+                        .byTodoTaskId(taskId)
+                        .checklistItems()
+                        .byChecklistItemId(checkListItemId)
+                        .delete();
       return null;
     });
   }

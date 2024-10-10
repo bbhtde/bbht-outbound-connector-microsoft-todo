@@ -1,5 +1,8 @@
 package de.bbht.development.connector.service.mapper;
 
+import static org.assertj.core.api.Assertions.as;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.microsoft.graph.models.DayOfWeek;
 import com.microsoft.graph.models.RecurrencePattern;
 import com.microsoft.graph.models.RecurrencePatternType;
@@ -8,14 +11,10 @@ import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
 import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
 import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
 import de.bbht.development.connector.service.dto.task.RecurrencePatternDto;
-import org.assertj.core.api.InstanceOfAssertFactories;
-import org.junit.jupiter.api.Test;
-
 import java.util.LinkedHashSet;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.as;
-import static org.assertj.core.api.Assertions.assertThat;
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.junit.jupiter.api.Test;
 
 public class RecurrencePatternMapperTest {
 
@@ -36,20 +35,21 @@ public class RecurrencePatternMapperTest {
 
     // then
     assertThat(result).returns(20, RecurrencePatternDto::getDayOfMonth)
-        .returns(DayOfWeekDto.THURSDAY, RecurrencePatternDto::getFirstDayOfWeek)
-        .returns(WeekIndexDto.SECOND, RecurrencePatternDto::getIndex)
-        .returns(3, RecurrencePatternDto::getInterval)
-        .returns(3, RecurrencePatternDto::getMonth)
-        .returns(RecurrencePatternTypeDto.DAILY, RecurrencePatternDto::getType)
-            .extracting(RecurrencePatternDto::getDaysOfWeek, as(InstanceOfAssertFactories.ITERABLE))
-            .hasSize(2)
-            .containsExactly(DayOfWeekDto.TUESDAY, DayOfWeekDto.FRIDAY);
-//        .extracting(RecurrencePatternDto::getDaysOfWeek,  as(InstanceOfAssertFactories.LIST))
-//        .hasSize(2)
-//            .containsExactly(DayOfWeekDto.TUESDAY, DayOfWeekDto.FRIDAY);
-//        .satisfiesExactly(dow1 -> assertThat(dow1).isNotNull()
-//            .isEqualTo(DayOfWeekDto.TUESDAY), dow2 -> assertThat(dow2).isNotNull()
-//            .isEqualTo(DayOfWeekDto.FRIDAY));
+                      .returns(DayOfWeekDto.THURSDAY, RecurrencePatternDto::getFirstDayOfWeek)
+                      .returns(WeekIndexDto.SECOND, RecurrencePatternDto::getIndex)
+                      .returns(3, RecurrencePatternDto::getInterval)
+                      .returns(3, RecurrencePatternDto::getMonth)
+                      .returns(RecurrencePatternTypeDto.DAILY, RecurrencePatternDto::getType)
+                      .extracting(RecurrencePatternDto::getDaysOfWeek,
+                          as(InstanceOfAssertFactories.ITERABLE))
+                      .hasSize(2)
+                      .containsExactly(DayOfWeekDto.TUESDAY, DayOfWeekDto.FRIDAY);
+    //        .extracting(RecurrencePatternDto::getDaysOfWeek,  as(InstanceOfAssertFactories.LIST))
+    //        .hasSize(2)
+    //            .containsExactly(DayOfWeekDto.TUESDAY, DayOfWeekDto.FRIDAY);
+    //        .satisfiesExactly(dow1 -> assertThat(dow1).isNotNull()
+    //            .isEqualTo(DayOfWeekDto.TUESDAY), dow2 -> assertThat(dow2).isNotNull()
+    //            .isEqualTo(DayOfWeekDto.FRIDAY));
   }
 
   @Test
@@ -58,7 +58,7 @@ public class RecurrencePatternMapperTest {
     var nullRecurrencePattern = (RecurrencePattern) null;
 
     // when
-    var result= RecurrencePatternMapper.mapRecurrencePattern(nullRecurrencePattern);
+    var result = RecurrencePatternMapper.mapRecurrencePattern(nullRecurrencePattern);
 
     // then
     assertThat(result).isNull();
@@ -84,14 +84,15 @@ public class RecurrencePatternMapperTest {
 
     // then
     assertThat(result).returns(21, RecurrencePattern::getDayOfMonth)
-        .returns(DayOfWeek.Wednesday, RecurrencePattern::getFirstDayOfWeek)
-        .returns(WeekIndex.Third, RecurrencePattern::getIndex)
-        .returns(1, RecurrencePattern::getInterval)
-        .returns(5, RecurrencePattern::getMonth)
-        .returns(RecurrencePatternType.Weekly, RecurrencePattern::getType)
-        .extracting(RecurrencePattern::getDaysOfWeek, as(InstanceOfAssertFactories.LIST))
-        .hasSize(2)
-        .containsExactly(DayOfWeek.Monday, DayOfWeek.Thursday);
+                      .returns(DayOfWeek.Wednesday, RecurrencePattern::getFirstDayOfWeek)
+                      .returns(WeekIndex.Third, RecurrencePattern::getIndex)
+                      .returns(1, RecurrencePattern::getInterval)
+                      .returns(5, RecurrencePattern::getMonth)
+                      .returns(RecurrencePatternType.Weekly, RecurrencePattern::getType)
+                      .extracting(RecurrencePattern::getDaysOfWeek,
+                          as(InstanceOfAssertFactories.LIST))
+                      .hasSize(2)
+                      .containsExactly(DayOfWeek.Monday, DayOfWeek.Thursday);
   }
 
   @Test
@@ -100,7 +101,7 @@ public class RecurrencePatternMapperTest {
     var nullRecurrencePatternDto = (RecurrencePatternDto) null;
 
     // when
-    var result= RecurrencePatternMapper.mapRecurrencePatternDto(nullRecurrencePatternDto);
+    var result = RecurrencePatternMapper.mapRecurrencePatternDto(nullRecurrencePatternDto);
 
     // then
     assertThat(result).isNull();

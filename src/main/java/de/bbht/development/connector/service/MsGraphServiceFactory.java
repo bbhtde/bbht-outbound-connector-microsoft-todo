@@ -18,10 +18,12 @@ public class MsGraphServiceFactory implements IMsGraphServiceFactory {
     }
 
     TokenCredential tokenCredential = new ClientSecretCredentialBuilder().tenantId(
-            authInfo.tenantId())
-        .clientId(authInfo.clientId())
-        .clientSecret(authInfo.clientSecret())
-        .build();
+                                                                             authInfo.tenantId())
+                                                                         .clientId(
+                                                                             authInfo.clientId())
+                                                                         .clientSecret(
+                                                                             authInfo.clientSecret())
+                                                                         .build();
 
     return new MsGraphService(new GraphServiceClient(tokenCredential, DEFAULT_SCOPE_LIST));
   }

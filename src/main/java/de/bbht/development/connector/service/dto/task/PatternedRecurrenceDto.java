@@ -35,8 +35,7 @@ public class PatternedRecurrenceDto {
     if (!(o instanceof PatternedRecurrenceDto that)) {
       return false;
     }
-    return Objects.equals(pattern, that.pattern) && Objects.equals(range,
-        that.range);
+    return Objects.equals(pattern, that.pattern) && Objects.equals(range, that.range);
   }
 
   @Override
@@ -46,7 +45,6 @@ public class PatternedRecurrenceDto {
 
   @Override
   public String toString() {
-    return "PatternedRecurrenceDto{" + "pattern=" + pattern + ", range=" + range
-        + '}';
+    return "PatternedRecurrenceDto{" + "pattern=" + pattern + ", range=" + range + '}';
   }
 }

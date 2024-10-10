@@ -1,19 +1,23 @@
 package de.bbht.development.connector.service.mapper;
 
-import com.microsoft.graph.models.*;
+import static org.assertj.core.api.Assertions.as;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.microsoft.graph.models.BodyType;
+import com.microsoft.graph.models.DateTimeTimeZone;
+import com.microsoft.graph.models.Importance;
+import com.microsoft.graph.models.ItemBody;
+import com.microsoft.graph.models.TaskStatus;
+import com.microsoft.graph.models.TodoTask;
 import de.bbht.development.connector.service.dto.enums.ImportanceDto;
 import de.bbht.development.connector.service.dto.enums.TaskStatusDto;
 import de.bbht.development.connector.service.dto.task.CreateUpdateTaskDto;
 import de.bbht.development.connector.service.dto.task.DateTimeTimeZoneDto;
 import de.bbht.development.connector.service.dto.task.TaskDto;
-import org.assertj.core.api.InstanceOfAssertFactories;
-import org.junit.jupiter.api.Test;
-
 import java.time.OffsetDateTime;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.as;
-import static org.assertj.core.api.Assertions.assertThat;
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.junit.jupiter.api.Test;
 
 class TaskMapperTest {
 
@@ -49,33 +53,42 @@ class TaskMapperTest {
 
     // then
     assertThat(taskDto).returns("ID", TaskDto::getId)
-        .returns("Title", TaskDto::getTitle)
-        .returns("ItemBody", TaskDto::getBody)
-        .returns(ImportanceDto.HIGH, TaskDto::getImportance)
-        .returns(TaskStatusDto.IN_PROGRESS, TaskDto::getStatus)
-        .returns(OFFSET_DATE_TIME, TaskDto::getBodyLastModifiedDateTime)
-        .returns(OFFSET_DATE_TIME, TaskDto::getLastModifiedDateTime)
-        .returns(OFFSET_DATE_TIME, TaskDto::getCreatedDateTime)
-        .returns(Boolean.TRUE, TaskDto::getReminderOn)
-        .satisfies(
-            taskDto1 -> assertThat(taskDto1.getStartDateTime()).returns(DATE_TIME, DateTimeTimeZoneDto::getDateTime)
-                .returns("UTC", DateTimeTimeZoneDto::getTimeZone))
-        .satisfies(
-            taskDto1 -> assertThat(taskDto1.getCompletedDateTime()).returns(DATE_TIME, DateTimeTimeZoneDto::getDateTime)
-                .returns("UTC", DateTimeTimeZoneDto::getTimeZone))
-        .satisfies(
-            taskDto1 -> assertThat(taskDto1.getDueDateTime()).returns(DATE_TIME, DateTimeTimeZoneDto::getDateTime)
-                .returns("UTC", DateTimeTimeZoneDto::getTimeZone))
-        .satisfies(
-                taskDto1 -> assertThat(taskDto1.getReminderDateTime()).returns(DATE_TIME, DateTimeTimeZoneDto::getDateTime)
-                        .returns("UTC", DateTimeTimeZoneDto::getTimeZone))
-        .extracting(TaskDto::getCategories, as(InstanceOfAssertFactories.LIST))
-        .hasSize(2)
-        .satisfiesExactly(item1 -> assertThat(item1).isNotNull()
-            .asString()
-            .contains("Category1"), item2 -> assertThat(item2).isNotNull()
-            .asString()
-            .contains("Category2"));
+                       .returns("Title", TaskDto::getTitle)
+                       .returns("ItemBody", TaskDto::getBody)
+                       .returns(ImportanceDto.HIGH, TaskDto::getImportance)
+                       .returns(TaskStatusDto.IN_PROGRESS, TaskDto::getStatus)
+                       .returns(OFFSET_DATE_TIME, TaskDto::getBodyLastModifiedDateTime)
+                       .returns(OFFSET_DATE_TIME, TaskDto::getLastModifiedDateTime)
+                       .returns(OFFSET_DATE_TIME, TaskDto::getCreatedDateTime)
+                       .returns(Boolean.TRUE, TaskDto::getReminderOn)
+                       .satisfies(
+                           taskDto1 -> assertThat(taskDto1.getStartDateTime()).returns(DATE_TIME,
+                                                                                  DateTimeTimeZoneDto::getDateTime)
+                                                                              .returns("UTC",
+                                                                                  DateTimeTimeZoneDto::getTimeZone))
+                       .satisfies(taskDto1 -> assertThat(taskDto1.getCompletedDateTime()).returns(
+                                                                                             DATE_TIME, DateTimeTimeZoneDto::getDateTime)
+                                                                                         .returns(
+                                                                                             "UTC",
+                                                                                             DateTimeTimeZoneDto::getTimeZone))
+                       .satisfies(
+                           taskDto1 -> assertThat(taskDto1.getDueDateTime()).returns(DATE_TIME,
+                                                                                DateTimeTimeZoneDto::getDateTime)
+                                                                            .returns("UTC",
+                                                                                DateTimeTimeZoneDto::getTimeZone))
+                       .satisfies(
+                           taskDto1 -> assertThat(taskDto1.getReminderDateTime()).returns(DATE_TIME,
+                                                                                     DateTimeTimeZoneDto::getDateTime)
+                                                                                 .returns("UTC",
+                                                                                     DateTimeTimeZoneDto::getTimeZone))
+                       .extracting(TaskDto::getCategories, as(InstanceOfAssertFactories.LIST))
+                       .hasSize(2)
+                       .satisfiesExactly(item1 -> assertThat(item1).isNotNull()
+                                                                   .asString()
+                                                                   .contains("Category1"),
+                           item2 -> assertThat(item2).isNotNull()
+                                                     .asString()
+                                                     .contains("Category2"));
   }
 
   DateTimeTimeZone createDateTimeTimeZone() {
@@ -105,30 +118,41 @@ class TaskMapperTest {
 
     // then
     assertThat(todoTask).returns(null, TodoTask::getId)
-        .returns("Title", TodoTask::getTitle)
-        .satisfies(todoTask1 -> assertThat(todoTask1.getBody()).isNotNull()
-            .returns("ItemBody", ItemBody::getContent)
-            .returns(BodyType.Text, ItemBody::getContentType))
-        .returns(Importance.High, TodoTask::getImportance)
-        .returns(TaskStatus.InProgress, TodoTask::getStatus)
-        .returns(null, TodoTask::getBodyLastModifiedDateTime)
-        .returns(null, TodoTask::getLastModifiedDateTime)
-        .returns(null, TodoTask::getCreatedDateTime)
-        .satisfies(
-            todoTask1 -> assertThat(todoTask1.getStartDateTime()).returns(DATE_TIME, DateTimeTimeZone::getDateTime)
-                .returns("UTC", DateTimeTimeZone::getTimeZone))
-        .satisfies(
-            todoTask1 -> assertThat(todoTask1.getCompletedDateTime()).returns(DATE_TIME, DateTimeTimeZone::getDateTime)
-                .returns("UTC", DateTimeTimeZone::getTimeZone))
-        .satisfies(todoTask1 -> assertThat(todoTask1.getDueDateTime()).returns(DATE_TIME, DateTimeTimeZone::getDateTime)
-            .returns("UTC", DateTimeTimeZone::getTimeZone))
-        .extracting(TodoTask::getCategories, as(InstanceOfAssertFactories.LIST))
-        .hasSize(2)
-        .satisfiesExactly(item1 -> assertThat(item1).isNotNull()
-            .asString()
-            .contains("Category1"), item2 -> assertThat(item2).isNotNull()
-            .asString()
-            .contains("Category2"));
+                        .returns("Title", TodoTask::getTitle)
+                        .satisfies(todoTask1 -> assertThat(todoTask1.getBody()).isNotNull()
+                                                                               .returns("ItemBody",
+                                                                                   ItemBody::getContent)
+                                                                               .returns(
+                                                                                   BodyType.Text,
+                                                                                   ItemBody::getContentType))
+                        .returns(Importance.High, TodoTask::getImportance)
+                        .returns(TaskStatus.InProgress, TodoTask::getStatus)
+                        .returns(null, TodoTask::getBodyLastModifiedDateTime)
+                        .returns(null, TodoTask::getLastModifiedDateTime)
+                        .returns(null, TodoTask::getCreatedDateTime)
+                        .satisfies(
+                            todoTask1 -> assertThat(todoTask1.getStartDateTime()).returns(DATE_TIME,
+                                                                                     DateTimeTimeZone::getDateTime)
+                                                                                 .returns("UTC",
+                                                                                     DateTimeTimeZone::getTimeZone))
+                        .satisfies(
+                            todoTask1 -> assertThat(todoTask1.getCompletedDateTime()).returns(
+                                                                                         DATE_TIME, DateTimeTimeZone::getDateTime)
+                                                                                     .returns("UTC",
+                                                                                         DateTimeTimeZone::getTimeZone))
+                        .satisfies(
+                            todoTask1 -> assertThat(todoTask1.getDueDateTime()).returns(DATE_TIME,
+                                                                                   DateTimeTimeZone::getDateTime)
+                                                                               .returns("UTC",
+                                                                                   DateTimeTimeZone::getTimeZone))
+                        .extracting(TodoTask::getCategories, as(InstanceOfAssertFactories.LIST))
+                        .hasSize(2)
+                        .satisfiesExactly(item1 -> assertThat(item1).isNotNull()
+                                                                    .asString()
+                                                                    .contains("Category1"),
+                            item2 -> assertThat(item2).isNotNull()
+                                                      .asString()
+                                                      .contains("Category2"));
   }
 
   DateTimeTimeZoneDto createDateTimeTimeZoneDto() {
@@ -166,10 +190,11 @@ class TaskMapperTest {
 
     // then
     assertThat(listOfTaskDto).hasSize(2)
-        .satisfiesExactly(task1 -> assertThat(task1).returns("ID1", TaskDto::getId),
-            task2 -> assertThat(task2).returns("ID2", TaskDto::getId)
+                             .satisfiesExactly(
+                                 task1 -> assertThat(task1).returns("ID1", TaskDto::getId),
+                                 task2 -> assertThat(task2).returns("ID2", TaskDto::getId)
 
-        );
+                             );
   }
 
   @Test

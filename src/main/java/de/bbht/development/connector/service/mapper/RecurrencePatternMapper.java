@@ -14,27 +14,34 @@ public final class RecurrencePatternMapper {
     if (recurrencePattern != null) {
       recurrencePatternDto = new RecurrencePatternDto();
       recurrencePatternDto.setDayOfMonth(recurrencePattern.getDayOfMonth());
-      recurrencePatternDto.setDaysOfWeek(EnumMapper.mapDaysOfWeek(recurrencePattern.getDaysOfWeek()));
-      recurrencePatternDto.setFirstDayOfWeek(EnumMapper.mapDayOfWeek(recurrencePattern.getFirstDayOfWeek()));
+      recurrencePatternDto.setDaysOfWeek(
+          EnumMapper.mapDaysOfWeek(recurrencePattern.getDaysOfWeek()));
+      recurrencePatternDto.setFirstDayOfWeek(
+          EnumMapper.mapDayOfWeek(recurrencePattern.getFirstDayOfWeek()));
       recurrencePatternDto.setIndex(EnumMapper.mapWeekIndex(recurrencePattern.getIndex()));
       recurrencePatternDto.setInterval(recurrencePattern.getInterval());
       recurrencePatternDto.setMonth(recurrencePattern.getMonth());
-      recurrencePatternDto.setType(EnumMapper.mapRecurrencePatternType(recurrencePattern.getType()));
+      recurrencePatternDto.setType(
+          EnumMapper.mapRecurrencePatternType(recurrencePattern.getType()));
     }
     return recurrencePatternDto;
   }
 
-  public static RecurrencePattern mapRecurrencePatternDto(RecurrencePatternDto recurrencePatternDto) {
+  public static RecurrencePattern mapRecurrencePatternDto(
+      RecurrencePatternDto recurrencePatternDto) {
     RecurrencePattern recurrencePattern = null;
     if (recurrencePatternDto != null) {
       recurrencePattern = new RecurrencePattern();
       recurrencePattern.setDayOfMonth(recurrencePatternDto.getDayOfMonth());
-      recurrencePattern.setDaysOfWeek(EnumMapper.mapDaysOfWeekDto(recurrencePatternDto.getDaysOfWeek()));
-      recurrencePattern.setFirstDayOfWeek(EnumMapper.mapDayOfWeekDto(recurrencePatternDto.getFirstDayOfWeek()));
+      recurrencePattern.setDaysOfWeek(
+          EnumMapper.mapDaysOfWeekDto(recurrencePatternDto.getDaysOfWeek()));
+      recurrencePattern.setFirstDayOfWeek(
+          EnumMapper.mapDayOfWeekDto(recurrencePatternDto.getFirstDayOfWeek()));
       recurrencePattern.setIndex(EnumMapper.mapWeekIndexDto(recurrencePatternDto.getIndex()));
       recurrencePattern.setInterval(recurrencePatternDto.getInterval());
       recurrencePattern.setMonth(recurrencePatternDto.getMonth());
-      recurrencePattern.setType(EnumMapper.mapRecurrencePatternTypeDto(recurrencePatternDto.getType()));
+      recurrencePattern.setType(
+          EnumMapper.mapRecurrencePatternTypeDto(recurrencePatternDto.getType()));
     }
     return recurrencePattern;
   }

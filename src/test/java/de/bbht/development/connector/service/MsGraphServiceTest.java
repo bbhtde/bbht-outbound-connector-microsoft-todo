@@ -1,6 +1,20 @@
 package de.bbht.development.connector.service;
 
-import com.microsoft.graph.models.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+
+import com.microsoft.graph.models.BodyType;
+import com.microsoft.graph.models.ChecklistItem;
+import com.microsoft.graph.models.Importance;
+import com.microsoft.graph.models.ItemBody;
+import com.microsoft.graph.models.TaskStatus;
+import com.microsoft.graph.models.TodoTask;
+import com.microsoft.graph.models.TodoTaskList;
+import com.microsoft.graph.models.WellknownListName;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import com.microsoft.graph.users.item.todo.lists.item.TodoTaskListItemRequestBuilder;
 import com.microsoft.graph.users.item.todo.lists.item.tasks.item.TodoTaskItemRequestBuilder;
@@ -14,6 +28,9 @@ import de.bbht.development.connector.service.dto.task.CreateUpdateTaskDto;
 import de.bbht.development.connector.service.dto.task.TaskDto;
 import de.bbht.development.connector.service.dto.tasklist.CreateUpdateTaskListDto;
 import de.bbht.development.connector.service.dto.tasklist.TaskListDto;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,17 +38,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class MsGraphServiceTest {
@@ -89,86 +95,86 @@ class MsGraphServiceTest {
   void shouldGetListOfTaskLists() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .get()
-        .getValue()).willReturn(createMockTodoTaskLists(false, false));
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .get()
+                            .getValue()).willReturn(createMockTodoTaskLists(false, false));
 
     // When
     var result = service.getListOfTaskLists(TEST_USER_ID);
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.list(TaskListDto.class))
-        .isNotEmpty()
-        .hasSize(3);
+                      .asInstanceOf(InstanceOfAssertFactories.list(TaskListDto.class))
+                      .isNotEmpty()
+                      .hasSize(3);
   }
 
   @Test
   void shouldGetEmptyListOfTaskLists() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .get()).willReturn(null);
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .get()).willReturn(null);
 
     // When
     var result = service.getListOfTaskLists(TEST_USER_ID);
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.list(TaskDto.class))
-        .isEmpty();
+                      .asInstanceOf(InstanceOfAssertFactories.list(TaskDto.class))
+                      .isEmpty();
   }
 
   @Test
   void shouldGetOneTaskListById() {
     // Mock Setup
     given(graphServiceClient.users()
-        .byUserId(anyString())
-        .todo()
-        .lists()
-        .get()
-        .getValue()).willReturn(createMockTodoTaskLists(true, false));
+                            .byUserId(anyString())
+                            .todo()
+                            .lists()
+                            .get()
+                            .getValue()).willReturn(createMockTodoTaskLists(true, false));
     given(graphServiceClient.users()
-        .byUserId(anyString())
-        .todo()
-        .lists()
-        .byTodoTaskListId("ID4")
-        .get()).willReturn(
+                            .byUserId(anyString())
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId("ID4")
+                            .get()).willReturn(
         createMockTodoTaskList("ID4", TEST_TASK_LIST_NAME, WellknownListName.None));
 
     // Given
     var taskListForId = service.getTaskListByDisplayName(TEST_USER_ID, TEST_TASK_LIST_NAME);
     assertThat(taskListForId).isPresent()
-        .get()
-        .extracting("id")
-        .isNotNull();
+                             .get()
+                             .extracting("id")
+                             .isNotNull();
     var taskListId = taskListForId.get()
-        .getId();
+                                  .getId();
 
     // When
     var taskList = service.getTaskListById(TEST_USER_ID, taskListId);
 
     // Then
     assertThat(taskList).isPresent()
-        .get()
-        .returns(TEST_TASK_LIST_NAME, TaskListDto::getDisplayName)
-        .extracting("id")
-        .isNotNull();
+                        .get()
+                        .returns(TEST_TASK_LIST_NAME, TaskListDto::getDisplayName)
+                        .extracting("id")
+                        .isNotNull();
   }
 
   @Test
   void shouldGetNullTaskListById() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .get()).willReturn(null);
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .get()).willReturn(null);
 
     // When
     var taskList = service.getTaskListById(TEST_USER_ID, TEST_TASK_LIST_ID);
@@ -181,31 +187,31 @@ class MsGraphServiceTest {
   void shouldGetOneTaskListByDisplayName() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .get()
-        .getValue()).willReturn(createMockTodoTaskLists(true, false));
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .get()
+                            .getValue()).willReturn(createMockTodoTaskLists(true, false));
 
     // When
     var taskList = service.getTaskListByDisplayName(TEST_USER_ID, TEST_TASK_LIST_NAME);
 
     // Then
     assertThat(taskList).isPresent()
-        .get()
-        .returns(TEST_TASK_LIST_NAME, TaskListDto::getDisplayName)
-        .extracting("id")
-        .isNotNull();
+                        .get()
+                        .returns(TEST_TASK_LIST_NAME, TaskListDto::getDisplayName)
+                        .extracting("id")
+                        .isNotNull();
   }
 
   @Test
   void shouldCreateTaskList() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .post(any(TodoTaskList.class))).willReturn(
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .post(any(TodoTaskList.class))).willReturn(
         createMockTodoTaskList("ID4", TEST_TASK_LIST_NAME, WellknownListName.None));
 
     // When
@@ -215,40 +221,41 @@ class MsGraphServiceTest {
 
     // Then
     assertThat(createdTaskList).isPresent()
-        .get()
-        .returns(TEST_TASK_LIST_NAME, TaskListDto::getDisplayName)
-        .returns(true, TaskListDto::getOwner)
-        .returns(false, TaskListDto::getShared)
-        .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName)
-        .extracting("id")
-        .isNotNull();
+                               .get()
+                               .returns(TEST_TASK_LIST_NAME, TaskListDto::getDisplayName)
+                               .returns(true, TaskListDto::getOwner)
+                               .returns(false, TaskListDto::getShared)
+                               .returns(WellknownListNameDto.NONE,
+                                   TaskListDto::getWellknownListName)
+                               .extracting("id")
+                               .isNotNull();
   }
 
   @Test
   void shouldUpdateTaskList() {
     // Mock Setup
     given(graphServiceClient.users()
-        .byUserId(anyString())
-        .todo()
-        .lists()
-        .get()
-        .getValue()).willReturn(createMockTodoTaskLists(true, false));
+                            .byUserId(anyString())
+                            .todo()
+                            .lists()
+                            .get()
+                            .getValue()).willReturn(createMockTodoTaskLists(true, false));
     given(graphServiceClient.users()
-        .byUserId(anyString())
-        .todo()
-        .lists()
-        .byTodoTaskListId("ID4")
-        .patch(any(TodoTaskList.class))).willReturn(
+                            .byUserId(anyString())
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId("ID4")
+                            .patch(any(TodoTaskList.class))).willReturn(
         createMockTodoTaskList("ID4", TEST_TASK_LIST_NAME_UPDATED, WellknownListName.None));
 
     // Given
     var taskListForId = service.getTaskListByDisplayName(TEST_USER_ID, TEST_TASK_LIST_NAME);
     assertThat(taskListForId).isPresent()
-        .get()
-        .extracting("id")
-        .isNotNull();
+                             .get()
+                             .extracting("id")
+                             .isNotNull();
     var taskListId = taskListForId.get()
-        .getId();
+                                  .getId();
 
     // When
     var modifiedTaskList = new CreateUpdateTaskListDto();
@@ -258,12 +265,13 @@ class MsGraphServiceTest {
 
     // Then
     assertThat(updatedTaskList).isPresent()
-        .get()
-        .returns(taskListId, TaskListDto::getId)
-        .returns(TEST_TASK_LIST_NAME_UPDATED, TaskListDto::getDisplayName)
-        .returns(true, TaskListDto::getOwner)
-        .returns(false, TaskListDto::getShared)
-        .returns(WellknownListNameDto.NONE, TaskListDto::getWellknownListName);
+                               .get()
+                               .returns(taskListId, TaskListDto::getId)
+                               .returns(TEST_TASK_LIST_NAME_UPDATED, TaskListDto::getDisplayName)
+                               .returns(true, TaskListDto::getOwner)
+                               .returns(false, TaskListDto::getShared)
+                               .returns(WellknownListNameDto.NONE,
+                                   TaskListDto::getWellknownListName);
   }
 
   @Test
@@ -272,11 +280,11 @@ class MsGraphServiceTest {
     // use this flag to determine if a task list was deleted or not.
     final AtomicBoolean wasDeleted = new AtomicBoolean(false);
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .get()
-        .getValue()).willAnswer(answer -> {
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .get()
+                            .getValue()).willAnswer(answer -> {
       if (wasDeleted.get()) {
         return createMockTodoTaskLists(false, false);
       } else {
@@ -291,22 +299,22 @@ class MsGraphServiceTest {
       wasDeleted.set(true);
       return (Void) null;
     }).when(taskListItemRequestBuilder)
-        .delete();
+      .delete();
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId("ID4")).willReturn(taskListItemRequestBuilder);
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId("ID4")).willReturn(taskListItemRequestBuilder);
 
     // Given
     var userId = TEST_USER_ID;
 
     var taskListForId = service.getTaskListByDisplayName(userId, TEST_TASK_LIST_NAME_UPDATED);
     assertThat(taskListForId).isPresent()
-        .get()
-        .returns("ID4", TaskListDto::getId);
+                             .get()
+                             .returns("ID4", TaskListDto::getId);
     var taskListId = taskListForId.get()
-        .getId();
+                                  .getId();
 
     // When
     service.deleteTaskList(userId, taskListId);
@@ -350,42 +358,42 @@ class MsGraphServiceTest {
   void shouldGetListOfTasks() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .get()
-        .getValue()).willReturn(createMockTodoTasks(false, false));
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .get()
+                            .getValue()).willReturn(createMockTodoTasks(false, false));
 
     // When
     var result = service.getListOfTasks(TEST_USER_ID, TEST_TASK_LIST_ID);
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.list(TaskDto.class))
-        .isNotEmpty()
-        .hasSize(3);
+                      .asInstanceOf(InstanceOfAssertFactories.list(TaskDto.class))
+                      .isNotEmpty()
+                      .hasSize(3);
   }
 
   @Test
   void shouldGetEmptyListOfTasks() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .get()).willReturn(null);
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .get()).willReturn(null);
 
     // When
     var result = service.getListOfTasks(TEST_USER_ID, TEST_TASK_LIST_ID);
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.list(TaskDto.class))
-        .isEmpty();
+                      .asInstanceOf(InstanceOfAssertFactories.list(TaskDto.class))
+                      .isEmpty();
 
   }
 
@@ -393,13 +401,13 @@ class MsGraphServiceTest {
   void shouldGetTask() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_01)
-        .get()).willReturn(
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_01)
+                            .get()).willReturn(
         createMockTodoTask("ID1", "Title 01", Importance.High, TaskStatus.NotStarted));
 
     // When
@@ -407,25 +415,25 @@ class MsGraphServiceTest {
 
     // Then
     assertThat(task).isNotEmpty()
-        .get()
-        .isNotNull()
-        .returns("ID1", TaskDto::getId)
-        .returns("Title 01", TaskDto::getTitle)
-        .returns(ImportanceDto.HIGH, TaskDto::getImportance)
-        .returns(TaskStatusDto.NOT_STARTED, TaskDto::getStatus);
+                    .get()
+                    .isNotNull()
+                    .returns("ID1", TaskDto::getId)
+                    .returns("Title 01", TaskDto::getTitle)
+                    .returns(ImportanceDto.HIGH, TaskDto::getImportance)
+                    .returns(TaskStatusDto.NOT_STARTED, TaskDto::getStatus);
   }
 
   @Test
   void shouldGetEmptyTask() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_01)
-        .get()).willReturn(null);
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_01)
+                            .get()).willReturn(null);
 
     // When
     var task = service.getTask(TEST_USER_ID, TEST_TASK_LIST_ID, TEST_TASK_ID_01);
@@ -438,12 +446,12 @@ class MsGraphServiceTest {
   void shouldCreateTask() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .post(any(TodoTask.class))).willReturn(
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .post(any(TodoTask.class))).willReturn(
         createMockTodoTask(TEST_TASK_ID_04, "Title 04", Importance.High, TaskStatus.InProgress));
 
     // When
@@ -456,44 +464,44 @@ class MsGraphServiceTest {
 
     // Then
     assertThat(createdTask).isPresent()
-        .get()
-        .returns("Title 04", TaskDto::getTitle)
-        .returns(ImportanceDto.HIGH, TaskDto::getImportance)
-        .returns(TaskStatusDto.IN_PROGRESS, TaskDto::getStatus)
-        .returns("Item Body", TaskDto::getBody)
-        .extracting("id")
-        .isNotNull();
+                           .get()
+                           .returns("Title 04", TaskDto::getTitle)
+                           .returns(ImportanceDto.HIGH, TaskDto::getImportance)
+                           .returns(TaskStatusDto.IN_PROGRESS, TaskDto::getStatus)
+                           .returns("Item Body", TaskDto::getBody)
+                           .extracting("id")
+                           .isNotNull();
   }
 
   @Test
   void shouldUpdateTask() {
     // Mock Setup
     given(graphServiceClient.users()
-        .byUserId(anyString())
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_04)
-        .get()).willReturn(
+                            .byUserId(anyString())
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_04)
+                            .get()).willReturn(
         createMockTodoTask(TEST_TASK_ID_04, "Task 04", Importance.Normal, TaskStatus.NotStarted));
     given(graphServiceClient.users()
-        .byUserId(anyString())
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_04)
-        .patch(any(TodoTask.class))).willReturn(
+                            .byUserId(anyString())
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_04)
+                            .patch(any(TodoTask.class))).willReturn(
         createMockTodoTask(TEST_TASK_ID_04, "Updated Task 04", Importance.Normal,
             TaskStatus.NotStarted));
 
     // Given
     var taskForId = service.getTask(TEST_USER_ID, TEST_TASK_LIST_ID, TEST_TASK_ID_04);
     assertThat(taskForId).isPresent()
-        .get()
-        .returns(TEST_TASK_ID_04, TaskDto::getId)
-        .returns("Task 04", TaskDto::getTitle);
+                         .get()
+                         .returns(TEST_TASK_ID_04, TaskDto::getId)
+                         .returns("Task 04", TaskDto::getTitle);
 
     // When
     var modifiedTask = new CreateUpdateTaskDto();
@@ -504,11 +512,11 @@ class MsGraphServiceTest {
 
     // Then
     assertThat(updatedTask).isPresent()
-        .get()
-        .returns(TEST_TASK_ID_04, TaskDto::getId)
-        .returns("Updated Task 04", TaskDto::getTitle)
-        .returns(ImportanceDto.NORMAL, TaskDto::getImportance)
-        .returns(TaskStatusDto.NOT_STARTED, TaskDto::getStatus);
+                           .get()
+                           .returns(TEST_TASK_ID_04, TaskDto::getId)
+                           .returns("Updated Task 04", TaskDto::getTitle)
+                           .returns(ImportanceDto.NORMAL, TaskDto::getImportance)
+                           .returns(TaskStatusDto.NOT_STARTED, TaskDto::getStatus);
   }
 
   @Test
@@ -517,12 +525,12 @@ class MsGraphServiceTest {
     // use this flag to determine if a task  was deleted or not.
     final AtomicBoolean wasDeleted = new AtomicBoolean(false);
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .get()).willAnswer(answer -> {
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .get()).willAnswer(answer -> {
       if (wasDeleted.get()) {
         return createMockTodoTasks(false, false);
       } else {
@@ -537,14 +545,14 @@ class MsGraphServiceTest {
       wasDeleted.set(true);
       return (Void) null;
     }).when(taskItemRequestBuilder)
-        .delete();
+      .delete();
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_04)).willReturn(taskItemRequestBuilder);
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_04)).willReturn(taskItemRequestBuilder);
 
     // Given / When
     service.deleteTask(TEST_USER_ID, TEST_TASK_LIST_ID, TEST_TASK_ID_04);
@@ -584,73 +592,83 @@ class MsGraphServiceTest {
   void shouldGetListOfCheckListItems() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_01)
-        .checklistItems()
-        .get()
-        .getValue()).willReturn(createMockCheckListItems(false, false));
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_01)
+                            .checklistItems()
+                            .get()
+                            .getValue()).willReturn(createMockCheckListItems(false, false));
 
     // When
     var result = service.getListOfCheckListItems(TEST_USER_ID, TEST_TASK_LIST_ID, TEST_TASK_ID_01);
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.list(CheckListItemDto.class))
-        .isNotEmpty()
-        .hasSize(3)
-        .satisfiesExactly(item1 -> assertThat(item1).returns("ID1", CheckListItemDto::getId)
-                .returns("CheckListItem 1", CheckListItemDto::getDisplayName)
-                .returns(Boolean.FALSE, CheckListItemDto::getChecked)
-                .returns(null, CheckListItemDto::getCheckedDateTime),
-            item2 -> assertThat(item2).returns("ID2", CheckListItemDto::getId)
-                .returns("CheckListItem 2", CheckListItemDto::getDisplayName)
-                .returns(Boolean.TRUE, CheckListItemDto::getChecked)
-                .returns(OFFSET_DATE_TIME, CheckListItemDto::getCheckedDateTime),
-            item3 -> assertThat(item3).returns("ID3", CheckListItemDto::getId)
-                .returns("CheckListItem 3", CheckListItemDto::getDisplayName)
-                .returns(Boolean.FALSE, CheckListItemDto::getChecked)
-                .returns(null, CheckListItemDto::getCheckedDateTime));
+                      .asInstanceOf(InstanceOfAssertFactories.list(CheckListItemDto.class))
+                      .isNotEmpty()
+                      .hasSize(3)
+                      .satisfiesExactly(
+                          item1 -> assertThat(item1).returns("ID1", CheckListItemDto::getId)
+                                                    .returns("CheckListItem 1",
+                                                        CheckListItemDto::getDisplayName)
+                                                    .returns(Boolean.FALSE,
+                                                        CheckListItemDto::getChecked)
+                                                    .returns(null,
+                                                        CheckListItemDto::getCheckedDateTime),
+                          item2 -> assertThat(item2).returns("ID2", CheckListItemDto::getId)
+                                                    .returns("CheckListItem 2",
+                                                        CheckListItemDto::getDisplayName)
+                                                    .returns(Boolean.TRUE,
+                                                        CheckListItemDto::getChecked)
+                                                    .returns(OFFSET_DATE_TIME,
+                                                        CheckListItemDto::getCheckedDateTime),
+                          item3 -> assertThat(item3).returns("ID3", CheckListItemDto::getId)
+                                                    .returns("CheckListItem 3",
+                                                        CheckListItemDto::getDisplayName)
+                                                    .returns(Boolean.FALSE,
+                                                        CheckListItemDto::getChecked)
+                                                    .returns(null,
+                                                        CheckListItemDto::getCheckedDateTime));
   }
 
   @Test
   void shouldGetEmptyListOfCheckListItems() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_01)
-        .checklistItems()
-        .get()).willReturn(null);
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_01)
+                            .checklistItems()
+                            .get()).willReturn(null);
 
     // When
     var result = service.getListOfCheckListItems(TEST_USER_ID, TEST_TASK_LIST_ID, TEST_TASK_ID_01);
 
     // Then
     assertThat(result).isNotNull()
-        .asInstanceOf(InstanceOfAssertFactories.list(CheckListItemDto.class))
-        .isEmpty();
+                      .asInstanceOf(InstanceOfAssertFactories.list(CheckListItemDto.class))
+                      .isEmpty();
   }
 
   @Test
   void shouldGetCheckListItem() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_01)
-        .checklistItems()
-        .byChecklistItemId(TEST_CHECK_LIST_ITEM_ID_01)
-        .get()).willReturn(
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_01)
+                            .checklistItems()
+                            .byChecklistItemId(TEST_CHECK_LIST_ITEM_ID_01)
+                            .get()).willReturn(
         createMockCheckListItem(TEST_CHECK_LIST_ITEM_ID_01, "CheckListItem 1", Boolean.FALSE));
 
     // When
@@ -659,27 +677,27 @@ class MsGraphServiceTest {
 
     // Then
     assertThat(checkListItem).isNotEmpty()
-        .get()
-        .isNotNull()
-        .returns(TEST_CHECK_LIST_ITEM_ID_01, CheckListItemDto::getId)
-        .returns("CheckListItem 1", CheckListItemDto::getDisplayName)
-        .returns(Boolean.FALSE, CheckListItemDto::getChecked)
-        .returns(null, CheckListItemDto::getCheckedDateTime);
+                             .get()
+                             .isNotNull()
+                             .returns(TEST_CHECK_LIST_ITEM_ID_01, CheckListItemDto::getId)
+                             .returns("CheckListItem 1", CheckListItemDto::getDisplayName)
+                             .returns(Boolean.FALSE, CheckListItemDto::getChecked)
+                             .returns(null, CheckListItemDto::getCheckedDateTime);
   }
 
   @Test
   void shouldGetEmptyCheckListItem() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_01)
-        .checklistItems()
-        .byChecklistItemId(TEST_CHECK_LIST_ITEM_ID_01)
-        .get()).willReturn(null);
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_01)
+                            .checklistItems()
+                            .byChecklistItemId(TEST_CHECK_LIST_ITEM_ID_01)
+                            .get()).willReturn(null);
 
     // When
     var checkListItem = service.getCheckListItem(TEST_USER_ID, TEST_TASK_LIST_ID, TEST_TASK_ID_01,
@@ -693,14 +711,14 @@ class MsGraphServiceTest {
   void shouldCreateCheckListItem() {
     // Given / Mock Setup
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_01)
-        .checklistItems()
-        .post(any(ChecklistItem.class))).willReturn(
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_01)
+                            .checklistItems()
+                            .post(any(ChecklistItem.class))).willReturn(
         createMockCheckListItem(TEST_CHECK_LIST_ITEM_ID_04, "CheckListItem 4", Boolean.FALSE));
 
     // When
@@ -712,38 +730,38 @@ class MsGraphServiceTest {
 
     // Then
     assertThat(createdCheckListItem).isPresent()
-        .get()
-        .returns("CheckListItem 4", CheckListItemDto::getDisplayName)
-        .returns(Boolean.FALSE, CheckListItemDto::getChecked)
-        .returns(null, CheckListItemDto::getCheckedDateTime)
-        .extracting(CheckListItemDto::getId)
-        .isNotNull();
+                                    .get()
+                                    .returns("CheckListItem 4", CheckListItemDto::getDisplayName)
+                                    .returns(Boolean.FALSE, CheckListItemDto::getChecked)
+                                    .returns(null, CheckListItemDto::getCheckedDateTime)
+                                    .extracting(CheckListItemDto::getId)
+                                    .isNotNull();
   }
 
   @Test
   void shouldUpdateCheckListItem() {
     // Mock Setup
     given(graphServiceClient.users()
-        .byUserId(anyString())
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_04)
-        .checklistItems()
-        .byChecklistItemId(TEST_CHECK_LIST_ITEM_ID_04)
-        .get()).willReturn(
+                            .byUserId(anyString())
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_04)
+                            .checklistItems()
+                            .byChecklistItemId(TEST_CHECK_LIST_ITEM_ID_04)
+                            .get()).willReturn(
         createMockCheckListItem(TEST_CHECK_LIST_ITEM_ID_04, "CheckListItem 4", Boolean.FALSE));
     given(graphServiceClient.users()
-        .byUserId(anyString())
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_04)
-        .checklistItems()
-        .byChecklistItemId(TEST_CHECK_LIST_ITEM_ID_04)
-        .patch(any(ChecklistItem.class))).willReturn(
+                            .byUserId(anyString())
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_04)
+                            .checklistItems()
+                            .byChecklistItemId(TEST_CHECK_LIST_ITEM_ID_04)
+                            .patch(any(ChecklistItem.class))).willReturn(
         createMockCheckListItem(TEST_CHECK_LIST_ITEM_ID_04, "Updated CheckListItem 4",
             Boolean.FALSE));
 
@@ -758,11 +776,12 @@ class MsGraphServiceTest {
 
     // Then
     assertThat(updatedCheckListItem).isPresent()
-        .get()
-        .returns(TEST_CHECK_LIST_ITEM_ID_04, CheckListItemDto::getId)
-        .returns("Updated CheckListItem 4", CheckListItemDto::getDisplayName)
-        .returns(Boolean.FALSE, CheckListItemDto::getChecked)
-        .returns(null, CheckListItemDto::getCheckedDateTime);
+                                    .get()
+                                    .returns(TEST_CHECK_LIST_ITEM_ID_04, CheckListItemDto::getId)
+                                    .returns("Updated CheckListItem 4",
+                                        CheckListItemDto::getDisplayName)
+                                    .returns(Boolean.FALSE, CheckListItemDto::getChecked)
+                                    .returns(null, CheckListItemDto::getCheckedDateTime);
   }
 
   @Test
@@ -771,15 +790,15 @@ class MsGraphServiceTest {
     // use this flag to determine if a check list item  was deleted or not.
     final AtomicBoolean wasDeleted = new AtomicBoolean(false);
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_01)
-        .checklistItems()
-        .byChecklistItemId(TEST_CHECK_LIST_ITEM_ID_04)
-        .get()).willAnswer(answer -> {
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_01)
+                            .checklistItems()
+                            .byChecklistItemId(TEST_CHECK_LIST_ITEM_ID_04)
+                            .get()).willAnswer(answer -> {
       if (wasDeleted.get()) {
         return createMockCheckListItems(false, false);
       } else {
@@ -794,16 +813,17 @@ class MsGraphServiceTest {
       wasDeleted.set(true);
       return (Void) null;
     }).when(checklistItemRequestBuilder)
-        .delete();
+      .delete();
     given(graphServiceClient.users()
-        .byUserId(TEST_USER_ID)
-        .todo()
-        .lists()
-        .byTodoTaskListId(TEST_TASK_LIST_ID)
-        .tasks()
-        .byTodoTaskId(TEST_TASK_ID_01)
-        .checklistItems()
-        .byChecklistItemId(TEST_CHECK_LIST_ITEM_ID_04)).willReturn(checklistItemRequestBuilder);
+                            .byUserId(TEST_USER_ID)
+                            .todo()
+                            .lists()
+                            .byTodoTaskListId(TEST_TASK_LIST_ID)
+                            .tasks()
+                            .byTodoTaskId(TEST_TASK_ID_01)
+                            .checklistItems()
+                            .byChecklistItemId(TEST_CHECK_LIST_ITEM_ID_04)).willReturn(
+        checklistItemRequestBuilder);
 
     // Given / When
     service.deleteCheckListItem(TEST_USER_ID, TEST_TASK_LIST_ID, TEST_TASK_ID_01,

@@ -3,7 +3,6 @@ package de.bbht.development.connector.service.dto.task;
 import de.bbht.development.connector.service.dto.enums.DayOfWeekDto;
 import de.bbht.development.connector.service.dto.enums.RecurrencePatternTypeDto;
 import de.bbht.development.connector.service.dto.enums.WeekIndexDto;
-
 import java.util.Objects;
 import java.util.Set;
 
@@ -85,9 +84,10 @@ public class RecurrencePatternDto {
     if (!(o instanceof RecurrencePatternDto that)) {
       return false;
     }
-    return Objects.equals(dayOfMonth, that.dayOfMonth) && Objects.equals(daysOfWeek, that.daysOfWeek)
-        && firstDayOfWeek == that.firstDayOfWeek && index == that.index && Objects.equals(interval, that.interval)
-        && Objects.equals(month, that.month) && type == that.type;
+    return Objects.equals(dayOfMonth, that.dayOfMonth) && Objects.equals(daysOfWeek,
+        that.daysOfWeek) && firstDayOfWeek == that.firstDayOfWeek && index == that.index
+        && Objects.equals(interval, that.interval) && Objects.equals(month, that.month)
+        && type == that.type;
   }
 
   @Override
@@ -97,7 +97,8 @@ public class RecurrencePatternDto {
 
   @Override
   public String toString() {
-    return "RecurrencePatternDto{" + "dayOfMonth=" + dayOfMonth + ", daysOfWeek=" + daysOfWeek + ", firstDayOfWeek="
-        + firstDayOfWeek + ", index=" + index + ", interval=" + interval + ", month=" + month + ", type=" + type + '}';
+    return "RecurrencePatternDto{" + "dayOfMonth=" + dayOfMonth + ", daysOfWeek=" + daysOfWeek
+        + ", firstDayOfWeek=" + firstDayOfWeek + ", index=" + index + ", interval=" + interval
+        + ", month=" + month + ", type=" + type + '}';
   }
 }

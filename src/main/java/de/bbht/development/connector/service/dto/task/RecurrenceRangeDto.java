@@ -1,7 +1,6 @@
 package de.bbht.development.connector.service.dto.task;
 
 import de.bbht.development.connector.service.dto.enums.RecurrenceRangeTypeDto;
-
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -65,9 +64,9 @@ public class RecurrenceRangeDto {
     if (!(o instanceof RecurrenceRangeDto that)) {
       return false;
     }
-    return Objects.equals(endDate, that.endDate) && Objects.equals(numberOfOccurrences, that.numberOfOccurrences)
-        && Objects.equals(recurrenceTimeZone, that.recurrenceTimeZone) && Objects.equals(startDate, that.startDate)
-        && type == that.type;
+    return Objects.equals(endDate, that.endDate) && Objects.equals(numberOfOccurrences,
+        that.numberOfOccurrences) && Objects.equals(recurrenceTimeZone, that.recurrenceTimeZone)
+        && Objects.equals(startDate, that.startDate) && type == that.type;
   }
 
   @Override
@@ -77,7 +76,8 @@ public class RecurrenceRangeDto {
 
   @Override
   public String toString() {
-    return "RecurrenceRangeDto{" + "endDate=" + endDate + ", numberOfOccurrences=" + numberOfOccurrences
-        + ", recurrenceTimeZone='" + recurrenceTimeZone + '\'' + ", startDate=" + startDate + ", type=" + type + '}';
+    return "RecurrenceRangeDto{" + "endDate=" + endDate + ", numberOfOccurrences="
+        + numberOfOccurrences + ", recurrenceTimeZone='" + recurrenceTimeZone + '\''
+        + ", startDate=" + startDate + ", type=" + type + '}';
   }
 }
